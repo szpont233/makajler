@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Szpontokliker</title>
+    <style>
+        #img {
+            cursor: pointer;
+            width: 200px;
+            height: 200px;
+            display: block;
+            margin: 20px auto 0 auto;
+        }
+        #licznik {
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        video{
+            border: 5px solid black;
+            border-radius: 15px;
+            align-content: right;
+            position: absolute;
+            right: 0;
+            top: 0;
+            pointer-events: none;
+        }
+        div,img{
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            background-color: lightgray;
+            width: 10%;
+        }
+        footer{
+            position: fixed;
+            height: auto;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: lightgray;
+            padding: 5px 0;
+            color: red;
+            font-weight: bold;
+            font-size: large;
+        }
+        #odpal {
+            display: block;
+            margin: 20px auto 0 auto;
+}
+    </style>
+</head>
+<body>
+    <audio id="szpont" src="assets/audio/szpont.mp3"></audio>
+    <audio id="nachuj" src="assets/audio/nachujwpierdalasz.mp3"></audio>
+    <audio id="kursor" src="assets/audio/kursorwirus.mp3"></audio>
+    <audio id="kurwa" src="assets/audio/kurwa.mp3"></audio>
+    <h1>Szpontokliker</h1>
+
+    <p style="color:red">Certyfikowany przez Makajlera!1!!</p>
+
+    <div id="licznik">Wynik: 0
+        <br>Kliknij profesora
+    </div>
+
+    <img id="img" src="assets/img/baza0.png" alt="przycisk do gloryfikacji szponta">
+
+    <br>
+    <p id="2" style="text-align: center;">tryb tiktoka \/</p>
+    <button id="odpal" style="text-align: center;">Wyl/Wl</button>
+    <br>
+
+    <video width="320" height="480" autoplay muted loop style="display: none;">
+        <source src="assets/audio/brainwashing.mp4" type="video/mp4">
+    </video>
+
+    <footer>wersja 0.67
+        <br>Stworzono w Wielkiej Lechii
+    </footer>
+
+
+    <script>
+        const images = [
+            "assets/img/baza0.png",
+            "assets/img/baza1.png",
+            "assets/img/baza2.png",
+            "assets/img/baza3.png"
+        ];
+        let clickCount = 0;
+        let currentImage = 0;
+
+        const img = document.getElementById('img');
+        const counter = document.getElementById('licznik');
+
+        img.addEventListener('click', () => {
+            clickCount++;
+            counter.textContent = `Wynik: ${clickCount}`;
+            if (clickCount % 50 === 0) {
+                currentImage = (currentImage + 1) % images.length;
+                img.src = images[currentImage] + '?' + new Date().getTime();
+                console.log('currentImage:', currentImage, 'src:', img.src);
+            }
+            if (clickCount % 50 === 0){
+                document.getElementById('szpont').play();
+            }
+            if (clickCount % 200 === 0){
+                document.getElementById('nachuj').play();
+            }
+            if (clickCount % 550 === 0){
+                document.getElementById('kursor').play();
+            }
+            if (clickCount % 1000 === 0){
+                document.getElementById('kurwa').play();
+            }
+        });
+
+    document.getElementById('odpal').onclick = function() {
+        const video = document.querySelector('video');
+        if (video.style.display === 'none') {
+            video.style.display = 'block';
+        } else {
+            video.style.display = 'none';
+        }
+    };
+    </script>
+</body>
+</html>
