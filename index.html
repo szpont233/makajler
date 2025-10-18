@@ -6,7 +6,13 @@
 <link rel="icon" type="image/x-icon" href="assets/favicon.png">
 
 <style>
-body {
+html, body{
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+body{
     background-color: #c9d2e3;
     color: #333;
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -14,55 +20,55 @@ body {
     margin: 0;
     padding: 0;
 }
-#header {
+#header{
     background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
     color: white;
     padding: 20px;
     text-align: center;
     border-bottom: 4px solid #1c3057;
 }
-#container {
+#container{
     width: 900px;
     margin: 20px auto;
     background: white;
     border: 1px solid #999;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
-#menu {
+#menu{
     background: #f2f2f2;
     padding: 8px;
     border-bottom: 1px solid #ccc;
     text-align: center;
 }
-#menu a {
+#menu a{
     color: #003366;
     text-decoration: none;
     font-weight: bold;
     margin: 0 10px;
 }
-#menu a:hover {
+#menu a:hover{
     color: #cc0000;
 }
-#content {
+#content{
     padding: 20px;
 }
-h1 {
+h1{
     color: red;
     font-size: 22px;
     border-bottom: 2px solid red;
 }
-h2 {
+h2{
     color: #2b4a80;
     font-size: 18px;
 }
-.footer {
+.footer{
     background: #2b4a80;
     color: white;
     text-align: center;
     padding: 10px;
     font-size: 12px;
 }
-.button {
+.button{
     background: linear-gradient(to bottom, #4f81bd, #385d8a);
     color: white;
     padding: 8px 16px;
@@ -71,9 +77,28 @@ h2 {
     font-weight: bold;
     border-radius: 3px;
 }
-.button:hover {
+.button:hover{
     background: #5a8fd1;
 }
+#nowe{
+    padding: 10px;
+    border-left: 4px solid #2b4a80; 
+    background: #f0f4f8;
+    margin-bottom: 10px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background 0.2s;
+}
+#nowe:hover{
+    background-color: #dbdbdb;
+}
+#nowe strong{
+    color: #2b4a80;
+    font-size: 14px;
+}
+#container{
+    flex: 1;
+}
+
 </style>
 
 </head>
@@ -95,8 +120,9 @@ h2 {
 
     <div id="content">
         <h2>Nowości</h2>
-        <p><strong>18 października 2025</strong> <br> Obczaj nowego Szpontoklikera <a href="https://szpont233.github.io/makajler/">tutaj</a></p>
-        <p><strong>15 października 2025</strong><br> Narodziny Lechii w internecie.</p>
+        <p id="nowe"><strong>18 października 2025</strong><br> Dodano nową strone glowna i posortowano wszystko na różne kategorie. Pozdrawiam wszystkich Lechitów!</p>
+        <p id="nowe"><strong>16 października 2025</strong> <br> Obczaj nowego Szpontoklikera <a href="projekty/makajler/index.html">tutaj</a></p>
+        <p id="nowe"><strong>15 października 2025</strong><br> Narodziny Lechistanu w internecie.</p>
         <h2>O nas</h2>
         <p>Jesteśmy potomkami wladcow Imperium Lechickiego i w ramach tego stworzylismy strone internetowa. Zapraszamy.</p>
         
@@ -108,7 +134,8 @@ h2 {
 <div class="footer">
     Strona stworzona przez obywateli Imperium Lechitów.
     <p style="text-align:center;">
-    Odwiedzilo nas: <script type="text/javascript" src="https://counter.websiteout.com/js/21/0/0/0"></script> osob.
+    Odwiedzilo nas: <script type="text/javascript" src="https://counter.websiteout.com/js/21/0/0/0"></script> osob.<br>
+    Ostatnia aktualizacja: 18.10.2025, 22:38:46
 </p>
 
 </div>
