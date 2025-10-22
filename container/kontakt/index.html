@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Imperium Lechitów - Kontakt</title>
-<link rel="stylesheet" href="/assets/css/style.css">
+
+<link rel="stylesheet" href="../../assets/css/style.css">
+
 <link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
 <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -12,101 +14,72 @@
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
 <style>
-body {
-    background-color: #c9d2e3;
-    color: #333;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-}
-#header {
-    background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 4px solid #1c3057;
-}
-#container {
-    width: 900px;
-    margin: 20px auto;
-    background: white;
-    border: 1px solid #999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-#menu {
-    background: #f2f2f2;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
-}
-#menu a {
-    color: #003366;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
-}
-#menu a:hover {
-    color: #cc0000;
-}
-#content {
-    padding: 20px;
-}
-h1 {
-    color: red;
-    font-size: 22px;
-    border-bottom: 2px solid red;
-}
-h2 {
-    color: #2b4a80;
-    font-size: 18px;
-}
-.footer {
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
-}
-.button {
-    background: linear-gradient(to bottom, #4f81bd, #385d8a);
-    color: white;
-    padding: 8px 16px;
-    border: 1px solid #1c3057;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 3px;
-}
-.button:hover {
-    background: #5a8fd1;
-}
-html, body{
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+#form {
+  background-color: #f0f4f8;
+  border: 1px solid #999;
+  padding: 20px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-#container{
-    flex: 1;
+.field {
+  margin-bottom: 15px;
 }
 
-.footer{
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #2b4a80;
+  margin-bottom: 5px;
+  font-family: Verdana, sans-serif;
 }
+
+.field input[type="text"],
+.field textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-family: Verdana, sans-serif;
+  font-size: 13px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+input[type="submit"] {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: #2b4a80;
+  color: white;
+  border: 1px solid #1c3057;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: Verdana, sans-serif;
+  transition: background-color 0.2s ease-in-out;
+}
+
+input[type="submit"]:hover {
+  background-color: #385d8a;
+}
+
 </style>
-
 </head>
 <body>
 
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
     <h1>Kontakt</h1>
-    <p>Tytul mowi wszystko za siebie.</p>
+    <p style="text-shadow: 2px 2px 3px black; color: black;">Tytul mówi wszystko za siebie</p>
 </div>
 
 <div id="container">
@@ -119,10 +92,33 @@ html, body{
     </div>
 
     <div id="content">
-        <h1>Kontaktuj</h1> <br>
+        <h1>Info do kontaktowania</h1> <br>
         <p>Pisać tu: <a href="mailto:imperiumlechickie@protonmail.com">imperiumlechickie@protonmail.com</a></p>
         <p>Portal do naszego Imperium znajdziesz tutaj: <a href="https://share.google/gEBXOTnxCfTJ9oNt5">https://share.google/gEBXOTnxCfTJ9oNt5</a></p>
     </div>
+
+<h1>Kontaktuj</h1> <br>
+
+<form id="form">
+  <div class="field">
+    <label for="email">Podaj maila</label>
+    <input type="text" name="email" id="email">
+    <label for="tytul">Podaj tytul</label>
+    <input type="text" name="tytul" id="tytul">
+    <label for="message">Napisz wiadomość</label>
+    <textarea name="message" placeholder="Wiadomość" required></textarea>
+  </div>
+
+  <input type="submit" id="button" value=" Wyslij ">
+</form>
+
+<script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script type="text/javascript">
+  emailjs.init('2j9IQrMJItUV9PqJd')
+</script>
+
 </div>
 
 <div class="footer">
@@ -132,6 +128,29 @@ html, body{
 </p>
 
 </div>
+<script>
+const btn = document.getElementById('button');
+
+document.getElementById('form')
+ .addEventListener('submit', function(event) {
+   event.preventDefault();
+
+   btn.value = 'Wysylanie...';
+
+   const serviceID = 'default_service';
+   const templateID = 'template_0b0ayse';
+
+   emailjs.sendForm(serviceID, templateID, this)
+    .then(() => {
+      btn.value = 'Wyslij maila';
+      alert('Wyslano!');
+    }, (err) => {
+      btn.value = 'Wyslij maila';
+      alert(JSON.stringify(err));
+    });
+});
+</script>
+
 
 </body>
 </html>

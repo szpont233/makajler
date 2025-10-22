@@ -1,86 +1,104 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 body {
-    background-color: #c9d2e3;
-    color: #333;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
+  background-color: #c9d2e3;
+  color: #333;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  padding: 0;
 }
+
 #header {
-    background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 4px solid #1c3057;
+  background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 4px solid #1c3057;
 }
+
 #container {
-    width: 900px;
-    margin: 20px auto;
-    background: white;
-    border: 1px solid #999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  width: 900px;
+  margin: 20px auto;
+  background: white;
+  border: 1px solid #999;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  flex: 1;
 }
+
 #menu {
-    background: #f2f2f2;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
+  background: #f2f2f2;
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
 }
+
 #menu a {
-    color: #003366;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
+  color: #003366;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 10px;
 }
+
 #menu a:hover {
-    color: #cc0000;
+  color: #cc0000;
 }
+
 #content {
-    padding: 20px;
+  padding: 20px;
 }
+
 h1 {
-    color: red;
-    font-size: 22px;
-    border-bottom: 2px solid red;
+  color: red;
+  font-size: 22px;
+  border-bottom: 2px solid red;
 }
+
 h2 {
-    color: #2b4a80;
-    font-size: 18px;
+  color: #2b4a80;
+  font-size: 18px;
 }
+
 .footer {
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
+  background: #2b4a80;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
 }
+
 .button {
-    background: linear-gradient(to bottom, #4f81bd, #385d8a);
-    color: white;
-    padding: 8px 16px;
-    border: 1px solid #1c3057;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 3px;
+  background: linear-gradient(to bottom, #4f81bd, #385d8a);
+  color: white;
+  padding: 8px 16px;
+  border: 1px solid #1c3057;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 3px;
 }
+
 .button:hover {
-    background: #5a8fd1;
-}
-html, body{
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+  background: #5a8fd1;
 }
 
-#container{
-    flex: 1;
+#nowe {
+  padding: 10px;
+  border-left: 4px solid #2b4a80;
+  background: #f0f4f8;
+  margin-bottom: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s, background 0.2s;
 }
 
-.footer{
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
+#nowe:hover {
+  background-color: #dbdbdb;
+}
+
+#nowe strong {
+  color: #2b4a80;
+  font-size: 14px;
 }

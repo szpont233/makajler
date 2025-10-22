@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Imperium Lechitów - Projekty</title>
-<link rel="stylesheet" href="/assets/css/style.css">
+
+<link rel="stylesheet" href="../../assets/css/style.css">
+
 <link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
 <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -13,95 +15,36 @@
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
 
 <style>
-body {
-    background-color: #c9d2e3;
-    color: #333;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-}
-#header {
-    background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 4px solid #1c3057;
-}
-#container {
-    width: 900px;
-    margin: 20px auto;
-    background: white;
-    border: 1px solid #999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-#menu {
-    background: #f2f2f2;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
-}
-#menu a {
-    color: #003366;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
-}
-#menu a:hover {
-    color: #cc0000;
-}
-#content {
-    padding: 20px;
-}
-h1 {
-    color: red;
-    font-size: 22px;
-    border-bottom: 2px solid red;
-}
-h2 {
-    color: #2b4a80;
-    font-size: 18px;
-}
-.footer {
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
-}
-.button {
-    background: linear-gradient(to bottom, #4f81bd, #385d8a);
-    color: white;
-    padding: 8px 16px;
-    border: 1px solid #1c3057;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 3px;
-}
-.button:hover {
-    background: #5a8fd1;
-}
-#szpont{
-    border: 2px solid gold;
-}
-html, body{
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+#projekty-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
 }
 
-#container{
-    flex: 1;
+.projekt {
+  width: 120px;
+  text-align: center;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
 
-.footer{
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
+.projekt:hover {
+  background: #e0e0e0;
 }
+
+.projekt img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #999;
+  margin-bottom: 8px;
+}
+
 </style>
 
 </head>
@@ -110,7 +53,7 @@ html, body{
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
     <h1>Projekty Lechitów</h1>
-    <p>Nasze aktualne wydane projekty.</p>
+    <p style="text-shadow: 2px 2px 3px black;">Nasze aktualne wydane projekty.</p>
 </div>
 
 <div id="container">
@@ -125,13 +68,25 @@ html, body{
 <div id="content">
   <h1>Projekty</h1>
 
+<div id="projekty-container">
+
   <div class="projekt">
     <a href="../../projekty/makajler/index.html" style="text-decoration: none; color: inherit;">
-      <img src="../../projekty/makajler/assets/img/baza0.png" alt="Szpontokliker" width="100" height="100" style="display:block; margin-bottom:8px;" id="szpont">
+      <img src="../../projekty/makajler/assets/img/baza0.png" alt="Szpontokliker">
       <strong>Szpontokliker</strong><br>
-      <span>Zobacz projekt</span>
+      <span>Kliknij</span>
     </a>
   </div>
+
+  <div class="projekt">
+    <a href="#" style="text-decoration: none; color: inherit;">
+      <img src="https://www.animatedgif.net/animals/bears/polarbranm_e0.gif" alt="Test 2">
+      <strong>Bedzie</strong><br>
+      <span>Niedlugo</span>
+    </a>
+  </div>
+
+</div>
 </div>
 </div>
 <br>

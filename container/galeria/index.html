@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Imperium Lechitów - Galeria</title>
-<link rel="stylesheet" href="/assets/css/style.css">
+
+<link rel="stylesheet" href="../../assets/css/style.css">
+
 <link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
 <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -11,102 +13,86 @@
 <link rel="manifest" href="../../assets/site.webmanifest" />
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
+
 <style>
-body {
-    background-color: #c9d2e3;
-    color: #333;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    margin: 0;
-    padding: 0;
-}
-#header {
-    background: #2b4a80 url('https://i.imgur.com/DN5gRmu.png') repeat-x;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 4px solid #1c3057;
-}
-#container {
-    width: 900px;
-    margin: 20px auto;
-    background: white;
-    border: 1px solid #999;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-}
-#menu {
-    background: #f2f2f2;
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
-}
-#menu a {
-    color: #003366;
-    text-decoration: none;
-    font-weight: bold;
-    margin: 0 10px;
-}
-#menu a:hover {
-    color: #cc0000;
-}
-#content {
-    padding: 20px;
-}
-h1 {
-    color: red;
-    font-size: 22px;
-    border-bottom: 2px solid red;
-}
-h2 {
-    color: #2b4a80;
-    font-size: 18px;
-}
-.footer {
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
-}
-.button {
-    background: linear-gradient(to bottom, #4f81bd, #385d8a);
-    color: white;
-    padding: 8px 16px;
-    border: 1px solid #1c3057;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 3px;
-}
-.button:hover {
-    background: #5a8fd1;
-}
-html, body{
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+.galeria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
 }
 
-#container{
-    flex: 1;
+.zdj {
+  width: 200px;
+  background: #f9f9f9;
+  border: 2px solid #999;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  box-shadow: 2px 2px 5px #666;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
 }
 
-.footer{
-    background: #2b4a80;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
+.zdj:hover {
+  background: #e0e0e0;
+  transform: scale(1.05);
 }
+
+.zdj img {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+}
+
+#lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 15, 15, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border: 4px solid white;
+  box-shadow: 0 0 25px black;
+}
+
+#lightbox.hidden {
+  display: none;
+}
+
+#lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  background: red;
+  padding: 5px 12px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px black;
+}
+
+
 </style>
-
 </head>
 <body>
 
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
     <h1>Galeria Lechicka</h1>
-    <p>Nasze foty i sama prawda.</p>
+    <p style="text-shadow: 2px 2px 3px black; color: black;">Nasze foty</p>
 </div>
 
 <div id="container">
@@ -118,9 +104,28 @@ html, body{
         <a href="../../container/swiatynia/index.html">Świątynia</a>
     </div>
 
-    <div id="content">
-        <h1>Galeria</h1>
+<div id="content">
+  <h1>Galeria</h1>
+  <br>
+
+  <div class="galeria">
+    <div class="zdj">
+      <img src="../../assets/lechia.jpg" alt="Lechia" data-full="../../assets/lechia.jpg">
+      <p>Imperium Lechitów 2025</p>
     </div>
+    <div class="zdj">
+      <img src="../../assets/mapa.jpg" alt="Imperium" data-full="../../assets/mapa.jpg">
+      <p>Mapa Imperium</p>
+    </div>
+  </div>
+</div>
+
+
+<div id="lightbox" class="hidden">
+  <span id="lightbox-close">X</span>
+  <img id="lightbox-img" src="" alt="full view">
+</div>
+</div>
 </div>
 
 <div class="footer">
@@ -130,6 +135,21 @@ html, body{
 </p>
 
 </div>
+<script>
+  document.querySelectorAll('.zdj img').forEach(img => {
+    img.addEventListener('click', () => {
+      const full = img.getAttribute('data-full');
+      document.getElementById('lightbox-img').src = full;
+      document.getElementById('lightbox').classList.remove('hidden');
+    });
+  });
 
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox' || e.target.id === 'lightbox-close') {
+      document.getElementById('lightbox').classList.add('hidden');
+      document.getElementById('lightbox-img').src = '';
+    }
+  });
+</script>
 </body>
 </html>
