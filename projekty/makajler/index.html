@@ -110,9 +110,9 @@ function detectAutoClicker() {
   const now = Date.now();
   clickTimestamps.push(now);
 
-  clickTimestamps = clickTimestamps.filter(ts => now - ts < 500);
+  clickTimestamps = clickTimestamps.filter(ts => now - ts < 1000);
 
-  if (clickTimestamps.length > 14) {
+  if (clickTimestamps.length > 15) {
     triggerPunishment();
   }
 }
