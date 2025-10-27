@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8" />
-  <title>Szpontokliker v1.271</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  
+<meta charset="utf-8" />
+<title>Szpontokliker BETA</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
 <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -12,359 +11,407 @@
 <link rel="manifest" href="../../assets/site.webmanifest" />
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
+<link rel="stylesheet" href="style.css">
 
-  <style>
-    :root{--bg:#fafafa;--panel:#e9e9e9;--accent:#c0392b}
-    html,body{height:100%;margin:0;font-family:Verdana, Arial, Helvetica, sans-serif;background:var(--bg);color:#222}
-    .wrap{max-width:980px;margin:18px auto;padding:18px}
-    header{display:flex;align-items:center;gap:12px}
-    h1{margin:0;font-size:24px}
-    #licznik{font-size:22px;margin:12px 0}
-    #img{width:180px;height:180px;display:block;margin:12px auto;cursor:pointer}
-
-    .layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
-    .panel{background:var(--panel);padding:12px;border-radius:8px}
-
-    .shop-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(0,0,0,0.03)}
-    .shop-item button{padding:6px 10px;border-radius:6px;border:0;background:var(--accent);color:white;cursor:pointer}
-    .shop-item small{display:block;color:#444}
-
-    footer{
-    background: #2b4a80;
-    color: red;
-    text-align: center;
-    padding: 10px;
-    font-size: 12px;
-    }
-
-    @media (max-width:780px){
-      .layout{grid-template-columns:1fr}
-    }
-  </style>
 </head>
 <body>
-    <audio id="szpont" src="assets/audio/szpont.mp3"></audio>
-    <audio id="nachuj" src="assets/audio/nachujwpierdalasz.mp3"></audio>
-    <audio id="kursor" src="assets/audio/kursorwirus.mp3"></audio>
-    <audio id="kurwa" src="assets/audio/kurwa.mp3"></audio>
-  <div class="wrap">
-    <header>
-      <h1>Szpontokliker</h1>
-      <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
-      <div style="margin-left:auto;color:#666">wersja: v1.271</div>
-    </header>
+<audio id="szpont" src="assets/audio/szpont.mp3"></audio>
+<audio id="nachuj" src="assets/audio/nachujwpierdalasz.mp3"></audio>
+<audio id="kursor" src="assets/audio/kursorwirus.mp3"></audio>
+<audio id="kurwa" src="assets/audio/kurwa.mp3"></audio>
+<div class="wrap">
+<header>
+<h1>Szpontokliker</h1>
+<a href="../../index.html" style="margin:auto; padding:5px;"><div style="border:1px solid black; padding:5px; background-color:#c0c0c0;"><img src="../../logo.png" alt="logo Lechii"></div></a>
+<div style="margin-left:auto;color:#666">wersja: v1.3</div>
+</header>
+<div class="layout">
+<main>
+  <div class="panel">
+  <div id="licznik">kliknięcia: <span id="score">0</span></div>
+  <div id="level">Poziom 1 – Bezrobotny Szpont</div>
+    <img id="img" src="assets/img/baza0.png" alt="klikaj" />
 
-    <div class="layout">
-      <main>
-        <div class="panel">
-          <div id="licznik">kliknięcia: <span id="score">0</span></div>
-          <img id="img" src="assets/img/baza0.png" alt="klikaj" />
-
-          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
-            <button id="reset">Reset</button>
-            <button id="save">Zapisz</button>
-            <button id="dzwieki">Wylącz dźwięki</button>
-
-          </div>
-
-          <hr>
-          <div>
-            <strong>Nowe wieści:</strong>
-            <ul>
-              <li>Dodano ubgrejdy i sklepik</li>
-              <li>Wszystko zapisuje się automatycznie co ileś kliknięć (!!!)</li>
-              <li>Wersja klasik jest dostepna na naszej stronie</li>
-            </ul>
-          </div>
-        </div>
-      </main>
-
-      <aside>
-        <div class="panel">
-          <h3>Sklep</h3>
-          <div id="shop"></div>
-          <hr>
-          <div style="margin-top:8px">
-            <strong>Statystyki</strong>
-            <div>CPS: <span id="cps">0</span></div>
-            <div>Wartość kliknięcia: <span id="clickValue">1</span></div>
-          </div>
-        </div>
-
-        <div class="panel" style="margin-top:12px">
-          <h3>Osiągnięcia</h3>
-          <div id="achievements"></div>
-        </div>
-      </aside>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+    <button id="reset">Reset</button>
+    <button id="save">Zapisz</button>
+    <button id="dzwieki">Wyłącz dźwięki</button>
+</div>
+<hr>
+<div>
+<strong>Nowe wieści:</strong>
+<ul>
+<li><strong>v1.3 beta</strong></li>
+<li>Tusk udezyl nas drozyzna. Od teraz +25% przy kazdym zakupie</li>
+<li>Zlagodzono anti cheata. dodano ostrzezenie przed banem</li>
+<li>Ogarnieto sypiace sie dzwięki i obrazki</li>
+<li>Mniej dostajesz, wiecej placisz</li>
+<li>Dodano poziomy</li>
+<li>Pracuje nad rankingiem, wciaz moze nie dzialac czasami</li>
+</ul>
+<ul>
+<li><strong>v1.271 beta</strong></li>
+<li>Dodano ubgrejdy i sklepik</li>
+<li>Wszystko zapisuje się automatycznie co ileś kliknięć (!!!)</li>
+</ul>
+</div>
+</div>
+</main>
+<aside>
+<div class="panel">
+    <h3>Sklep</h3>
+    <div id="shop"></div>
+    <hr>
+    <div style="margin-top:8px">
+      <strong>Statystyki</strong>
+      <div>CPS: <span id="cps">0</span></div>
+      <div>Wartość kliknięcia: <span id="clickValue">1</span></div>
     </div>
-
   </div>
-  <footer>Stworzono w Wielkiej Lechii, v1.271</footer>
 
-  <script>
-    let audioCtx = null;
-    let wyciszone = false;
-    let clickTimestamps = [];
+  <div class="panel" style="margin-top:12px">
+    <h3>Osiągnięcia</h3>
+    <div id="achievements"></div>
+  </div>
+
+  <div class="panel" style="margin-top:12px">
+    <h3>Ranking</h3>
+    <table id="ranking" style="width:100%; font-size:13px"></table>
+  </div>
+</aside>
+</div>
+  </div>
+  <footer>Stworzono w Wielkiej Lechii. <br>
+    imperiumlechitow.pl
+  </footer>
+
+<script>
+let audioCtx = null;
+let wyciszone = false;
+
+let clickTimestamps = [];
+let clickQueue = 0;
+let lastSoundTime = 0;
+
+const POOL_SIZE = 8;
+const MAX_SOUND_CLICKS_PER_TICK = 25;
+let oscPool = null;
+let oscPoolIndex = 0;
+
+function ensureAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (!oscPool) initOscPool();
+}
+
+function initOscPool() {
+  ensureAudioCtx();
+  oscPool = [];
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'square';
+    g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.start();
+    oscPool.push({ o, g, busyUntil: 0 });
+  }
+}
+
+function playClick(freq = 1280) {
+  if (wyciszone) return;
+  ensureAudioCtx();
+
+  const now = audioCtx.currentTime;
+  for (let attempts = 0; attempts < POOL_SIZE; attempts++) {
+    const idx = (oscPoolIndex++) % POOL_SIZE;
+    const node = oscPool[idx];
+    if (audioCtx.currentTime >= node.busyUntil) {
+      try {
+        node.o.frequency.setValueAtTime(freq, now);
+        node.g.gain.cancelScheduledValues(now);
+        node.g.gain.setValueAtTime(0.08, now);
+        node.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+        node.busyUntil = now + 0.09;
+      } catch (e) {
+      }
+      return;
+    }
+  }
+
+  const fallback = oscPool[(oscPoolIndex++) % POOL_SIZE];
+  try {
+    const now2 = audioCtx.currentTime;
+    fallback.o.frequency.setValueAtTime(freq, now2);
+    fallback.g.gain.cancelScheduledValues(now2);
+    fallback.g.gain.setValueAtTime(0.06, now2);
+    fallback.g.gain.exponentialRampToValueAtTime(0.0001, now2 + 0.06);
+    fallback.busyUntil = now2 + 0.07;
+  } catch (e) {}
+}
+
+const scoreEl = document.getElementById('score');
+const cpsEl = document.getElementById('cps');
+const clickValueEl = document.getElementById('clickValue');
+const shopEl = document.getElementById('shop');
+const achievementsEl = document.getElementById('achievements');
+const levelEl = document.getElementById('level');
+const img = document.getElementById('img');
+
+const state = {
+  score: 0,
+  baseClick: 1,
+  clickMultiplier: 1,
+  cps: 0,
+  items: {},
+  lastTick: Date.now()
+};
+
+const images = ['assets/img/baza0.png','assets/img/baza1.png','assets/img/baza2.png'];
+const preloadedImgs = images.map(src => { const i = new Image(); i.src = src; return i; });
+let currentImage = 0;
+
+const shopDefinitions = [
+  {id:'popit', name:'Sąsiad', cost:15, cps:0.1, click:0, quantity:0, desc:'+0.1 CPS'},
+  {id:'konsola', name:'Argentyńskie bydło', cost:100, cps:1, click:0, quantity:0, desc:'+1 CPS'},
+  {id:'kawa', name:'Kawa + fajka na śniadanie', cost:250, cps:0, click:1, quantity:0, desc:'+1 do kliknięcia'},
+  {id:'guru', name:'Plebsowy GPT 6-7', cost:1200, cps:10, click:0, quantity:0, desc:'+10 CPS'},
+  {id:'boost', name:'Kwantowy GPT-7.6', cost:5000, cps:0, click:10, quantity:0, desc:'+10 do kliknięcia'},
+  {id:'ojczysta', name:'Ojczysta 100%', cost:1, cps:0, click:20, quantity:0, desc:'+20 do kliknięcia'}
+];
+
+const achDefs = [
+  {id:'10', label:'10 klikesow', check:st=>Math.floor(st.score)>=10},
+  {id:'100', label:'100 pkt', check:st=>Math.floor(st.score)>=100},
+  {id:'firstbuy', label:'Pierwszy zakup', check:st=>Object.keys(st.items).length>0}
+];
+
+const levels = [
+  {req:0, name:"Zbieracz kiepów"},
+  {req:100, name:"Bezrobotny renciarz"},
+  {req:500, name:"Robotnik z socjalem"},
+  {req:1500, name:"Kierorwnik zegarka OREGON SCIENTIFIC"},
+  {req:5000, name:"Menadżer pilotu od telewizora"},
+  {req:12000, name:"Dyrektor PKS Dzialdowo S.A"},
+  {req:25000, name:"Prezes Szpont Holding z Cypru"},
+  {req:50000, name:"Szpont Obajtek"},
+  {req:100000, name:"Przemytnik dzialek na Ksiezycu"},
+  {req:250000, name:"Żyd z Mobilisu"}
+];
+
+function safePlay(id){
+  if (wyciszone) return;
+  const now = Date.now();
+  if (now - lastSoundTime < 250) return;
+  lastSoundTime = now;
+  const a = document.getElementById(id);
+  if (!a) return;
+  try { a.currentTime = 0; a.play().catch(()=>{}); } catch (e) {}
+}
 
 function detectAutoClicker() {
   const now = Date.now();
   clickTimestamps.push(now);
-
   clickTimestamps = clickTimestamps.filter(ts => now - ts < 1000);
-
-  if (clickTimestamps.length > 15) {
-    triggerPunishment();
+  if (clickTimestamps.length > 18) {
+    alert("Zwolnij bo konon zastrzeli cie mlekiem");
+    clickTimestamps = [];
   }
 }
 
-    // Debug audio loading
-    ['szpont', 'nachuj', 'kursor', 'kurwa'].forEach(id => {
-        const audio = document.getElementById(id);
-        audio.addEventListener('error', (e) => {
-            console.error(`Error loading audio ${id}:`, e);
-        });
-    });
-    
-    const img = document.getElementById('img');
-    let currentImage = 0;
-    const images = ['assets/img/baza0.png', 'assets/img/baza1.png', 'assets/img/baza2.png'];
-let lastSzpont = 0;
-let lastNachuj = 0;
-let lastKursor = 0;
-let lastKurwa = 0;
-
-function checkSounds(){
-    if (wyciszone) return;
-
-    if(state.score - lastSzpont >= 300){
-        currentImage = (currentImage + 1) % images.length;
-        img.src = images[currentImage];
-        document.getElementById('szpont').play().catch(e => console.error('Error playing szpont:', e));
-        lastSzpont += 300;
-    }
-    if(state.score - lastNachuj >= 600){
-        document.getElementById('nachuj').play().catch(e => console.error('Error playing nachuj:', e));
-        lastNachuj += 600;
-    }
-    if(state.score - lastKursor >= 950){
-        document.getElementById('kursor').play().catch(e => console.error('Error playing kursor:', e));
-        lastKursor += 950;
-    }
-    if(state.score - lastKurwa >= 2000){
-        document.getElementById('kurwa').play().catch(e => console.error('Error playing kurwa:', e));
-        lastKurwa += 2000;
-    }
-
+function priceFor(def) {
+  return Math.floor(def.cost * Math.pow(1.25, def.quantity));
 }
-let lastClickSound = 0;
 
+function recalcCPS() {
+  let total = 0;
+  shopDefinitions.forEach(d => total += (d.cps || 0) * d.quantity);
+  state.cps = total;
+  cpsEl.textContent = state.cps.toFixed(2);
+}
 
-  img.addEventListener('click', () => {
-      detectAutoClicker();
-      state.score += recalcClickValue();
-      checkSounds();
-      playClick();
-      render();
+function recalcClickValue() {
+  let v = state.baseClick + state.clickMultiplier - 1;
+  shopDefinitions.forEach(d => { if (d.click) v += d.click * d.quantity; });
+  clickValueEl.textContent = v;
+  return v;
+}
+
+function renderShop(){
+  shopEl.innerHTML = '';
+  shopDefinitions.forEach(def=>{
+    const item = state.items[def.id] || {quantity:0};
+    def.quantity = item.quantity || 0;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'shop-item';
+    wrapper.innerHTML = `<div><strong>${def.name}</strong><small>${def.desc}</small><div style="font-size:12px;color:#666">Posiadasz: ${def.quantity}</div></div><div style="text-align:right"><div style="font-weight:bold">${priceFor(def)} €</div><button data-id="${def.id}">Kup</button></div>`;
+    shopEl.appendChild(wrapper);
+    wrapper.querySelector('button').addEventListener('click',()=>buy(def));
   });
-
-    const state = {
-      score: 0,
-      baseClick: 1,
-      clickMultiplier: 1,
-      cps: 0,
-      items: {},
-      lastTick: Date.now()
-    };
-    const shopDefinitions = [
-      {id:'popit', name:'Sąsiad', cost: 15, cps: 0.1, click:0, quantity:0, desc:'+0.1 CPS'},
-      {id:'konsola', name:'Argentyńskie bydło', cost: 100, cps: 1, click:0, quantity:0, desc:'+1 CPS'},
-      {id:'kawa', name:'Kawa + fajka na śniadanie', cost: 250, cps:0, click:1, quantity:0, desc:'+1 do kliknięcia'},
-      {id:'guru', name:'Plebsowy GPT 6-7', cost:1200, cps:10, click:0, quantity:0, desc:'+10 CPS'},
-      {id:'boost', name:'Kwantowy GPT-7.6', cost:5000, cps:0, click:10, quantity:0, desc:'+10 do kliknięcia'},
-      {id:'ojczysta', name:'Ojczysta 100%', cost:10000, cps:0, click:10, quantity:0, desc:'+100 do kliknięcia'}
-    ];
-    const scoreEl = document.getElementById('score');
-    const shopEl = document.getElementById('shop');
-    const cpsEl = document.getElementById('cps');
-    const clickValueEl = document.getElementById('clickValue');
-    const achievementsEl = document.getElementById('achievements');
-
-    function save() {
-      localStorage.setItem('szpont-state', JSON.stringify(state));
-      document.getElementById('save').textContent = 'Zapisano!';
-      setTimeout(()=>document.getElementById('save').textContent='Zapisz',800);
-    }
-
-function playClick(freq = 1280) {
-  if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.type = 'square';
-  o.frequency.value = freq;
-  g.gain.value = 0.1;
-  o.connect(g);
-  g.connect(audioCtx.destination);
-  o.start();
-  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
-  o.stop(audioCtx.currentTime + 0.09);
 }
 
-const clickVal = recalcClickValue();
-state.score += clickVal;
-playClick(1000 + clickVal * 10);
+function buy(def){
+  const cost = priceFor(def);
+  if (state.score < cost) { flashNotEnough(); return; }
+  state.score -= cost;
+  def.quantity = (def.quantity || 0) + 1;
+  state.items[def.id] = { quantity: def.quantity };
+  renderShop(); recalcCPS(); recalcClickValue(); save();updateRankingPrompt(state.score);
+}
 
-    function load(){
-      const raw = localStorage.getItem('szpont-state');
-      if(raw){
-        try{const parsed = JSON.parse(raw); Object.assign(state, parsed);}catch(e){console.warn('load failed',e)}
-      }
-    }
-    function priceFor(def){
-      return Math.floor(def.cost * Math.pow(1.15, def.quantity));
-    }
-    function renderShop(){
-      shopEl.innerHTML = '';
-      shopDefinitions.forEach(def=>{
-        const item = state.items[def.id] || {quantity:0};
-        def.quantity = item.quantity || 0;
-        const wrapper = document.createElement('div');
-        wrapper.className = 'shop-item';
-        wrapper.innerHTML = `
-          <div>
-            <strong>${def.name}</strong>
-            <small>${def.desc}</small>
-            <div style="font-size:12px;color:#666">Posiadasz: ${def.quantity}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:bold">${priceFor(def)} \u20ac</div>
-            <button data-id="${def.id}">Kup</button>
-          </div>`;
-        shopEl.appendChild(wrapper);
-        wrapper.querySelector('button').addEventListener('click',()=>buy(def));
-      });
-    }
+function renderAchievements(){
+  achievementsEl.innerHTML = '';
+  achDefs.forEach(a=>{
+    const unlocked = a.check(state);
+    const el = document.createElement('div');
+    el.textContent = a.label + (unlocked ? ' OK' : '');
+    achievementsEl.appendChild(el);
+  });
+}
 
-    function recalcCPS(){
-      let total = 0;
-      shopDefinitions.forEach(d=>{
-        total += (d.cps || 0)*d.quantity;
-      });
-      state.cps = total;
-      cpsEl.textContent = state.cps.toFixed(2);
-    }
+function renderLevel(){
+  const lvl = levels.slice().reverse().find(l => state.score >= l.req) || levels[0];
+  const lvlIndex = levels.indexOf(lvl) + 1;
+  levelEl.textContent = `Poziom ${lvlIndex} – ${lvl.name}`;
+}
 
-    function recalcClickValue(){
-      let v = state.baseClick + state.clickMultiplier - 1;
-      shopDefinitions.forEach(d=>{ if(d.click) v += d.click * d.quantity; });
-      clickValueEl.textContent = v;
-      return v;
-    }
+function render(){
+  scoreEl.textContent = Math.floor(state.score);
+  renderLevel();
+  renderAchievements();
+}
 
-    function buy(def){
-      const cost = priceFor(def);
-      if(state.score < cost) return flashNotEnough();
-      state.score -= cost;
-      def.quantity = (def.quantity||0) + 1;
-      state.items[def.id] = {quantity:def.quantity};
-      render();
-      renderShop();
-      recalcCPS();
-      recalcClickValue();
-      save();
-    }
+function save(){ localStorage.setItem('szpont-state', JSON.stringify(state)); document.getElementById('save').textContent='Zapisano!'; setTimeout(()=>document.getElementById('save').textContent='Zapisz',800); }
+function load(){ const raw = localStorage.getItem('szpont-state'); if (raw) { try { Object.assign(state, JSON.parse(raw)); } catch(e){ console.warn('load failed', e); } } }
 
-    function flashNotEnough(){
-      scoreEl.style.color = 'red';
-      setTimeout(()=>scoreEl.style.color='inherit',300);
-    }
+function flashNotEnough(){ scoreEl.style.color='red'; setTimeout(()=>scoreEl.style.color='inherit',300); }
 
-    function tick(){
-      const now = Date.now();
-      const dt = (now - state.lastTick)/1000.0;
-      state.lastTick = now;
-      if(state.cps > 0){
-        state.score += state.cps * dt;
-        render();
-      }
-    }
-    setInterval(()=>{ save(); }, 15000);
-    setInterval(tick, 250);
+function tick(){
+  const now = Date.now();
+  const dt = (now - state.lastTick) / 1000.0;
+  state.lastTick = now;
+  if (dt > 3) return;
+  if (state.cps > 0) {
+    let cps = state.cps;
+    if (cps > 2000) cps = 2000 + Math.log10(cps) * 100;
+    state.score += cps * dt;
+  }
+}
 
-    function render(){
-      if(state.score < 100) scoreEl.textContent = Math.floor(state.score);
-      else scoreEl.textContent = Math.floor(state.score);
-    }
-
-    document.getElementById('reset').addEventListener('click',()=>{
-      if(!confirm('Chcesz cofnąć sie do epoki kamienia łupanego?')) return;
-      localStorage.removeItem('szpont-state');
-      location.reload();
-    });
-
-    document.getElementById('save').addEventListener('click',save);
-    const achDefs = [
-      {id:'10', label:'10 klikesow', check:st=>Math.floor(st.score) >= 10},
-      {id:'100', label:'100 pkt', check:st=>Math.floor(st.score) >= 100},
-      {id:'firstbuy', label:'Pierwszy zakup', check:st=>Object.keys(st.items).length>0}
-    ];
-
-    function renderAchievements(){
-      achievementsEl.innerHTML='';
-      achDefs.forEach(a=>{
-        const unlocked = a.check(state);
-        const el = document.createElement('div');
-        el.textContent = a.label + (unlocked? ' OK':'');
-        achievementsEl.appendChild(el);
-      });
-    }
-
-    function triggerPunishment() {
+function triggerPunishment(){
   localStorage.removeItem('szpont-state');
   state.score = 0;
   document.body.innerHTML = '';
-
   const div = document.createElement('div');
-  div.style.position = 'fixed';
-  div.style.top = 0;
-  div.style.left = 0;
-  div.style.width = '100vw';
-  div.style.height = '100vh';
-  div.style.backgroundColor = 'black';
-  div.style.zIndex = '9';
-  div.style.display = 'flex';
-  div.style.flexDirection = 'column';
-  div.style.alignItems = 'center';
-  div.style.justifyContent = 'center';
-
-  div.innerHTML = `
-    <img src="https://cdn.discordapp.com/attachments/1412558821817319464/1424500573666938972/Screenshot_20250911-172320_1.png?ex=68f9edca&is=68f89c4a&hm=9ee105aa0d9a0500492fcbe91e49abf3f8bfb6c93b9a6e4816a8dcc556e9bfd6&" style="max-width:90%;max-height:60vh;border:4px solid red;border-radius:12px;">
-    <h1 style="color:red;margin-top:20px;font-size:28px;">Wypierdalaj z autoclickerem falszywa kurwo</h1>
-    <p style="color:white;font-size:16px;"></p>
-  `;
-
+  div.style.position='fixed'; div.style.top=0; div.style.left=0; div.style.width='100vw'; div.style.height='100vh';
+  div.style.backgroundColor='black'; div.style.zIndex='9'; div.style.display='flex'; div.style.flexDirection='column';
+  div.style.alignItems='center'; div.style.justifyContent='center';
+  div.innerHTML = `<img src="https://cdn.discordapp.com/attachments/1412558821817319464/1424500573666938972/Screenshot_20250911-172320_1.png" style="max-width:90%;max-height:60vh;border:4px solid red;border-radius:12px;"><h1 style="color:red;margin-top:20px;font-size:28px;">Wypierdalaj z autoclickerem falszywa kurwo</h1><p style="color:white;font-size:16px;"></p>`;
   document.body.appendChild(div);
-} 
+}
 
-document.getElementById('dzwieki').addEventListener('click', () => {
-  wyciszone = !wyciszone;
-  const btn = document.getElementById('dzwieki');
-  btn.textContent = wyciszone ? ' Włącz dźwięki' : ' Wyłącz dźwięki';
+function processClickQueue(){
+  if (clickQueue <= 0) return;
+  const clicks = clickQueue;
+  clickQueue = 0;
+
+  const val = recalcClickValue(); 
+  state.score += val * clicks;
+
+  const soundsToPlay = Math.min(clicks, MAX_SOUND_CLICKS_PER_TICK);
+  for (let i = 0; i < soundsToPlay; i++) {
+
+    (function(offset){
+      setTimeout(() => {
+        const freq = 900 + Math.min(3000, val * 12);
+        playClick(freq);
+      }, offset);
+    })(i * 8);
+  }
+
+  checkBonusSoundsAndImages();
+}
+
+let lastSzpont = 0, lastNachuj = 0, lastKursor = 0, lastKurwa = 0;
+function checkBonusSoundsAndImages(){
+  let infl = 1;
+  if (state.score >= 50000) infl = 4;
+  else if (state.score >= 20000) infl = 3;
+  else if (state.score >= 5000) infl = 2;
+
+  if (state.score - lastSzpont >= 300 * infl) {
+    currentImage = (currentImage + 1) % preloadedImgs.length;
+    img.src = preloadedImgs[currentImage].src;
+    safePlay('szpont');
+    lastSzpont = state.score;
+  }
+  if (state.score - lastNachuj >= 600 * infl) {
+    safePlay('nachuj');
+    lastNachuj = state.score;
+  }
+  if (state.score - lastKursor >= 950 * infl) {
+    safePlay('kursor');
+    lastKursor = state.score;
+  }
+  if (state.score - lastKurwa >= 2000 * infl) {
+    safePlay('kurwa');
+    lastKurwa = state.score;
+  }
+}
+
+img.addEventListener('pointerdown', () => {
+  detectAutoClicker();
+  clickQueue++;
 });
 
-    load();
-    shopDefinitions.forEach(d=>{
-      const saved = state.items[d.id];
-      if(saved && typeof saved.quantity === 'number') d.quantity = saved.quantity; else d.quantity = 0;
-    });
-    recalcCPS();
-    recalcClickValue();
-    renderShop();
-    render();
-    renderAchievements();
-    setInterval(()=>{ recalcCPS(); recalcClickValue(); renderAchievements(); }, 1000);
+document.getElementById('reset').addEventListener('click', () => {
+  if (!confirm('Chcesz cofnąć sie do epoki kamienia łupanego?')) return;
+  localStorage.removeItem('szpont-state');
+  location.reload();
+});
+document.getElementById('save').addEventListener('click', save);
+document.getElementById('dzwieki').addEventListener('click', () => {
+  wyciszone = !wyciszone;
+  document.getElementById('dzwieki').textContent = wyciszone ? 'Włącz dźwięki' : 'Wyłącz dźwięki';
+});
 
-  </script>
+load();
+shopDefinitions.forEach(d => {
+  const s = state.items[d.id];
+  d.quantity = (s && typeof s.quantity === 'number') ? s.quantity : 0;
+});
+recalcCPS(); recalcClickValue(); renderShop(); render();
+setInterval(tick, 250);
+setInterval(processClickQueue, 50);
+setInterval(render, 100);
+setInterval(() => { save(); recalcCPS(); recalcClickValue(); }, 30000);
+</script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyACKJG8cU9M3VqZ1rvbawxd1o45PU7oOXU",
+    authDomain: "szpontkliker.firebaseapp.com",
+    projectId: "szpontkliker",
+    storageBucket: "szpontkliker.firebasestorage.app",
+    messagingSenderId: "761006393043",
+    appId: "1:761006393043:web:a534faff83b8695157b626",
+    measurementId: "G-215L6B8F1P"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 </body>
 </html>
