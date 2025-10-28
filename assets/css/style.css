@@ -113,3 +113,56 @@ h2 {
   color: #2b4a80;
   font-size: 14px;
 }
+
+@media(max-width: 768px) {
+  body{
+    font-size: 14px;
+  }
+
+  #header{
+    padding: 10px;
+  }
+
+  #container{
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  #menu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  #menu a{
+    display: inline-block;
+    margin: 4px 6px;
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+
+  #content{
+    padding: 10px;
+  }
+
+  h1{
+    font-size: 18px;
+  }
+
+  h2{
+    font-size: 16px;
+  }
+
+  .button{
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+    width: 80%;
+  }
+
+  #nowe{
+    font-size: 13px;
+    padding: 8px;
+  }
+}

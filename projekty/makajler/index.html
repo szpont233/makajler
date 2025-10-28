@@ -12,6 +12,8 @@
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
 <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 </head>
 <body>
@@ -115,7 +117,6 @@ function ensureAudioCtx() {
 }
 
 function initOscPool() {
-  ensureAudioCtx();
   oscPool = [];
   for (let i = 0; i < POOL_SIZE; i++) {
     const o = audioCtx.createOscillator();
@@ -141,8 +142,8 @@ function playClick(freq = 1280) {
       try {
         node.o.frequency.setValueAtTime(freq, now);
         node.g.gain.cancelScheduledValues(now);
-        node.g.gain.setValueAtTime(0.08, now);
-        node.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+        node.g.gain.setValueAtTime(0.15, now);
+        node.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
         node.busyUntil = now + 0.09;
       } catch (e) {
       }
