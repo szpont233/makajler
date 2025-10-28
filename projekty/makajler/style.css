@@ -13,10 +13,120 @@ h1{margin:0;font-size:24px}
 footer{background: #2b4a80;color: red;text-align: center;padding: 10px;font-size: 12px;}
 #level{font-weight:bold;font-size:18px;margin-top:10px;}
 @media (max-width:780px){.layout{grid-template-columns:1fr}}
-#ranking th {
-  text-align: left;
-  border-bottom: 1px solid #aaa;
+
+body {
+  font-family: "Verdana", "Tahoma", sans-serif;
+  background: linear-gradient(#f0f0f0, #dcdcdc);
+  color: #222;
+  margin: 0;
+  padding: 0;
 }
-#ranking td {
-  padding: 2px 4px;
+
+h1, h3 {
+  text-shadow: 1px 1px 0 #fff;
 }
+
+.wrap {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 8px;
+  background: #e9e9e9;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(#c8d8f0, #a0b8d8);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #8aa0c0;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #12325a;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.layout {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+main {
+  flex: 2;
+}
+aside {
+  flex: 1;
+}
+
+.panel {
+  background: linear-gradient(#f7f7f7, #e2e2e2);
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  padding: 10px;
+}
+
+button {
+  background: linear-gradient(#fefefe, #cfcfcf);
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.1s;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+button:hover {
+  background: linear-gradient(#fff, #bfbfbf);
+}
+
+button:active {
+  background: #a0a0a0;
+  transform: scale(0.97);
+}
+
+#ranking tr:nth-child(even) { background: #f0f0f0; }
+#ranking tr:nth-child(odd) { background: #e0e0e0; }
+
+ul#tabela {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+ul#tabela li {
+  margin-bottom: 3px;
+}
+
+#img {
+  display: block;
+  margin: 10px auto;
+  cursor: pointer;
+  border: 2px solid #888;
+  border-radius: 6px;
+  background: #ccc;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+}
+
+#img:active {
+  transform: scale(0.98);
+}
+
+footer {
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px;
+  margin-top: 15px;
+  border-top: 1px solid #aaa;
+}
+

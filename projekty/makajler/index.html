@@ -23,7 +23,7 @@
 <header>
 <h1>Szpontokliker</h1>
 <a href="../../index.html" style="margin:auto; padding:5px;"><div style="border:1px solid black; padding:5px; background-color:#c0c0c0;"><img src="../../logo.png" alt="logo Lechii"></div></a>
-<div style="margin-left:auto;color:#666">wersja: v1.3</div>
+<div style="margin-left:auto;color:#666">wersja: v1.42</div>
 </header>
 <div class="layout">
 <main>
@@ -38,9 +38,18 @@
     <button id="dzwieki">Wyłącz dźwięki</button>
 </div>
 <hr>
+
 <div>
 <strong>Nowe wieści:</strong>
-<ul>
+<ul id="tabela">
+    <li></li>
+</ul>
+<ul id="tabela">
+  <li><strong>v1.41 beta</strong></li>
+  <li>Dodano DZIALAJACY ranking online, wciaz moga byc drobne bugi np. nie zapisuje sie ranking po manualnym klikniecniu na "Zapisz" (trzeba odczekac 10 sekund)</li>
+  <li>Ogarnieto lepsza stylistyke strony (juz nie wyglada jak rozjechane surowe gowno)</li>
+</ul>
+<ul id="tabela">
 <li><strong>v1.3 beta</strong></li>
 <li>Tusk udezyl nas drozyzna. Od teraz +25% przy kazdym zakupie</li>
 <li>Zlagodzono anti cheata. dodano ostrzezenie przed banem</li>
@@ -49,7 +58,7 @@
 <li>Dodano poziomy</li>
 <li>Pracuje nad rankingiem, wciaz moze nie dzialac czasami</li>
 </ul>
-<ul>
+<ul id="tabela">
 <li><strong>v1.271 beta</strong></li>
 <li>Dodano ubgrejdy i sklepik</li>
 <li>Wszystko zapisuje się automatycznie co ileś kliknięć (!!!)</li>
@@ -70,13 +79,13 @@
   </div>
 
   <div class="panel" style="margin-top:12px">
-    <h3>Osiągnięcia</h3>
-    <div id="achievements"></div>
+    <h3>Ranking</h3>
+    <table id="ranking" style="width:100%; font-size:13px"></table>
   </div>
 
   <div class="panel" style="margin-top:12px">
-    <h3>Ranking</h3>
-    <table id="ranking" style="width:100%; font-size:13px"></table>
+    <h3>Osiągnięcia</h3>
+    <div id="achievements"></div>
   </div>
 </aside>
 </div>
@@ -190,11 +199,11 @@ const achDefs = [
 
 const levels = [
   {req:0, name:"Zbieracz kiepów"},
-  {req:100, name:"Bezrobotny renciarz"},
-  {req:500, name:"Robotnik z socjalem"},
-  {req:1500, name:"Kierorwnik zegarka OREGON SCIENTIFIC"},
-  {req:5000, name:"Menadżer pilotu od telewizora"},
-  {req:12000, name:"Dyrektor PKS Dzialdowo S.A"},
+  {req:500, name:"Bezrobotny renciarz"},
+  {req:1000, name:"Robotnik z socjalem"},
+  {req:5000, name:"Kierorwnik zegarka OREGON SCIENTIFIC"},
+  {req:10000, name:"Menadżer pilotu od telewizora"},
+  {req:15000, name:"Dyrektor PKS Dzialdowo S.A"},
   {req:25000, name:"Prezes Szpont Holding z Cypru"},
   {req:50000, name:"Szpont Obajtek"},
   {req:100000, name:"Przemytnik dzialek na Ksiezycu"},
@@ -386,18 +395,16 @@ recalcCPS(); recalcClickValue(); renderShop(); render();
 setInterval(tick, 250);
 setInterval(processClickQueue, 50);
 setInterval(render, 100);
-setInterval(() => { save(); recalcCPS(); recalcClickValue(); }, 30000);
+setInterval(() => { save(); recalcCPS(); recalcClickValue(); }, 10000);
 </script>
 
+<huefufhiuefhuehufehuefhuefhuefhuefhuef></huefufhiuefhuehufehuefhuefhuefhuefhuef>
+
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getFirestore, collection, doc, setDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
     apiKey: "AIzaSyACKJG8cU9M3VqZ1rvbawxd1o45PU7oOXU",
     authDomain: "szpontkliker.firebaseapp.com",
@@ -408,10 +415,110 @@ setInterval(() => { save(); recalcCPS(); recalcClickValue(); }, 30000);
     measurementId: "G-215L6B8F1P"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  let playerId = localStorage.getItem('szpont-player-id');
+  if (!playerId) {
+    playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('szpont-player-id', playerId);
+  }
+
+  function ensurePlayerName() {
+    let playerName = localStorage.getItem('szpont-player-name');
+    if (!playerName) {
+      playerName = prompt('🏆 Podaj swoją nazwę do rankingu (możesz anulować i podać później):');
+      if (playerName && playerName.trim()) {
+        playerName = playerName.trim();
+        localStorage.setItem('szpont-player-name', playerName);
+
+        updateRanking(playerName, Math.floor(window.state.score || 0));
+      }
+    }
+    return playerName;
+  }
+
+  window.updateRankingPrompt = async function(score) {
+    const playerName = localStorage.getItem('szpont-player-name');
+    if (playerName) {
+      await updateRanking(playerName, Math.floor(score));
+    }
+  };
+
+  async function updateRanking(name, score) {
+    try {
+      await setDoc(doc(db, 'scores', playerId), {
+        name: name,
+        score: score,
+        lastUpdate: new Date().toISOString()
+      });
+      console.log('✅ Ranking zaktualizowany!');
+      loadRanking();
+    } catch (error) {
+      console.error('❌ Błąd zapisu:', error);
+    }
+  }
+
+  async function loadRanking() {
+    try {
+      const q = query(
+        collection(db, 'scores'),
+        orderBy('score', 'desc'),
+        limit(10)
+      );
+      const querySnapshot = await getDocs(q);
+      
+      const rankingTable = document.getElementById('ranking');
+      if (querySnapshot.empty) {
+        rankingTable.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:8px;color:#999">Brak wyników</td></tr>';
+        return;
+      }
+
+      let html = '<tr style="background:#f0f0f0;font-weight:bold"><td>#</td><td>Gracz</td><td>Punkty</td></tr>';
+      let position = 1;
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const isCurrentPlayer = doc.id === playerId;
+        const rowStyle = isCurrentPlayer ? 'background:#ffffcc;font-weight:bold' : '';
+        
+        let medal = '';
+        if (position === 1) medal = '🥇';
+        else if (position === 2) medal = '🥈';
+        else if (position === 3) medal = '🥉';
+
+        html += `<tr style="${rowStyle}">
+          <td style="padding:4px">${medal} ${position}</td>
+          <td style="padding:4px">${data.name}${isCurrentPlayer ? ' (TY)' : ''}</td>
+          <td style="padding:4px;text-align:right">${data.score.toLocaleString()}</td>
+        </tr>`;
+        position++;
+      });
+
+      rankingTable.innerHTML = html;
+    } catch (error) {
+      console.error('Błąd ładowania rankingu:', error);
+      document.getElementById('ranking').innerHTML = '<tr><td colspan="3" style="text-align:center;padding:8px;color:red">Błąd ładowania</td></tr>';
+    }
+  }
+
+  setTimeout(() => {
+    ensurePlayerName();
+  }, 1000);
+
+  loadRanking();
+  setInterval(loadRanking, 30000);
+
+  const originalSave = window.save;
+  window.save = function() {
+    originalSave();
+    if (window.updateRankingPrompt) {
+      window.updateRankingPrompt(state.score);
+    }
+  };
 </script>
+
 
 </body>
 </html>

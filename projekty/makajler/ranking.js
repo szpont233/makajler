@@ -1,9 +1,9 @@
-// Pobieramy potrzebne funkcje z Firebase
+
 const { collection, addDoc, getDocs, query, orderBy, limit } = window.firebaseTools;
-const db = window.db; // Twój obiekt Firestore
+const db = window.db;
 const rankingTable = document.getElementById('ranking');
 
-// Funkcja do ładowania rankingu
+
 async function loadRanking() {
   rankingTable.innerHTML = '<tr><td colspan="2">Ładowanie rankingu...</td></tr>';
   try {
@@ -21,7 +21,6 @@ async function loadRanking() {
   }
 }
 
-// Funkcja do dodania wyniku
 async function updateRankingPrompt(score) {
   const name = prompt("Podaj swój nick, aby dodać się do rankingu:");
   if (!name) return;
@@ -38,8 +37,6 @@ async function updateRankingPrompt(score) {
   }
 }
 
-// Expose do globalnego użycia z HTML
 window.updateRankingPrompt = updateRankingPrompt;
 
-// Załaduj ranking przy starcie
 loadRanking();
