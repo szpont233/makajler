@@ -12,33 +12,7 @@ h1{margin:0;font-size:24px}
 .shop-item small{display:block;color:#444}
 footer{background: #2b4a80;color: red;text-align: center;padding: 10px;font-size: 12px;}
 #level{font-weight:bold;font-size:18px;margin-top:10px;}
-
-@media (max-width: 780px) {
-  .layout {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  main, aside {
-    flex: 1 1 100%;
-    min-width: auto;
-  }
-
-  #img {
-    width: 70vw;
-    max-width: 150px;
-  }
-  
-  .shop-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .shop-item button {
-    width: 100%;
-  }
-}
-
+@media (max-width:780px){.layout{grid-template-columns:1fr}}
 
 body {
   font-family: "Verdana", "Tahoma", sans-serif;
