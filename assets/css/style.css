@@ -6,11 +6,12 @@ html, body {
 }
 
 body {
-  background-color: #c9d2e3;
+  background: linear-gradient(to bottom, #d7e0f0, #b9c6dd);
   color: #333;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 13px;
   padding: 0;
+  
 }
 
 #header {
@@ -19,22 +20,26 @@ body {
   padding: 20px;
   text-align: center;
   border-bottom: 4px solid #1c3057;
+  
 }
 
 #container {
   width: 900px;
   margin: 20px auto;
-  background: white;
-  border: 1px solid #999;
+  background: linear-gradient(to bottom, #ffffff, #e9edf5);
+  border: 1px solid #888;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   flex: 1;
+  
 }
 
 #menu {
-  background: #f2f2f2;
-  padding: 8px;
-  border-bottom: 1px solid #ccc;
+  background: linear-gradient(to bottom, #fafafa, #d9d9d9);
+  border-bottom: 1px solid #aaa;
+  box-shadow: inset 0 1px 0 white;
+  padding: 7px;
   text-align: center;
+  
 }
 
 #menu a {
@@ -45,7 +50,11 @@ body {
 }
 
 #menu a:hover {
-  color: #cc0000;
+  color: white;
+  background: #2b4a80;
+  padding: 4px 8px;
+  border-radius: 3px;
+  transition: all 0.2s;
 }
 
 #content {
@@ -69,6 +78,8 @@ h2 {
   text-align: center;
   padding: 10px;
   font-size: 12px;
+  border-top: 3px solid #1c3057;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 .button {
