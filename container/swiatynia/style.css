@@ -1,0 +1,171 @@
+body {
+    background-color: #000000;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-brick-wall.png");
+    color: #2b1a0b;
+    font-family: "Garamond", "Times New Roman", serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+}
+#header {
+    background-color: #111111;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-brick-wall.png");
+    color: #d4af37;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #2c2c2c;
+    font-family: "Cinzel", "Times New Roman", serif;
+}
+#container {
+    width: 65%;
+    margin: 20px auto;
+    max-width: 900px;
+    background-color: #313131;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-brick-wall.png");
+    border: 1px solid #6d6d6d;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+#menu {
+    background-color: #414040;
+    padding: 8px;
+    border-bottom: 1px solid #616161;
+    text-align: center;
+}
+#menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 10px;
+}
+#content h1 {
+    color: #ffffff;
+    font-size: 24px;
+    text-align: center;
+    border-bottom: 2px solid #535353;
+    margin-bottom: 15px;
+}
+#content h2 {
+    color: #ffffff;
+    border-bottom: 1px solid #5e5e5e;
+    padding-bottom: 3px;
+    margin-top: 25px;
+}
+.secret-box {
+    border: 1px solid #3f3f3f;
+    background-color: #5a5a5a;
+    color: white;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-brick-wall.png");
+    padding: 15px;
+    margin: 15px 0;
+    font-style: italic;
+    box-shadow: inset 0 0 5px rgba(107, 63, 38, 0.2);
+    font-size: larger;
+}
+.secret-box:hover {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1.01);
+    transition: 0.3s;
+}
+.warning {
+    background-color: #581616;
+    color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.footer {
+    background-color: #111111;
+    background-image: url("https://www.transparenttextures.com/patterns/dark-brick-wall.png");
+    color: #d4af37ff;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    border-top: 1px solid #2c2c2c;
+}
+body {
+  background: url('../../assets/candle.gif') repeat-y left,
+              url('../../assets/candle.gif') repeat-y right,
+              #000;
+}
+#menu a:hover {
+  color: #d4af37;
+  text-shadow: 0 0 5px #d4af37;
+}
+#img {
+  padding: 10px;
+  border: 1px solid #222;
+  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+}
+html, body{
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#container{
+    flex: 1;
+}
+
+.footer{
+    background: #2b4a80;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+}
+
+@media(max-width: 600px) {
+  body{
+    font-size: 14px;
+  }
+
+  #header{
+    padding: 10px;
+  }
+
+  #container{
+    width: 95%;
+    margin: 10px auto;
+  }
+
+  #menu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  #menu a{
+    display: block;
+    margin: 4px 0;
+    font-size: 14px;
+    padding: 5px 8px;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  h2{
+    font-size: 16px;
+  }
+
+  #content{
+    padding: 10px; 
+  }
+
+  .button{
+    display: block;
+    text-align: center;
+    margin: 10px auto;
+    width: 80%;
+  }
+
+  #nowe{
+    font-size: 13px;
+    padding: 8px;
+  }
+}
