@@ -1,1 +1,198 @@
-:root{--bg:#fafafa;--panel:#e9e9e9;--accent:#c0392b} html,body{height:100%;margin:0;font-family:Verdana, Arial, Helvetica, sans-serif;background:var(--bg);color:#222} .wrap{max-width:980px;margin:18px auto;padding:18px} header{display:flex;align-items:center;gap:12px} h1{margin:0;font-size:24px} #licznik{font-size:22px;margin:12px 0} #img{width:180px;height:180px;display:block;margin:12px auto;cursor:pointer;-webkit-tap-highlight-color: transparent; user-select:none; touch-action: manipulation;} .layout{display:grid;grid-template-columns:1fr 320px;gap:16px} .panel{background:var(--panel);padding:12px;border-radius:8px} .shop-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;margin-bottom:8px;background:rgba(0,0,0,0.03)} .shop-item button{padding:6px 10px;border-radius:6px;border:0;background:var(--accent);color:white;cursor:pointer; touch-action: manipulation;} .shop-item small{display:block;color:#444} footer{background: #2b4a80;color: red;text-align: center;padding: 10px;font-size: 12px;} #level{font-weight:bold;font-size:18px;margin-top:10px;} @media (max-width:780px) {.layout{grid-template-columns:1fr}} body { font-family: "Verdana", "Tahoma", sans-serif; background: linear-gradient(#f0f0f0, #dcdcdc); color: #222; margin: 0; padding: 0; } h1, h3 { text-shadow: 1px 1px 0 #fff; } .wrap { max-width: 1100px; margin: 20px auto; padding: 8px; background: #e9e9e9; border: 1px solid #aaa; border-radius: 8px; box-shadow: 2px 2px 6px rgba(0,0,0,0.2); } header { display: flex; align-items: center; background: linear-gradient(#c8d8f0, #a0b8d8); padding: 6px 10px; border-radius: 6px; border: 1px solid #8aa0c0; box-shadow: inset 0 1px 0 #fff; } header h1 { margin: 0; font-size: 20px; color: #12325a; text-shadow: 1px 1px 0 #fff; } .layout { display: flex; gap: 12px; margin-top: 10px; } main { flex: 2; } aside { flex: 1; } .panel { background: linear-gradient(#f7f7f7, #e2e2e2); border: 1px solid #aaa; border-radius: 6px; box-shadow: 1px 1px 4px rgba(0,0,0,0.2); padding: 10px; } button { background: linear-gradient(#fefefe, #cfcfcf); border: 1px solid #888; border-radius: 4px; padding: 5px 10px; font-weight: bold; cursor: pointer; transition: 0.1s; box-shadow: inset 0 1px 0 #fff; } button:hover { background: linear-gradient(#fff, #bfbfbf); } button:active { background: #a0a0a0; transform: scale(0.97); } #ranking tr:nth-child(even) { background: #f0f0f0; } #ranking tr:nth-child(odd) { background: #e0e0e0; } ul#tabela { list-style-type: none; margin: 0; padding-left: 10px; } ul#tabela li { margin-bottom: 3px; } #img { display: block; margin: 10px auto; cursor: pointer; border: 2px solid #888; border-radius: 6px; background: #ccc; box-shadow: 0 0 6px rgba(0,0,0,0.3); transition: transform 0.1s; } #img:active { transform: scale(0.98); } footer { text-align: center; color: #fff; font-size: 13px; padding: 10px; margin-top: 15px; border-top: 1px solid #aaa; }
+:root {
+  --bg: #fafafa;
+  --panel: #e9e9e9;
+  --accent: #c0392b;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: #222;
+}
+
+.wrap {
+  width: 95%;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  background: linear-gradient(#c8d8f0, #a0b8d8);
+  border-radius: 6px;
+  border: 1px solid #8aa0c0;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #12325a;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+#licznik {
+  font-size: 22px;
+  margin: 12px 0;
+}
+
+#img {
+  width: 180px;
+  max-width: 50vw;
+  height: auto;
+  display: block;
+  margin: 12px auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+  border: 2px solid #888;
+  border-radius: 6px;
+  background: #ccc;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+}
+
+#img:active {
+  transform: scale(0.98);
+}
+
+.layout {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+main {
+  flex: 2 1 65%;
+}
+
+aside {
+  flex: 1 1 30%;
+  min-width: 220px;
+}
+
+.panel {
+  background: linear-gradient(#f7f7f7, #e2e2e2);
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  padding: 12px;
+}
+
+.shop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: rgba(0,0,0,0.03);
+}
+
+.shop-item button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 0;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.shop-item small {
+  display: block;
+  color: #444;
+}
+
+button {
+  background: linear-gradient(#fefefe, #cfcfcf);
+  border: 1px solid #888;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.1s;
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+button:hover {
+  background: linear-gradient(#fff, #bfbfbf);
+}
+
+button:active {
+  background: #a0a0a0;
+  transform: scale(0.97);
+}
+
+#ranking tr:nth-child(even) { background: #f0f0f0; }
+#ranking tr:nth-child(odd) { background: #e0e0e0; }
+
+ul#tabela {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+ul#tabela li {
+  margin-bottom: 3px;
+}
+
+#level {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+footer {
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 5%;
+  margin-top: 15px;
+  border-top: 1px solid #aaa;
+  background: #2b4a80;
+}
+
+@media (max-width: 780px) {
+  .layout {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  main {
+    flex: 2 1 60%;
+    min-width: 180px;
+  }
+
+  aside {
+    flex: 1 1 35%;
+    min-width: 160px;
+  }
+
+  .shop-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .shop-item button {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  #img {
+    width: 45vw;
+    max-width: 150px;
+  }
+}
