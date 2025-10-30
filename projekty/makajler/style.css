@@ -47,12 +47,9 @@ header h1 {
 }
 
 #img {
-  width: 180px;
+  width: 210px;
   max-width: 50vw;
-  height: auto;
-  display: block;
-  margin: 12px auto;
-  cursor: pointer;
+  height: 200px;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   touch-action: manipulation;
@@ -61,10 +58,31 @@ header h1 {
   background: #ccc;
   box-shadow: 0 0 6px rgba(0,0,0,0.3);
   transition: transform 0.1s;
+  object-fit: cover;
+  display: block;
+  margin: 10px auto;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn{
+  background: linear-gradient(90deg, #d4af37, #ffbb10);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+}
+.btn:hover{
+  background: linear-gradient(90deg, #ffd342, #e6b12c);
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 #img:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
 }
 
 .layout {
@@ -136,6 +154,7 @@ button:active {
   transform: scale(0.97);
 }
 
+
 #ranking tr:nth-child(even) { background: #f0f0f0; }
 #ranking tr:nth-child(odd) { background: #e0e0e0; }
 
@@ -165,10 +184,17 @@ footer {
   background: #2b4a80;
 }
 
+
 @media (max-width: 780px) {
   .layout {
     flex-direction: row;
     flex-wrap: wrap;
+  }
+
+  #img {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
   }
 
   main {
@@ -196,6 +222,5 @@ footer {
     height: auto;
     display: block;
     margin: auto;
-}
-
+  }
 }
