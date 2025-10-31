@@ -13,7 +13,6 @@
 <link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
 <link rel="stylesheet" href="style.css">
 
-
 </head>
 <body>
 <audio id="szpont" src="assets/audio/szpont.mp3"></audio>
@@ -24,7 +23,7 @@
 <header>
 <h1>Szpontokliker</h1>
 <a href="../../index.html" style="margin:auto; padding:5px;"><div style="border:1px solid black; padding:5px; background-color:#c0c0c0;"><img src="../../logo.png" alt="logo Lechii"></div></a>
-<div style="margin-left:auto;color:#666">wersja: v1.50</div>
+<div style="margin-left:auto;color:#666">wersja: v1.42</div>
 </header>
  <a href="https://forms.gle/jQinbBHWugDWPmFr7" target="_blank" style="font-size:12px; color: red; text-align: center">Co dodać następnym razem?</a>
 <div class="layout">
@@ -42,19 +41,16 @@
 <hr>
 
 <div>
-<strong>Nowe wieści:</strong><br><br>
+<strong>Nowe wieści:</strong>
 <ul id="tabela">
-    <li><strong>v1.50 beta</strong></li>
-    <li>Na prośbe kilku osób dodalem pare nowych funkcji i ogarnalem bugi. Od teraz miejsce do klikania ma stala wielkość, dodano "Fidora" i rebirthy, powiekszono obrazek na telefonie, i dodano formularz na stronie z propozycjami do wyslania.  </li>
-    <li>Po uzyciu rebirtha dostajesz multiplier x1.75 i wszystkie zakupy i punkty resetuja sie. </li>
-    <li>Po aktualizacji moga wystepowac bledy w nowych bajerach. Postaram sie je ogarnac jak najszybciej.</li>
+    <li><strong>v1.50 beta anulowany.</strong></li>
 </ul>
-<ul id="tabela"><br>
+<ul id="tabela">
   <li><strong>v1.41 beta</strong></li>
   <li>Dodano DZIALAJACY ranking online, wciaz moga byc drobne bugi np. nie zapisuje sie ranking po manualnym klikniecniu na "Zapisz" (trzeba odczekac 10 sekund)</li>
   <li>Ogarnieto lepsza stylistyke strony (juz nie wyglada jak rozjechane surowe gowno)</li>
 </ul>
-<ul id="tabela"><br>
+<ul id="tabela">
 <li><strong>v1.3 beta</strong></li>
 <li>Tusk udezyl nas drozyzna. Od teraz +25% przy kazdym zakupie</li>
 <li>Zlagodzono anti cheata. dodano ostrzezenie przed banem</li>
@@ -63,7 +59,7 @@
 <li>Dodano poziomy</li>
 <li>Pracuje nad rankingiem, wciaz moze nie dzialac czasami</li>
 </ul>
-<ul id="tabela"><br>
+<ul id="tabela">
 <li><strong>v1.271 beta</strong></li>
 <li>Dodano ubgrejdy i sklepik</li>
 <li>Wszystko zapisuje się automatycznie co ileś kliknięć (!!!)</li>
@@ -72,13 +68,7 @@
 </div>
 </main>
 <aside>
-  <p style="text-align: center;font-weight: bold;color: white; text-shadow:1px 1px 2px red,0 0 1em blue,0 0 0.2em blue;">Specjal!!</p><br>
-  <div style="display:flex;gap:8px;justify-content:center;margin-bottom: 10px;">
-    <button id="rebirth" class="btn">Rebirth (2.5M)</button>
-    <button id="fidor" class="btn">Fidor (50k)</button>
-  </div>
-
-  <div class="panel">
+<div class="panel">
     <h3>Sklep</h3>
     <div id="shop"></div>
     <hr>
@@ -88,7 +78,6 @@
       <div>Wartość kliknięcia: <span id="clickValue">1</span></div>
     </div>
   </div>
-
 
   <div class="panel" style="margin-top:12px">
     <h3>Ranking</h3>
@@ -102,22 +91,9 @@
 </aside>
 </div>
   </div>
-
-<footer>
-  Stworzono w Wielkiej Lechii. <br>
-  imperiumlechitow.pl <br>
-  <a href="https://forms.gle/jQinbBHWugDWPmFr7" target="_blank" style="font-size:12px; color: red;">Co dodać następnym razem?</a>
-</footer>
-
-
-
-
-
-
-
-
-
-
+  <footer>Stworzono w Wielkiej Lechii. <br>
+    imperiumlechitow.pl
+  </footer>
 
 <script>
 let audioCtx = null;
@@ -140,6 +116,7 @@ function ensureAudioCtx() {
 }
 
 function initOscPool() {
+  ensureAudioCtx();
   oscPool = [];
   for (let i = 0; i < POOL_SIZE; i++) {
     const o = audioCtx.createOscillator();
@@ -165,8 +142,8 @@ function playClick(freq = 1280) {
       try {
         node.o.frequency.setValueAtTime(freq, now);
         node.g.gain.cancelScheduledValues(now);
-        node.g.gain.setValueAtTime(0.15, now);
-        node.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+        node.g.gain.setValueAtTime(0.08, now);
+        node.g.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
         node.busyUntil = now + 0.09;
       } catch (e) {
       }
@@ -218,9 +195,7 @@ const shopDefinitions = [
 const achDefs = [
   {id:'10', label:'10 klikesow', check:st=>Math.floor(st.score)>=10},
   {id:'100', label:'100 pkt', check:st=>Math.floor(st.score)>=100},
-  {id:'firstbuy', label:'Pierwszy zakup', check:st=>Object.keys(st.items).length>0},
-  { id: '10m', label: '10 milionów kliknięć?!', check: st => st.score >= 10_000_000 },
-  { id: '40m', label: 'Legenda Szpontoklikera', check: st => st.score >= 40_000_000 },
+  {id:'firstbuy', label:'Pierwszy zakup', check:st=>Object.keys(st.items).length>0}
 ];
 
 const levels = [
@@ -242,7 +217,6 @@ const levels = [
   {req:75000000, name: "Wnuk Rothschilda"},
   {req:100000000, name: "WŁADCA IMPERIUM LECHICKIEGO"}
 ];
-
 function safePlay(id){
   if (wyciszone) return;
   const now = Date.now();
@@ -420,8 +394,6 @@ document.getElementById('dzwieki').addEventListener('click', () => {
 });
 
 load();
-loadRebirths();
-
 shopDefinitions.forEach(d => {
   const s = state.items[d.id];
   d.quantity = (s && typeof s.quantity === 'number') ? s.quantity : 0;
@@ -431,133 +403,6 @@ setInterval(tick, 250);
 setInterval(processClickQueue, 50);
 setInterval(render, 100);
 setInterval(() => { save(); recalcCPS(); recalcClickValue(); }, 10000);
-
-document.getElementById('rebirth').addEventListener('click', performRebirth);
-document.getElementById('fidor').addEventListener('click', useFidor);
-
-// --- REBIRTH ---
-var rebirths = parseInt(localStorage.getItem('szpont-rebirths') || '0');
-var rebirthMultiplier = 1.0;
-
-function loadRebirths() {
-  rebirths = parseInt(localStorage.getItem('szpont-rebirths') || '0');
-  rebirthMultiplier = 1.0 + (rebirths * 0.75); // +0.75 za każdy rebirth
-}
-
-function performRebirth() {
-  if (state.score < 2500000) {
-    alert("Potrzebujesz przynajmniej 2 500 000 punktów do rebirthu!");
-    return;
-  }
-  if (!confirm("Czy na pewno chcesz sie odrodzić? Stracisz cały postęp, ale zyskasz multiplier")) return;
-
-  rebirths++;
-  localStorage.setItem('szpont-rebirths', rebirths.toString());
-
-  // Resetuj wynik i kupione itemy
-  state.score = 0;
-  state.items = {};
-  shopDefinitions.forEach(def => def.quantity = 0);
-  recalcCPS();
-  recalcClickValue();
-  render();
-  renderShop();
-
-  // Zaktualizuj multiplier
-  rebirthMultiplier = 1.0 + (rebirths * 0.75);
-  alert(`Witaj ponownie w Wielkiej Lechii. Masz ${rebirthMultiplier.toFixed(2)}x multiplier.`);
-}
-
-// Zaktualizuj funkcję recalcCPS i recalcClickValue, by uwzględniały rebirthMultiplier
-function recalcCPS() {
-  let total = 0;
-  shopDefinitions.forEach(d => total += (d.cps || 0) * d.quantity);
-  state.cps = total * rebirthMultiplier; // Dodano multiplier
-  cpsEl.textContent = state.cps.toFixed(2);
-}
-
-function recalcClickValue() {
-  let v = (state.baseClick + state.clickMultiplier - 1) * rebirthMultiplier; // Dodano multiplier
-  shopDefinitions.forEach(d => { if (d.click) v += d.click * d.quantity; });
-  clickValueEl.textContent = v.toFixed(2); // Dodano .toFixed(2)
-  return v;
-}
-
-
-// --- FIDOR ---
-let fidorsAvailable = true;
-let lastFidorUse = localStorage.getItem('szpont-last-fidor');
-
-function checkFidorAvailability() {
-  if (!lastFidorUse) {
-    fidorsAvailable = true;
-    return;
-  }
-  const now = Date.now();
-  const last = parseInt(lastFidorUse);
-  if (now - last > 24 * 60 * 60 * 1000) { // 24h
-    fidorsAvailable = true;
-  } else {
-    fidorsAvailable = false;
-  }
-}
-
-async function useFidor() {
-  if (!fidorsAvailable) {
-    alert("Fidor można użyć tylko raz na 24 godziny!");
-    return;
-  }
-  if (state.score < 50000) {
-    alert("Potrzebujesz przynajmniej 50 000 punktów, by użyć Fidora!");
-    return;
-  }
-
-  state.score -= 50000;
-
-  // Pobierz ranking i wybierz losowego gracza (oprócz siebie)
-  try {
-    const q = window.query(collection(db, 'scores'), orderBy('score', 'desc'), limit(10));
-    const querySnapshot = await getDocs(q);
-    let players = [];
-    querySnapshot.forEach((doc) => {
-      if (doc.id !== playerId) { // Nie atakuj samego siebie
-        players.push({ id: doc.id, ...doc.data() });
-      }
-    });
-
-    if (players.length === 0) {
-      alert("Brak graczy do ataku!");
-      return;
-    }
-
-    const randomPlayer = players[Math.floor(Math.random() * players.length)];
-    const targetId = randomPlayer.id;
-    const targetScore = randomPlayer.score;
-
-    if (targetScore < 20000) {
-      alert("Nie możesz zaatakować gracza z mniej niż 20k punktów!");
-      return;
-    }
-
-    // Zabierz 20k punktów
-    await setDoc(doc(db, 'scores', targetId), {
-      ...randomPlayer,
-      score: Math.max(0, targetScore - 20000),
-      lastUpdate: new Date().toISOString(),
-      fidorPenalty: true, // Dodaj flagę kary
-      fidorPenaltyUntil: Date.now() + 30 * 60 * 1000 // 30 minut
-    }, { merge: true });
-
-    alert(`Fidor zaatakował gracza ${randomPlayer.name}! Odebrano mu 20 000 punktów.`);
-    localStorage.setItem('szpont-last-fidor', Date.now().toString());
-    fidorsAvailable = false;
-  } catch (e) {
-    console.error("Błąd przy użyciu Fidora:", e);
-    alert("Błąd przy użyciu Fidora. Spróbuj ponownie później.");
-  }
-}
-
-checkFidorAvailability();
 </script>
 
 <huefufhiuefhuehufehuefhuefhuefhuefhuef></huefufhiuefhuehufehuefhuefhuefhuefhuef>
@@ -581,26 +426,11 @@ checkFidorAvailability();
   const analytics = getAnalytics(app);
   const db = getFirestore(app);
 
-  // --- Ujawnij funkcje i zmienne globalnie ---
-  window.db = db;
-  window.collection = collection;
-  window.doc = doc;
-  window.setDoc = setDoc;
-  window.getDocs = getDocs;
-  window.query = query;
-  window.orderBy = orderBy;
-  window.limit = limit;
-
   let playerId = localStorage.getItem('szpont-player-id');
   if (!playerId) {
     playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     localStorage.setItem('szpont-player-id', playerId);
   }
-  window.playerId = playerId;
-  // ---
-
-  // ... reszta kodu Firebase (ensurePlayerName, updateRanking, itd.)orage.setItem('szpont-player-id', playerId);
-
 
   function ensurePlayerName() {
     let playerName = localStorage.getItem('szpont-player-name');
@@ -628,7 +458,6 @@ checkFidorAvailability();
       await setDoc(doc(db, 'scores', playerId), {
         name: name,
         score: score,
-        rebirths: rebirths,
         lastUpdate: new Date().toISOString()
       });
       console.log('✅ Ranking zaktualizowany!');
@@ -638,49 +467,48 @@ checkFidorAvailability();
     }
   }
 
-async function loadRanking() {
-  try {
-    const q = query(
-      collection(db, 'scores'),
-      orderBy('score', 'desc'),
-      limit(10)
-    );
-    const querySnapshot = await getDocs(q);
+  async function loadRanking() {
+    try {
+      const q = query(
+        collection(db, 'scores'),
+        orderBy('score', 'desc'),
+        limit(10)
+      );
+      const querySnapshot = await getDocs(q);
+      
+      const rankingTable = document.getElementById('ranking');
+      if (querySnapshot.empty) {
+        rankingTable.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:8px;color:#999">Brak wyników</td></tr>';
+        return;
+      }
 
-    const rankingTable = document.getElementById('ranking');
-    if (querySnapshot.empty) {
-      rankingTable.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:8px;color:#999">Brak wyników</td></tr>';
-      return;
+      let html = '<tr style="background:#f0f0f0;font-weight:bold"><td>#</td><td>Gracz</td><td>Punkty</td></tr>';
+      let position = 1;
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const isCurrentPlayer = doc.id === playerId;
+        const rowStyle = isCurrentPlayer ? 'background:#ffffcc;font-weight:bold' : '';
+        
+        let medal = '';
+        if (position === 1) medal = '🥇';
+        else if (position === 2) medal = '🥈';
+        else if (position === 3) medal = '🥉';
+
+        html += `<tr style="${rowStyle}">
+          <td style="padding:4px">${medal} ${position}</td>
+          <td style="padding:4px">${data.name}${isCurrentPlayer ? ' (TY)' : ''}</td>
+          <td style="padding:4px;text-align:right">${data.score.toLocaleString()}</td>
+        </tr>`;
+        position++;
+      });
+
+      rankingTable.innerHTML = html;
+    } catch (error) {
+      console.error('Błąd ładowania rankingu:', error);
+      document.getElementById('ranking').innerHTML = '<tr><td colspan="3" style="text-align:center;padding:8px;color:red">Błąd ładowania</td></tr>';
     }
-
-    let html = '<tr style="background:#f0f0f0;font-weight:bold"><td>#</td><td>Gracz</td><td>Punkty</td><td>Rebirthy</td></tr>';
-    let position = 1;
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const isCurrentPlayer = doc.id === playerId;
-      const rowStyle = isCurrentPlayer ? 'background:#ffffcc;font-weight:bold' : '';
-
-      let medal = '';
-      if (position === 1) medal = '🥇';
-      else if (position === 2) medal = '🥈';
-      else if (position === 3) medal = '🥉';
-
-      html += `<tr style="${rowStyle}">
-        <td style="padding:4px">${medal} ${position}</td>
-        <td style="padding:4px">${data.name}${isCurrentPlayer ? ' (TY)' : ''}</td>
-        <td style="padding:4px;text-align:right">${data.score.toLocaleString()}</td>
-        <td style="padding:4px;text-align:center">${data.rebirths || 0}</td>
-      </tr>`;
-      position++;
-    });
-
-    rankingTable.innerHTML = html;
-  } catch (error) {
-    console.error('Błąd ładowania rankingu:', error);
-    document.getElementById('ranking').innerHTML = '<tr><td colspan="4" style="text-align:center;padding:8px;color:red">Błąd ładowania</td></tr>';
   }
-}
 
   setTimeout(() => {
     ensurePlayerName();
