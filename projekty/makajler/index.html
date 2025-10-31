@@ -231,7 +231,7 @@ function detectAutoClicker() {
   const now = Date.now();
   clickTimestamps.push(now);
   clickTimestamps = clickTimestamps.filter(ts => now - ts < 1000);
-  if (clickTimestamps.length > 18) {
+  if (clickTimestamps.length > 25) {
     alert("Zwolnij bo konon zastrzeli cie mlekiem");
     clickTimestamps = [];
   }
