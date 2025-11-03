@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 import { getFirestore, collection, doc, setDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-import { state } from './state.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyACKJG8cU9M3VqZ1rvbawxd1o45PU7oOXU",
@@ -14,7 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-try { getAnalytics(app); } catch(e){}
+try{ getAnalytics(app); }catch(e){}
 const db = getFirestore(app);
 
 window.db = db;
@@ -33,27 +32,27 @@ if (!playerId) {
 }
 window.playerId = playerId;
 
-export function ensurePlayerName() {
+window.ensurePlayerName = function() {
   let playerName = localStorage.getItem('szpont-player-name');
   if (!playerName) {
     playerName = prompt('🏆 Podaj swoją nazwę do rankingu (możesz anulować i podać później):');
     if (playerName && playerName.trim()) {
       playerName = playerName.trim();
       localStorage.setItem('szpont-player-name', playerName);
-      updateRanking(playerName, Math.floor(window.state.score || 0));
+      window.updateRanking(playerName, Math.floor(window.state.score || 0));
     }
   }
   return playerName;
-}
+};
 
-export async function updateRankingPrompt(score) {
+window.updateRankingPrompt = async function(score) {
   const playerName = localStorage.getItem('szpont-player-name');
   if (playerName) {
-    await updateRanking(playerName, Math.floor(score));
+    await window.updateRanking(playerName, Math.floor(score));
   }
-}
+};
 
-export async function updateRanking(name, score) {
+window.updateRanking = async function(name, score) {
   try {
     await setDoc(doc(db, 'scores', playerId), {
       name: name,
@@ -61,22 +60,19 @@ export async function updateRanking(name, score) {
       lastUpdate: new Date().toISOString()
     });
     console.log('✅ Ranking zaktualizowany!');
-    loadRanking();
+    window.loadRanking();
   } catch (error) {
     console.error('❌ Błąd zapisu:', error);
   }
-}
+};
 
-export async function loadRanking() {
+window.loadRanking = async function() {
   try {
-    const q = query(
-      collection(db, 'scores'),
-      orderBy('score', 'desc'),
-      limit(10)
-    );
+    const q = query(collection(db, 'scores'), orderBy('score', 'desc'), limit(10));
     const querySnapshot = await getDocs(q);
 
     const rankingTable = document.getElementById('ranking');
+    if (!rankingTable) return;
     if (querySnapshot.empty) {
       rankingTable.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:8px;color:#999">Brak wyników</td></tr>';
       return;
@@ -109,13 +105,15 @@ export async function loadRanking() {
     console.error('Błąd ładowania rankingu:', error);
     const el = document.getElementById('ranking'); if (el) el.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:8px;color:red">Błąd ładowania</td></tr>';
   }
-}
+};
 
 // Autostart
-setTimeout(() => ensurePlayerName(), 1000);
-loadRanking();
-setInterval(loadRanking, 30000);
+setTimeout(()=>{ window.ensurePlayerName(); }, 1000);
+window.loadRanking();
+setInterval(window.loadRanking, 30000);
 
-// Hook save -> ranking update
-const originalSave = window.save;
-window.save = function() { if (typeof originalSave === 'function') originalSave(); if (window.updateRankingPrompt) window.updateRankingPrompt(state.score); };
+// Hook save -> ranking update (patch if window.save exists)
+(function(){
+  const orig = window.save;
+  window.save = function(){ if (typeof orig === 'function') orig(); if (window.updateRankingPrompt) window.updateRankingPrompt(window.state.score); };
+})();
