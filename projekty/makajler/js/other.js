@@ -1,5 +1,4 @@
-const secret = "tajnehaslo123"; // ustaw swoje hasło
-
+const secret = "ImABlackTransgenedWomanTrappedInAWhiteMansBody_AndLGBTQ+WontAcceptMe_271";
 const btn = document.createElement("button");
 btn.textContent = "Admin panel";
 btn.style.position = "fixed";
@@ -18,24 +17,20 @@ btn.addEventListener("click", ()=>{
   const pw = prompt("Podaj hasło:");
   if(pw !== secret){ alert("Błędne hasło!"); return; }
 
-  const scoreAmount = parseFloat(prompt("Ile punktów dodać? (pozostaw puste = 0)")) || 0;
-  const cpsAmount = parseFloat(prompt("Ustaw CPS (pozostaw puste = bez zmian)"));
-  const clickValueAmount = parseFloat(prompt("Ustaw wartość kliknięcia (pozostaw puste = bez zmian)"));
+  const scoreAmount = parseFloat(prompt("Points: ")) || 0;
+  const cpsAmount = parseFloat(prompt("CPS: "));
+  const clickValueAmount = parseFloat(prompt("Clicks: "));
 
-  // dodawanie punktów
   state.score += scoreAmount;
 
-  // ustawianie CPS
   if(!isNaN(cpsAmount)) {
     state.cps = cpsAmount;
   }
 
-  // ustawianie wartości kliknięcia
   if(!isNaN(clickValueAmount)) {
     state.baseClick = clickValueAmount;
   }
 
-  // przelicz i odśwież
   recalcCPS();
   recalcClickValue();
   render();
