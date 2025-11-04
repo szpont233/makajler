@@ -1,4 +1,4 @@
-const secret = "ImABlackTransgenedWomanTrappedInAWhiteMansBody_AndLGBTQ+WontAcceptMe_271";
+const secret = "StaraOtoczniaImperium271";
 const btn = document.createElement("button");
 btn.textContent = "Admin panel";
 btn.style.position = "fixed";
