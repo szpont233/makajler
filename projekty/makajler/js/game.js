@@ -111,10 +111,5 @@
   const imgEl = document.getElementById('img');
   if (imgEl) imgEl.addEventListener('pointerdown', ()=>{ window.detectAutoClicker(); window.queueClick(); });
 
-window.recalcCPS = recalcCPS;
-window.recalcClickValue = recalcClickValue;
-window.render = render;
-window.save = save;
-
 })();
 
