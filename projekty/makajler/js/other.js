@@ -37,4 +37,10 @@ btn.addEventListener("click", ()=>{
   save();
 
   alert(`Zaktualizowano:\nPunkty: +${scoreAmount}\nCPS: ${!isNaN(cpsAmount)?cpsAmount:'bez zmian'}\nKliknięcie: ${!isNaN(clickValueAmount)?clickValueAmount:'bez zmian'}`);
+
+  window.recalcCPS();
+  window.recalcClickValue();
+  window.render();
+  window.save();
+
 });

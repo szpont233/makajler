@@ -22,4 +22,10 @@
     setInterval(()=>{ if (typeof window.save === 'function') window.save(); if (typeof window.recalcCPSUI === 'function') window.recalcCPSUI(); if (typeof window.recalcClickValueUI === 'function') window.recalcClickValueUI(); }, 10000);
   });
 
+  window.recalcCPS = recalcCPS;
+  window.recalcClickValue = recalcClickValue;
+  window.render = render;
+  window.save = save;
+  window.state = state;
+
 })();
