@@ -75,4 +75,10 @@
     });
   };
 
+  // Na końcu main.js (lub ui.js, gdzie są te funkcje)
+window.recalcCPS = recalcCPS;
+window.recalcClickValue = recalcClickValue;
+window.render = render;
+window.save = save;
+
 })();
