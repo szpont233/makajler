@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Twierdza</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png" />
+<link rel="manifest" href="../../assets/site.webmanifest" />
+<meta name="theme-color" content="#fafafa" />
+<link rel="mask-icon" href="../../assets/safari-pinned-tab.svg" color="#c0392b" />
+<style>
+  :root{
+    --tile:28px;
+    --map-size:20;
+    --accent:#2b5b95;
+    --bg:#e7eef6;
+    --panel:#f6f8fa;
+    --muted:#7a8aa6;
+    --danger:#c0392b;
+    --good:#2ecc71;
+  }
+  body{
+    margin:0;
+    font-family:Tahoma,Arial,Helvetica,sans-serif;
+    background:linear-gradient(#d7e2f0,#cfdced);
+    color:#222;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  header{
+    background:var(--accent);
+    color:white;
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+  }
+  header h1{ margin:0; font-size:18px; }
+
+  main{ display:flex; gap:12px; padding:12px; justify-content:center; }
+
+  .map {
+    width: calc(var(--tile) * var(--map-size));
+    height: calc(var(--tile) * var(--map-size));
+    background: #99c0a9;
+    display:grid;
+    grid-template-columns: repeat(var(--map-size), var(--tile));
+    grid-template-rows: repeat(var(--map-size), var(--tile));
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    border-radius:6px;
+    overflow:hidden;
+    user-select:none;
+  }
+  .tile{
+    width:var(--tile); height:var(--tile);
+    box-sizing:border-box;
+    border:1px solid rgba(0,0,0,0.06);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px;
+  }
+  .tile.grass{ background:#bfe3a6; }
+  .tile.forest{ background:#7bb273; }
+  .tile.rock{ background:#bcbcbc; }
+  .tile.field{ background:#f1da7b; }
+
+  .tile .b {
+    width:80%; height:80%; border-radius:4px; font-size:10px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.12);
+    user-select:none;
+  }
+  .b.drwal{ background:#8fb3a2; }
+  .b.quarry{ background:#9daec1; }
+  .b.farm{ background:#f4c46b; }
+  .b.house{ background:#d9b39a; }
+  .b.tower{ background:#d0d0d9; }
+  .b.wall{ background:#7f6f5a; }
+  .b.king{ background: #ffd166; color:#222; font-weight:700; }
+
+  .panel {
+    width:360px;
+    background:var(--panel);
+    border-radius:6px;
+    padding:12px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .resources{ display:flex; gap:8px; flex-wrap:wrap; font-weight:700; }
+  .res{ background:white;padding:8px;border-radius:6px;flex:1; box-shadow:inset 0 -2px 0 rgba(0,0,0,0.03); font-size:13px; text-align:center;}
+  .toolbar{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .tool{ padding:8px 10px; border-radius:6px; background:white; cursor:pointer; border:1px solid rgba(0,0,0,0.06); font-size:13px; }
+  .tool.active{ outline:3px solid rgba(43,91,149,0.12); }
+  .tool.erase{ background:var(--danger); color:white; border-color: rgba(0,0,0,0.08); }
+
+  .cost{ margin-top:6px; color:var(--muted); font-size:13px; min-height:18px; }
+  .log{ background:#fff; height:180px; overflow:auto; padding:8px; border-radius:6px; font-size:13px; color:#333; border:1px solid rgba(0,0,0,0.04); }
+  .statline{ display:flex; gap:8px; align-items:center; justify-content:space-between; }
+  .btn{ padding:8px 10px; border-radius:6px; background:var(--accent); color:white; border:none; cursor:pointer; }
+  .small{ font-size:12px; color:var(--muted); }
+
+  .hpwrap{ background:#fff; padding:6px;border-radius:6px; display:flex; flex-direction:column; gap:6px; align-items:center; }
+  .hpbar{ width:100%; height:12px; background:#e5e5e5; border-radius:8px; overflow:hidden; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06); }
+  .hpfill{ height:100%; background:#06a74e; width:100%; transition:width .4s ease; }
+
+  footer{ text-align:center; padding:8px; color:rgba(0,0,0,0.5); font-size:12px; margin-top:6px; }
+  @media (max-width:900px){ main{ flex-direction:column; align-items:center; } .panel{ width:95%; } }
+</style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0">Twierdza (alpha) </h1>
+  <a href="../../index.html" style="margin-left: 33%;"><div style="border:1px solid black; padding: 3px ;background-color:#c0c0c0;"><img src="../../logo.png" alt="logo Lechii"></div></a>
+  <div style="margin-left:auto;color:#fff;font-size:13px;">alpha 0.80</div>
+</header>
+
+<main>
+  <div class="map" id="map" title="Kliknij, żeby budować"></div>
+
+  <aside class="panel">
+    <div class="hpwrap">
+      <div style="font-weight:700">HP Króla: <span id="kingHpText">100</span>/<span id="kingMaxHpText">100</span></div>
+      <div class="hpbar" title="HP Króla">
+        <div id="kingHpFill" class="hpfill" style="width:100%"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div class="small">Populacja / morale</div>
+        <div style="font-weight:700;"><span id="popText">5</span> / <span id="maxPop">5</span>  -  Morale: <span id="morale">100</span>%</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="small">Tick co</div>
+        <div style="font-weight:700;">5s</div>
+      </div>
+    </div>
+
+    <div class="resources" id="resources">
+      <div class="res">Drewno: <span id="wood">100</span></div>
+      <div class="res">Kamień: <span id="stone">50</span></div>
+      <div class="res">Żywność: <span id="food">120</span></div>
+      <div class="res">Złoto: <span id="gold">0</span></div>
+    </div>
+
+    <div>
+      <div class="small">Wybierz budynek:</div>
+      <div class="toolbar" id="toolbar"></div>
+      <div class="cost small" id="costDesc">Wybierz budynek aby zobaczyć koszty</div>
+    </div>
+
+    <div class="statline">
+      <div class="small">Dostępni pracownicy: <span id="workersFree">0</span></div>
+      <div style="display:flex;gap:8px">
+        <button id="resetBtn" class="btn">Reset</button>
+        <button id="saveBtn" class="btn" style="background:#f39c12">Zapisz</button>
+        <button id="loadBtn" class="btn" style="background:#5dade2">Wczytaj</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="small">Dziennik</div>
+      <div class="log" id="log"></div>
+    </div>
+  </aside>
+</main>
+
+<footer>Stworzono przez obywatela Wielkiej Lechii</footer>
+
+<script>
+(() => {
+  const MAP_SIZE = 20;
+  const TICK_MS = 5000;
+  const mapEl = document.getElementById('map');
+  const toolbarEl = document.getElementById('toolbar');
+  const costDesc = document.getElementById('costDesc');
+  const logEl = document.getElementById('log');
+
+  const BUILDINGS = {
+    drwal: {name:'Chata drwala', cost:{wood:30,stone:0,food:0}, prod:{wood:3}, defence:0, allowed:['forest'], workers:1},
+    quarry:{name:'Kamieniołom', cost:{wood:20,stone:30,food:0}, prod:{stone:2}, defence:0, allowed:['rock'], workers:1},
+    farm:{name:'Farma', cost:{wood:20,stone:0,food:0}, prod:{food:6}, defence:0, allowed:['field','grass'], workers:1},
+    house:{name:'Dom', cost:{wood:40,stone:10,food:0}, prod:{}, pop:4, defence:0, allowed:['grass','field']},
+    tower:{name:'Wieża', cost:{wood:30,stone:30,food:0}, prod:{}, defence:6, allowed:['grass','field','rock']},
+    wall:{name:'Mur', cost:{wood:15,stone:25,food:0}, prod:{}, defence:2, allowed:['grass','field','rock']},
+    king:{name:'Dom Króla', cost:{wood:50,stone:20,food:0}, prod:{}, pop:2, defence:10, allowed:['grass','field']}
+  };
+
+  const TOOL_ORDER = ['drwal','quarry','farm','house','tower','wall','erase'];
+
+  function createInitialState(){
+    return {
+      wood:100, stone:50, food:120, gold:0,
+      pop:5, maxPop:5, morale:100,
+      buildings: {},
+      kingHp: 100,
+      kingMaxHp: 100,
+      tickCount:0,
+      gameOver:false,
+      threatLevel: 0.0 
+    };
+  }
+
+  let state = createInitialState();
+
+  const map = new Array(MAP_SIZE*MAP_SIZE).fill(0).map((_,i)=>{
+    const r = Math.random();
+    if(r < 0.55) return 'grass';
+    if(r < 0.75) return 'forest';
+    if(r < 0.9) return 'field';
+    return 'rock';
+  });
+
+  const RAID_TYPES = [
+    {name:'Germanie', force:1.0},
+    {name:'Wikingowie', force:1.4},
+    {name:'Rzymianie', force:1.8}
+  ];
+
+  let selectedTool = null;
+  let isEraseMode = false;
+  let tickInterval = null;
+
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+  function addLog(text){
+    const time = new Date().toLocaleTimeString();
+    logEl.innerHTML = `<div>[${time}] ${text}</div>` + logEl.innerHTML;
+  }
+
+  function createToolbar(){
+    toolbarEl.innerHTML = '';
+    TOOL_ORDER.forEach(key=>{
+      const btn = document.createElement('button');
+      btn.className = 'tool';
+      btn.textContent = key === 'erase' ? 'Zburz' : BUILDINGS[key].name;
+      if(key === 'erase') btn.classList.add('erase');
+      btn.onclick = () => {
+        if(state.gameOver) return;
+        selectedTool = key;
+        isEraseMode = (key === 'erase');
+        document.querySelectorAll('.tool').forEach(t=>t.classList.remove('active'));
+        btn.classList.add('active');
+        updateCostDesc();
+      };
+      toolbarEl.appendChild(btn);
+    });
+    document.querySelectorAll('.tool')[0].click();
+  }
+
+  function updateCostDesc(){
+    if(!selectedTool || selectedTool === 'erase'){
+      costDesc.textContent = 'Wybierz budynek aby zobaczyć koszty';
+      return;
+    }
+    const def = BUILDINGS[selectedTool];
+    if(!def){ costDesc.textContent = '---'; return; }
+    const parts = [];
+    for(const k of ['wood','stone','food']){
+      if(def.cost[k]) parts.push(`${def.cost[k]} ${k}`);
+    }
+    if(def.pop) parts.push(`+${def.pop} do pojemności`);
+    if(def.workers) parts.push(`Wymaga ${def.workers} prac.`); 
+    if(def.allowed) parts.push(`Można postawić na: ${def.allowed.join(', ')}`);
+    costDesc.textContent = parts.join(' • ');
+  }
+
+  function renderMap(){
+    mapEl.innerHTML = '';
+    for(let idx=0; idx<map.length; idx++){
+      const type = map[idx];
+      const d = document.createElement('div');
+      d.className = 'tile ' + type;
+      d.dataset.idx = idx;
+      d.onclick = onTileClick;
+      const b = state.buildings[idx];
+      if(b){
+        const bb = document.createElement('div');
+        bb.className = 'b '+b.type;
+        bb.title = BUILDINGS[b.type].name;
+
+
+        if(b.type === 'house') bb.textContent = 'H';
+        else if(b.type === 'tower') bb.textContent = 'T';
+        else if(b.type === 'wall') bb.textContent = 'W';
+        else if(b.type === 'king') bb.textContent = 'K';
+        else if(b.type === 'farm') bb.textContent = 'F';
+        else if(b.type === 'drwal') bb.textContent = 'D';
+        else if(b.type === 'quarry') bb.textContent = 'Q';
+        d.appendChild(bb);
+      }
+      mapEl.appendChild(d);
+    }
+  }
+
+  function onTileClick(e){
+    if(state.gameOver) return;
+    const idx = +this.dataset.idx;
+    if(selectedTool === 'erase' || isEraseMode){
+      if(state.buildings[idx]){
+        demolish(idx);
+      } else addLog('Tutaj nie ma nic do zburzenia');
+      renderMap(); updateUI();
+      return;
+    }
+    if(!selectedTool){ addLog('Najpierw wybierz budynek'); return; }
+
+    const tileType = map[idx];
+    if(tileType === 'rock' && selectedTool !== 'quarry' && selectedTool !== 'wall' && selectedTool !== 'tower'){
+      addLog('Nie da się tu postawić (skała)');
+      return;
+    }
+    if(state.buildings[idx]){ addLog('Pole jest zajęte'); return; }
+
+    const def = BUILDINGS[selectedTool];
+    if(!def){ addLog('Błąd: nieznany budynek'); return; }
+
+    if(def.allowed && def.allowed.length && def.allowed.indexOf(tileType) === -1){
+      addLog(`${def.name} nie można postawić na ${tileType}`);
+      return;
+    }
+
+    if(!canAfford(def.cost)){ addLog('Za mało surowców'); return; }
+
+    payCost(def.cost);
+    state.buildings[idx] = {type:selectedTool, builtAt: Date.now()};
+    if(def.pop){ state.maxPop += def.pop; addLog(`Postawiono ${def.name}. Pojemność populacji +${def.pop}.`); }
+    else addLog(`Postawiono ${def.name}`);
+    renderMap(); updateUI();
+  }
+
+  function demolish(idx){
+    const b = state.buildings[idx];
+    if(!b) return;
+    if(b.type === 'king'){
+      addLog('Zamek króla nie może zostać zburzony');
+      return;
+    }
+    const def = BUILDINGS[b.type];
+    for(const k in def.cost) state[k] = Math.max(0, (state[k]||0) + Math.floor(def.cost[k]*0.5));
+    if(def.pop){ state.maxPop = Math.max(1, state.maxPop - def.pop); if(state.pop > state.maxPop) state.pop = state.maxPop; }
+    delete state.buildings[idx];
+    addLog(`Zburzono ${def.name}. Otrzymano zwrot surowców`);
+  }
+
+  function canAfford(cost = {}){
+    return (state.wood >= (cost.wood||0)) && (state.stone >= (cost.stone||0)) && (state.food >= (cost.food||0));
+  }
+  function payCost(cost = {}){
+    state.wood -= (cost.wood||0);
+    state.stone -= (cost.stone||0);
+    state.food -= (cost.food||0);
+  }
+
+  function processTick(){
+    if(state.gameOver) return;
+    state.tickCount++;
+
+    const producers = Object.entries(state.buildings).map(([idx,b]) => {
+      const def = BUILDINGS[b.type];
+      return {idx: +idx, type: b.type, def};
+    }).filter(p => p.def && p.def.prod && Object.keys(p.def.prod).length > 0);
+
+    const priority = {'farm':0, 'drwal':1, 'quarry':2};
+    producers.sort((a,b)=> (priority[a.type]||5) - (priority[b.type]||5) || a.idx - b.idx);
+
+    let workersAvailable = Math.max(0, state.pop);
+    const prodTotals = {wood:0, stone:0, food:0, gold:0};
+    for(const p of producers){
+      const need = p.def.workers || 1;
+      const assigned = Math.min(need, workersAvailable);
+      workersAvailable -= assigned;
+      if(assigned > 0){
+        for(const r in p.def.prod){
+          prodTotals[r] += p.def.prod[r] * (assigned / need);
+        }
+      }
+    }
+
+    for(const r in prodTotals){
+      const amt = Math.floor(prodTotals[r]);
+      if(amt > 0){ state[r] = (state[r]||0) + amt; }
+    }
+
+    const foodConsume = state.pop;
+    state.food = Math.max(0, state.food - foodConsume);
+
+    if(state.food < state.pop){
+      state.morale = Math.max(0, state.morale - 3);
+      addLog('Niedobór żywności! Morale spadają.');
+    } else {
+      state.morale = Math.min(100, state.morale + 1);
+    }
+
+    if(state.food > state.pop * 5 && state.morale > 70 && Math.random() < 0.12){
+      state.pop = Math.min(state.maxPop, state.pop + 1);
+      addLog('Urodził się Brajanek. Populacja +1');
+    }
+
+    if(Object.values(prodTotals).some(v=>v>=1)){
+      const parts = [];
+      if(Math.floor(prodTotals.wood)) parts.push(`+${Math.floor(prodTotals.wood)} drewna`);
+      if(Math.floor(prodTotals.stone)) parts.push(`+${Math.floor(prodTotals.stone)} kamienia`);
+      if(Math.floor(prodTotals.food)) parts.push(`+${Math.floor(prodTotals.food)} żywności`);
+      addLog('Produkcja: ' + parts.join(', '));
+    }
+
+    state.threatLevel = clamp(state.threatLevel + 0.02, 0, 3);
+
+    if(state.tickCount % 12 === 0){
+      maybeRaid();
+    }
+
+    if(state.pop <= 0){
+      endGame('Wszyscy zginęli! Populacja = 0');
+    }
+
+    updateUI();
+  }
+
+  function maybeRaid(){
+    const type = RAID_TYPES[Math.floor(Math.random()*RAID_TYPES.length)];
+    let defStr = 0;
+    for(const b of Object.values(state.buildings)){
+      defStr += (BUILDINGS[b.type].defence || 0);
+    }
+    const moraleFactor = clamp((100 - state.morale) / 200, 0, 0.5);
+    defStr = Math.floor(defStr * (1 - moraleFactor));
+    const baseAttackers = Math.floor(3 + Math.random() * 10 + Math.floor(state.threatLevel));
+    const attStr = Math.round(baseAttackers * 2 * type.force);
+
+    addLog(`Najazd ${type.name}! Napastników: ${baseAttackers}. Siła ataku: ${attStr}. Obrona: ${defStr}.`);
+
+    const damage = Math.max(0, attStr - defStr);
+
+    if(damage === 0){
+      addLog('Obroniono miasto! Wieże i mury dają radę.');
+      state.morale = Math.min(100, state.morale + 3);
+      state.threatLevel = clamp(state.threatLevel - 0.05, 0, 3);
+      return;
+    }
+
+    state.morale = Math.max(0, state.morale - 5);
+    addLog(`Obrona częściowo przełamana. Potencjalne szkody: ${damage}.`);
+
+    const lostWood = Math.min(state.wood, Math.floor(damage * 0.35));
+    const lostStone = Math.min(state.stone, Math.floor(damage * 0.2));
+    const lostFood = Math.min(state.food, Math.floor(damage * 0.5));
+
+    state.wood -= lostWood;
+    state.stone -= lostStone;
+    state.food -= lostFood;
+
+    if(lostWood || lostStone || lostFood) addLog(`Stracono: ${lostWood} drewna, ${lostStone} kamienia, ${lostFood} żywności`);
+
+    const candidates = Object.entries(state.buildings)
+      .filter(([idx,b]) => b.type !== 'king')
+      .sort((a,b)=>{
+        const pa = (BUILDINGS[a[1].type].prod ? 0 : 1);
+        const pb = (BUILDINGS[b[1].type].prod ? 0 : 1);
+        return pa - pb;
+      })
+      .map(([idx,b]) => +idx);
+
+    if(candidates.length && Math.random() < clamp(damage/50, 0.05, 0.6)){
+      const victimIdx = candidates[Math.floor(Math.random()*candidates.length)];
+      const victimType = state.buildings[victimIdx].type;
+      delete state.buildings[victimIdx];
+      addLog(`Zniszczono ${BUILDINGS[victimType].name}.`);
+    }
+
+    if(attStr > defStr * 1.6){
+      const kingDmg = Math.max(1, Math.floor((attStr - defStr) * 0.25));
+      state.kingHp = Math.max(0, state.kingHp - kingDmg);
+      addLog(`Król został ranny (-${kingDmg} HP)!`);
+      state.morale = Math.max(0, state.morale - 3);
+    }
+
+    state.threatLevel = clamp(state.threatLevel + 0.06, 0, 3);
+
+    if(state.kingHp <= 0){
+      endGame('Król poległ w trakcie najazdu!');
+    }
+  }
+
+  function updateUI(){
+    const kHp = Number(state.kingHp || 0);
+    const kMax = Number(state.kingMaxHp || 100);
+    document.getElementById('kingHpText').textContent = kHp;
+    document.getElementById('kingMaxHpText').textContent = kMax;
+    const perc = Math.round((kHp / kMax) * 100);
+    document.getElementById('kingHpFill').style.width = `${clamp(perc,0,100)}%`;
+
+    document.getElementById('wood').textContent = Math.max(0, Math.floor(state.wood));
+    document.getElementById('stone').textContent = Math.max(0, Math.floor(state.stone));
+    document.getElementById('food').textContent = Math.max(0, Math.floor(state.food));
+    document.getElementById('gold').textContent = Math.max(0, Math.floor(state.gold));
+    document.getElementById('popText').textContent = state.pop;
+    document.getElementById('maxPop').textContent = state.maxPop;
+    document.getElementById('morale').textContent = state.morale;
+    const producingCount = Object.values(state.buildings).filter(b => BUILDINGS[b.type].prod && Object.keys(BUILDINGS[b.type].prod).length).length;
+    const freeWorkers = Math.max(0, state.pop - producingCount);
+    document.getElementById('workersFree').textContent = freeWorkers;
+
+    renderMap();
+  }
+
+  function reset(){
+    state = createInitialState();
+    initBase();
+    addLog('Zresetowano gre');
+    renderMap(); updateUI();
+  }
+
+  function save(){
+    try{
+      localStorage.setItem('mini_stronghold_save', JSON.stringify(state));
+      addLog('Zapisano do localStorage.');
+    }catch(e){ addLog('Błąd podczas zapisu.'); }
+  }
+
+  function load(){
+    const s = localStorage.getItem('mini_stronghold_save');
+    if(!s){ addLog('Brak zapisu.'); return; }
+    try{
+      const loaded = JSON.parse(s);
+      const base = createInitialState();
+      state = Object.assign(base, loaded);
+      if(state.kingHp == null) state.kingHp = base.kingHp;
+      if(state.kingMaxHp == null) state.kingMaxHp = base.kingMaxHp;
+      if(state.threatLevel == null) state.threatLevel = base.threatLevel;
+      addLog('Wczytano zapis.');
+      renderMap(); updateUI();
+    }catch(e){ addLog('Błąd wczytywania zapisu.'); }
+  }
+
+  function endGame(msg){
+    if(state.gameOver) return;
+    state.gameOver = true;
+    clearInterval(tickInterval);
+    addLog('KONIEC GRY: ' + msg);
+    renderMap(); updateUI();
+    alert('KONIEC GRY:\n' + msg);
+    mapEl.style.pointerEvents = 'none';
+  }
+
+  function findNearestBuildable(idx){
+    if(map[idx] !== 'rock') return idx;
+    const r0 = Math.floor(idx / MAP_SIZE);
+    const c0 = idx % MAP_SIZE;
+    for(let radius=1; radius<Math.max(MAP_SIZE,MAP_SIZE); radius++){
+      for(let r=r0-radius; r<=r0+radius; r++){
+        for(let c=c0-radius; c<=c0+radius; c++){
+          if(r<0||c<0||r>=MAP_SIZE||c>=MAP_SIZE) continue;
+          const i = r*MAP_SIZE + c;
+          if(map[i] !== 'rock') return i;
+        }
+      }
+    }
+    return idx;
+  }
+
+  function initBase(){
+    const centerRow = Math.floor(MAP_SIZE/2);
+    const centerCol = Math.floor(MAP_SIZE/2);
+    const centerIdx = centerRow * MAP_SIZE + centerCol;
+    const place = findNearestBuildable(centerIdx);
+
+    state.buildings[place] = {type:'king', builtAt: Date.now()};
+    if(BUILDINGS.king.pop) state.maxPop += BUILDINGS.king.pop;
+
+    let drwalIdx = -1;
+    for(let d of [1, MAP_SIZE, -1, -MAP_SIZE]){
+      const idx = place + d;
+      if(idx>=0 && idx<MAP_SIZE*MAP_SIZE && map[idx] === 'forest'){ drwalIdx = idx; break; }
+    }
+    if(drwalIdx === -1){
+      drwalIdx = (place+1 < MAP_SIZE*MAP_SIZE && map[place+1] !== 'rock') ? place+1 : (place+MAP_SIZE < MAP_SIZE*MAP_SIZE ? place+MAP_SIZE : place-1);
+    }
+    state.buildings[drwalIdx] = {type:'drwal', builtAt: Date.now()};
+
+    let towerIdx = -1;
+    for(let d of [-MAP_SIZE, MAP_SIZE, -1, 1]){
+      const idx = place + d;
+      if(idx>=0 && idx<MAP_SIZE*MAP_SIZE && map[idx] !== 'rock'){ towerIdx = idx; break; }
+    }
+    if(towerIdx === -1) towerIdx = place- MAP_SIZE >=0 ? place-MAP_SIZE : place+1;
+    state.buildings[towerIdx] = {type:'tower', builtAt: Date.now()};
+
+    addLog('Startowa baza: Dom Króla, Chata drwala, Wieża');
+  }
+
+  createToolbar();
+  renderMap();
+  updateUI();
+  addLog('Uruchomiono gre');
+
+  document.getElementById('resetBtn').onclick = reset;
+  document.getElementById('saveBtn').onclick = save;
+  document.getElementById('loadBtn').onclick = load;
+
+  tickInterval = setInterval(processTick, TICK_MS);
+
+  window.addEventListener('keydown', e=>{
+    if(state.gameOver) return;
+    if(e.key >= '1' && e.key <= '6'){ const i = parseInt(e.key)-1; const btn = document.querySelectorAll('.tool')[i]; if(btn) btn.click(); }
+    if(e.key.toLowerCase() === 'e'){ document.querySelectorAll('.tool').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.tool')[6].click(); }
+    if(e.key.toLowerCase() === 's'){ save(); }
+  });
+
+  reset();
+})();
+</script>
+</body>
+</html>
