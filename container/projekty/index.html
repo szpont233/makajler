@@ -47,6 +47,31 @@
   margin-bottom: 8px;
 }
 
+  #effectImage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://c.tenor.com/e66c_zn8x6UAAAAd/tenor.gif') center/cover no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-out;
+    z-index: 9999;
+  }
+
+  #effectVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+    z-index: 9999;
+  }
 </style>
 
 </head>
@@ -55,6 +80,9 @@
 <audio id="maeow">
   <source src="../../assets/maeow.mp3" type="audio/mpeg">
 </audio>
+
+<div id="effectImage"></div>
+<video id="effectVideo" src="../../assets/funny1.mp4"></video>
 
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
@@ -95,8 +123,8 @@
   <div class="projekt">
     <a href="#" style="text-decoration: none; color: inherit;" onclick="playAudio()">
       <img src="https://c.tenor.com/4Ro-nOcEVVMAAAAd/tenor.gif" alt="3 projekt przyszly">
-      <strong>Miejsce na 3 projekt...</strong><br>
-      <span>Kliknij</span>
+      <strong>Poklikaj se tu</strong><br>
+      <span>:3</span>
     </a>
   </div>
 
@@ -114,14 +142,58 @@
 </div>
 
 <script>
+let clickCount = 0;
+let pitchedOnce = false;
+let videoOnce = false;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function showImage() {
+  const img = document.getElementById('effectImage');
+  img.style.opacity = 1;
+  setTimeout(() => img.style.opacity = 0, 500);
+}
+
+function showVideo() {
+  if (videoOnce) return;
+  const vid = document.getElementById('effectVideo');
+  vid.style.opacity = 1;
+  vid.play();
+  videoOnce = true;
+  setTimeout(() => {
+    vid.pause();
+    vid.style.opacity = 0;
+  }, 1000);
+}
+
 function playAudio() {
-  const src = document.getElementById("maeow").querySelector("source").src;
-  new Audio(src).play();
+  const base = document.getElementById("maeow");
+  const src = base.querySelector("source").src;
+
+  clickCount++;
+
+  fetch(src)
+    .then(r => r.arrayBuffer())
+    .then(buf => audioCtx.decodeAudioData(buf))
+    .then(audioBuffer => {
+      const source = audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+
+      if (clickCount === 5 && !pitchedOnce) {
+        source.playbackRate.value = 1.0;
+        source.detune.value = -700;
+        pitchedOnce = true;
+        showImage();
+      }
+
+      source.connect(audioCtx.destination);
+      source.start();
+    });
+
+  if (clickCount === 10) {
+    showVideo();
+  }
 }
 </script>
-
-
-
 
 </body>
 </html>
