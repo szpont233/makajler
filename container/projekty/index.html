@@ -48,19 +48,21 @@
 }
 
   #effectImage {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: url('https://c.tenor.com/e66c_zn8x6UAAAAd/tenor.gif') center/cover no-repeat;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease-out;
-    z-index: 9999;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-out;
+  z-index: 9999;
+}
 
-  #effectVideo {
+  /*#effectVideo {
     position: fixed;
     top: 0;
     left: 0;
@@ -71,7 +73,7 @@
     pointer-events: none;
     transition: opacity 0.2s ease-out;
     z-index: 9999;
-  }
+  }*/
 </style>
 
 </head>
@@ -82,7 +84,7 @@
 </audio>
 
 <div id="effectImage"></div>
-<video id="effectVideo" src="../../assets/funny1.mp4"></video>
+<!------- <video id="effectVideo" src="../../assets/funny1.mp4"></video> ---->
 
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
@@ -143,27 +145,44 @@
 
 <script>
 let clickCount = 0;
-let pitchedOnce = false;
-let videoOnce = false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-function showImage() {
-  const img = document.getElementById('effectImage');
-  img.style.opacity = 1;
-  setTimeout(() => img.style.opacity = 0, 500);
+const images = [
+  'https://c.tenor.com/e66c_zn8x6UAAAAd/tenor.gif',
+  'https://cdn.discordapp.com/attachments/947718918271807518/1243520548537892904/SPOILER_giphy.gif?ex=692c2542&is=692ad3c2&hm=ef9aba43ff83d60aa46926ac97baedfec57b8515f97d311641033c9d6b5b5d0a&',
+  'https://c.tenor.com/AjtZ5fTDP8cAAAAd/tenor.gif',
+  '../../assets/drooly.png',
+  'https://c.tenor.com/bFnBwCSdDtcAAAAd/tenor.gif',
+  'https://media.discordapp.net/attachments/1067412952602378310/1101774860239257660/ezgif-3-614a7e22eb.gif?ex=692c9d8c&is=692b4c0c&hm=fafdafc8855b29f98f3687b6148835c6c22ab01c73857db0a513f8f0275121ca&',
+  'https://media.discordapp.net/attachments/750738926058340583/997405525849415710/caption-8-1.gif?ex=692c9c08&is=692b4a88&hm=dcf937f9bfba9adf56d68e81dd1e3df75f6091a258afe1732a46edae027530ee&'
+];
+
+let imageQueue = [];
+
+function shuffleImages() {
+  imageQueue = [...images];
+  for (let i = imageQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [imageQueue[i], imageQueue[j]] = [imageQueue[j], imageQueue[i]];
+  }
 }
 
-function showVideo() {
-  if (videoOnce) return;
-  const vid = document.getElementById('effectVideo');
-  vid.style.opacity = 1;
-  vid.play();
-  videoOnce = true;
-  setTimeout(() => {
-    vid.pause();
-    vid.style.opacity = 0;
-  }, 1000);
+shuffleImages();
+
+function showRandomImage() {
+  const imgDiv = document.getElementById('effectImage');
+
+  if (imageQueue.length === 0) {
+    shuffleImages();
+  }
+
+  const img = imageQueue.pop();
+  imgDiv.style.backgroundImage = `url('${img}')`;
+
+  imgDiv.style.opacity = 1;
+  setTimeout(() => imgDiv.style.opacity = 0, 500);
 }
+
 
 function playAudio() {
   const base = document.getElementById("maeow");
@@ -178,20 +197,16 @@ function playAudio() {
       const source = audioCtx.createBufferSource();
       source.buffer = audioBuffer;
 
-      if (clickCount === 5 && !pitchedOnce) {
-        source.playbackRate.value = 1.0;
+      if (clickCount % 5 === 0) {
         source.detune.value = -700;
-        pitchedOnce = true;
-        showImage();
+        source.playbackRate.value = 1.0;
+
+        showRandomImage();
       }
 
       source.connect(audioCtx.destination);
       source.start();
     });
-
-  if (clickCount === 10) {
-    showVideo();
-  }
 }
 </script>
 
