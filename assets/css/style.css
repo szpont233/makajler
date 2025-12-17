@@ -170,7 +170,7 @@ a:hover {
 }
 
 .infobox {
-    width: 245px;
+    width: 240px;
     height: 20%;
     flex-shrink: 0;
     background: linear-gradient(to bottom, #e8f0ff 0%, #d0e0f5 100%);
@@ -179,16 +179,20 @@ a:hover {
     font-family: Verdana, sans-serif;
     font-size: 12px;
     box-shadow: inset 1px 1px 0 #fff, 2px 2px 5px rgba(0,0,0,0.15);
+    min-height: 120px;
+
+    
 }
 
 #main {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
   gap: 20px;
-  padding-right: 15px;
-  padding-top: 15px;
-  padding-left: 15px;
-  padding-bottom: 15px;
+  padding: 15px;
+}
+
+.infobox + .infobox {
+  margin-top: 15px;
 }
 
     
