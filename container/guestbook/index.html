@@ -113,23 +113,28 @@ input[type="submit"]:hover {
     const form = document.getElementById('guestbook-form');
     const list = document.getElementById('entries-list');
 
-    // Funkcja pobierania
     async function loadEntries() {
         const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
         const snap = await getDocs(q);
         list.innerHTML = "";
         snap.forEach(doc => {
-            const d = doc.data();
-            const date = d.createdAt?.toDate().toLocaleDateString('pl-PL') || "Teraz";
-            list.innerHTML += `
-                <div style="border-bottom: 1px dotted #888; margin-bottom: 10px; padding: 5px;">
-                    <strong>${d.name}</strong> <small>${date}</small><br>
-                    ${d.content}
-                </div>`;
-        });
+        const d = doc.data();
+        const date = d.createdAt ? d.createdAt.toDate().toLocaleString('pl-PL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }) : "Teraz";
+
+        list.innerHTML += `
+            <div style="border-bottom: 1px dotted #888; margin-bottom: 10px; padding: 5px;">
+                <strong>${d.name}</strong> <small style="color: #666;">(${date})</small><br>
+                <div style="margin-top: 5px;">${d.content}</div>
+            </div>`;
+                });
     }
 
-    // Obsługa wysyłki
     form.onsubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById('guest-name').value;
@@ -142,7 +147,7 @@ input[type="submit"]:hover {
                 createdAt: serverTimestamp()
             });
             form.reset();
-            loadEntries(); // Odśwież listę
+            loadEntries();
         } catch (err) {
             alert("Błąd podczas dodawania. Sprawdź limity znaków.");
         }

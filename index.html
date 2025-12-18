@@ -91,7 +91,7 @@
                 <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
             </aside>
             <aside class="infobox" id="partia">
-                <h3>Guestbook</h3>
+                <h3>Księga wpisów</h3>
                 <div id="latest-guestbook-entry">Ładowanie wpisu...</div>
                 <hr>
                 <a href="container/guestbook/index.html" style="font-weight: bold;">Zobacz wszystkie / Napisz</a>
@@ -145,7 +145,7 @@
 <script src="assets/imieniny.js"></script>
 <script type="module" src="./assets/firebase-conf.js"></script>
 
-<!-- <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
   import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
@@ -176,7 +176,13 @@
       }
 
       const data = querySnapshot.docs[0].data();
-      const date = data.createdAt ? data.createdAt.toDate().toLocaleDateString('pl-PL') : "Niedawno";
+      const date = data.createdAt ? data.createdAt.toDate().toLocaleString('pl-PL', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }) : "Niedawno";
 
       container.innerHTML = `
         <div style="font-size: 12px; border-left: 3px solid #c0392b; padding-left: 10px; margin-top: 10px;">
@@ -191,7 +197,7 @@
   }
 
   loadLatestEntry();
-</script> -->
+</script>
 
 </body>
 </html>
