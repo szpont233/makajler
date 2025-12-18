@@ -98,7 +98,7 @@
             </aside>
 
             <script type="module">
-                import { db, collection, query, orderBy, limit, getDocs } from './assets/firebase-config.js';
+                import { db, collection, query, orderBy, limit, getDocs } from './assets/firebase-conf.js';
 
                 async function loadLatestEntry() {
                     const container = document.getElementById('latest-guestbook-entry');
@@ -143,11 +143,11 @@
 
 <script src="assets/infobox.js"></script>
 <script src="assets/imieniny.js"></script>
-<!-- <script type="module" src="./assets/firebase-conf.js"></script> -->
+<script type="module" src="./assets/firebase-conf.js"></script>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!-- <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
@@ -159,12 +159,11 @@
     measurementId: "G-665V4Q0410"
   };
 
-  // Inicjalizacja
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
   async function loadLatestEntry() {
-    const container = document.getElementById('latest-guestbook-entry'); // Upewnij się, że masz ten ID w HTML!
+    const container = document.getElementById('latest-guestbook-entry');
     if (!container) return;
 
     try {
@@ -191,9 +190,8 @@
     }
   }
 
-  // Odpalenie funkcji
   loadLatestEntry();
-</script>
+</script> -->
 
 </body>
 </html>

@@ -107,8 +107,8 @@ input[type="submit"]:hover {
     <div id="entries-list">Ładowanie wpisów...</div>
 </div>
 
-<script type="text/javascript">
-    import { db, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from '../../assets/firebase-config.js';
+<script type="module">
+    import { db, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from '../../assets/firebase-conf.js';
 
     const form = document.getElementById('guestbook-form');
     const list = document.getElementById('entries-list');
