@@ -81,8 +81,8 @@ input[type="submit"]:hover {
 
 <div id="header">
     <a href="../../index.html" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii" ></div></a>
-    <h1>Kontakt</h1>
-    <p style="text-shadow: 2px 2px 3px black; color: black;">Tytul mówi wszystko za siebie</p>
+    <h1>Księga wpisów</h1>
+    <p style="text-shadow: 2px 2px 3px black; color: black;">Napisz coś na tablice, i tak bedzie</p>
 </div>
 
 <div id="container">
@@ -90,39 +90,12 @@ input[type="submit"]:hover {
         <a href="../../index.html">Strona Główna</a> |
         <a href="../../container/projekty/index.html">Projekty</a> |
         <a href="../../container/galeria/index.html">Galeria</a> |
-        <a href="#">Kontakt</a> |
+        <a href="../../container/galeria/index.html">Kontakt</a> |
         <a href="../../container/swiatynia/index.html">Świątynia</a> |
-        <a id="new" href="../../container/guestbook/index.html">Księga wpisów</a>
+        <a id="new" href="#">Księga wpisów</a>
     </div>
 
-    <div id="content">
-        <h1>Info do kontaktowania</h1> <br>
-        <p>Pisać tu: <a href="mailto:kontaktlechici@gmail.com">kontaktlechici@gmail.com</a> </p>
-        <p>Portal do naszego Imperium znajdziesz tutaj: <a href="https://share.google/gEBXOTnxCfTJ9oNt5">https://share.google/gEBXOTnxCfTJ9oNt5</a></p>
-        <img src="https://theoldnet.com/images/mailbox.gif">
-    </div>
 
-<h1>Kontaktuj</h1> <br>
-
-<form id="form">
-  <div class="field">
-    <label for="email">Podaj maila</label>
-    <input type="text" name="email" id="email">
-    <label for="tytul">Podaj tytul</label>
-    <input type="text" name="tytul" id="tytul">
-    <label for="message">Napisz wiadomość</label>
-    <textarea name="message" placeholder="Wiadomość" required></textarea>
-  </div>
-
-  <input type="submit" id="button" value=" Wyslij ">
-</form>
-
-<script type="text/javascript"
-  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-<script type="text/javascript">
-  emailjs.init('2j9IQrMJItUV9PqJd')
-</script>
 
 </div>
 
@@ -133,28 +106,6 @@ input[type="submit"]:hover {
 </p>
 
 </div>
-<script>
-const btn = document.getElementById('button');
-
-document.getElementById('form')
- .addEventListener('submit', function(event) {
-   event.preventDefault();
-
-   btn.value = 'Wysylanie...';
-
-   const serviceID = 'default_service';
-   const templateID = 'template_0b0ayse';
-
-   emailjs.sendForm(serviceID, templateID, this)
-    .then(() => {
-      btn.value = 'Wyslij maila';
-      alert('Wyslano!');
-    }, (err) => {
-      btn.value = 'Wyslij maila';
-      alert(JSON.stringify(err));
-    });
-});
-</script>
 
 
 </body>
