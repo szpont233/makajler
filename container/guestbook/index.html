@@ -95,7 +95,61 @@ input[type="submit"]:hover {
         <a id="new" href="#">Księga wpisów</a>
     </div>
 
+    <div id="content" style="max-width: 600px; margin: auto;">
+    <h2>Księga Wpisow</h2>
+    <form id="guestbook-form" style="background: #f0f4f8; padding: 15px; border: 1px solid #ccc;">
+        <input type="text" id="guest-name" placeholder="Twoje imię" required style="width: 100%; margin-bottom: 10px; padding: 5px;"><br>
+        <textarea id="guest-content" placeholder="Treść wpisu (max 500 znaków)" required style="width: 100%; height: 80px; padding: 5px;"></textarea><br>
+        <button type="submit" class="button" style="cursor: pointer; margin-top: 10px;">Dodaj wpis</button>
+    </form>
 
+    <hr>
+    <div id="entries-list">Ładowanie wpisów...</div>
+</div>
+
+<script type="module">
+    import { db, collection, addDoc, query, orderBy, getDocs, serverTimestamp } from '../../assets/firebase-config.js';
+
+    const form = document.getElementById('guestbook-form');
+    const list = document.getElementById('entries-list');
+
+    // Funkcja pobierania
+    async function loadEntries() {
+        const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        list.innerHTML = "";
+        snap.forEach(doc => {
+            const d = doc.data();
+            const date = d.createdAt?.toDate().toLocaleDateString('pl-PL') || "Teraz";
+            list.innerHTML += `
+                <div style="border-bottom: 1px dotted #888; margin-bottom: 10px; padding: 5px;">
+                    <strong>${d.name}</strong> <small>${date}</small><br>
+                    ${d.content}
+                </div>`;
+        });
+    }
+
+    // Obsługa wysyłki
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('guest-name').value;
+        const content = document.getElementById('guest-content').value;
+
+        try {
+            await addDoc(collection(db, "guestbook"), {
+                name: name,
+                content: content,
+                createdAt: serverTimestamp()
+            });
+            form.reset();
+            loadEntries(); // Odśwież listę
+        } catch (err) {
+            alert("Błąd podczas dodawania. Sprawdź limity znaków.");
+        }
+    };
+
+    loadEntries();
+</script>
 
 </div>
 
@@ -106,6 +160,9 @@ input[type="submit"]:hover {
 </p>
 
 </div>
+
+<script type="module" src="../../assets/firebase-conf.js"></script>
+
 
 
 </body>
