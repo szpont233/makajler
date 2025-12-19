@@ -146,6 +146,29 @@ img, .button {
   font-size: 14px;
 }
 
+#specjal {
+  padding: 10px;
+  border-left: 4px solid gold;
+  background: #f0f4f8;
+  margin-bottom: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s, background 0.2s;
+}
+
+#specjal:hover {
+  background-color: #dbdbdb;
+}
+
+#specjal:not(:last-child) {
+  border-bottom: 1px dotted #ccc;
+  margin-bottom: 12px;
+}
+
+#specjal strong {
+  color: goldenrod;
+  font-size: 14px;
+}
+
 #ciacho{
   color: #fff;
   text-align: center;

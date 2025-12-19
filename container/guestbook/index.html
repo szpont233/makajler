@@ -75,6 +75,12 @@ input[type="submit"]:hover {
   background-color: #385d8a;
 }
 
+#img{
+    max-width: 120px;
+    max-height: 180px;
+}
+
+
 </style>
 </head>
 <body>
@@ -99,7 +105,7 @@ input[type="submit"]:hover {
     <h2>Księga Wpisow</h2>
     <form id="guestbook-form" style="background: #f0f4f8; padding: 15px; border: 1px solid #ccc;">
         <input type="text" id="guest-name" placeholder="Twoje imię" required style="width: 100%; margin-bottom: 10px; padding: 5px;"><br>
-        <textarea id="guest-content" placeholder="Treść wpisu (max 500 znaków)" required style="width: 100%; height: 80px; padding: 5px;"></textarea><br>
+        <textarea id="guest-content" placeholder="Treść wpisu (max 1000 znaków)" required style="width: 100%; height: 80px; padding: 5px;"></textarea><br>
         <button type="submit" class="button" style="cursor: pointer; margin-top: 10px;">Dodaj wpis</button>
     </form>
 
@@ -117,24 +123,74 @@ input[type="submit"]:hover {
         const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
         const snap = await getDocs(q);
         list.innerHTML = "";
-        snap.forEach(doc => {
-        const d = doc.data();
-        const date = d.createdAt ? d.createdAt.toDate().toLocaleString('pl-PL', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }) : "Teraz";
 
-        list.innerHTML += `
-            <div style="border-bottom: 1px dotted #888; margin-bottom: 10px; padding: 5px;">
-                <strong>${d.name}</strong> <small style="color: #666;">(${date})</small><br>
-                <div style="margin-top: 5px;">${d.content}</div>
-            </div>`;
-                });
+        snap.forEach(doc => {
+            const d = doc.data();
+
+            const wrapper = document.createElement("div");
+            wrapper.style.borderBottom = "1px dotted #888";
+            wrapper.style.marginBottom = "10px";
+            wrapper.style.padding = "5px";
+
+            const name = document.createElement("strong");
+            name.textContent = d.name;
+
+            const date = document.createElement("small");
+            date.style.color = "#666";
+            date.textContent = d.createdAt
+              ? ` (${d.createdAt.toDate().toLocaleString('pl-PL')})`
+              : " (Teraz)";
+
+            const header = document.createElement("div");
+            header.appendChild(name);
+            header.appendChild(date);
+
+            const content = renderContentWithImg(d.content);
+            content.style.marginTop = "5px";
+
+
+            wrapper.appendChild(header);
+            wrapper.appendChild(content);
+      });
     }
 
+      function renderContentWithImg(raw) {
+    const container = document.createElement("div");
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(raw, "text/html");
+
+    doc.body.childNodes.forEach(node => {
+
+      // JEŚLI TO <img>
+      if (
+        node.nodeType === Node.ELEMENT_NODE &&
+        node.tagName === "IMG"
+      ) {
+        const src = node.getAttribute("src");
+
+        // tylko http/https
+        if (src && /^https?:\/\//i.test(src)) {
+          const img = document.createElement("img");
+          img.src = src;
+          img.style.maxWidth = "100%";
+          img.style.display = "block";
+          img.style.marginTop = "5px";
+
+          container.appendChild(img);
+        }
+
+      } else {
+        container.appendChild(
+          document.createTextNode(node.textContent)
+        );
+      }
+    });
+
+    return container;
+  }
+
+    
     form.onsubmit = async (e) => {
         e.preventDefault();
         const name = document.getElementById('guest-name').value;
@@ -165,8 +221,6 @@ input[type="submit"]:hover {
 </p>
 
 </div>
-
-<script type="module" src="../../assets/firebase-conf.js"></script>
 
 
 
