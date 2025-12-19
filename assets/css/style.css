@@ -218,14 +218,6 @@ a:hover {
   margin-top: 15px;
 }
 
-
-#new{
-  color: gold;
-}
-#new:hover{
-  color: white;
-  background-color: #003366;
-}
     
 @media(max-width: 600px) {
   body{
