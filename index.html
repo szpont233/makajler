@@ -42,11 +42,24 @@
         <a id="cwel" href="container/guestbook/index.html">Księga wpisów</a>
     </div>
 
+    <div id="logan">
+        <p id="czyzal">Status...</p>
+        <a id="loginlink" href="register.html" style="text-align: right;">
+            <img src="assets/icons/icon_mini_login.gif" height="13" width="12" alt="*">
+            Dołącz do Imperium |
+        </a>
+        <a id="loginlink" href="login.html">
+            <img src="#">
+            Zaloguj się
+        </a>
+    </div>
 
-    
     <div id="main">
         <div id="content">
             <h2>Nowości</h2>
+            <p id="nowe"><strong>21 grudnia 2025</strong><br><br>
+                 Nudzi mi sie w chuj dajcie jakies propozycje. Dodalem nowy system kont. Juz mozna sie rejestrowac/logowac. Wciaz w fazie beta!! Nie spodziewajcie sie kokosow
+            </p>
             <p id="nowe"><strong>19 grudnia 2025</strong><br><br>
             Zrobilem dzialajaca strone do wpisow. Najnowsze wpisy beda wyswietlane na tej stronie glownej (3 kafelek po prawej stronie). Zobacz <a href="container/guestbook/index.html">Ksiege wpisow</a>
             </p>
@@ -93,8 +106,14 @@
 
         <div id="sidebar">
             <aside class="infobox">
-                <h3>Pogoda i data</h3>
+                <h3>Info ogólne</h3>
+                <hr>
                 <div id="mlawa-info">Lapanie sygnalu z marsa...</div>
+                <p style="text-align:center;">
+                    <hr>
+                    <b>Odwiedzieliscie nas:</b><br> <script type="text/javascript" src="https://counter.websiteout.com/js/21/8/891/0"></script>  razy.<br><br>
+                    <b>Ostatnia aktualizacja:</b> 21.12.2025, 16:03:19
+                </p>
             </aside>
             <aside class="infobox" id="partia">
                 <h3>Księga wpisów</h3>
@@ -109,7 +128,7 @@
                 <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
             </aside>
 
-            <script type="module">
+            <script type="module"> //status wpisow
                 import { db, collection, query, orderBy, limit, getDocs } from './assets/firebase-conf.js';
 
                 async function loadLatestEntry() {
@@ -143,11 +162,7 @@
 
 
 <div class="footer">
-    Strona stworzona przez obywateli Imperium Lechitów.
-    <p style="text-align:center;">
-    Odwiedzieliscie nas: <script type="text/javascript" src="https://counter.websiteout.com/js/21/0/0/0"></script> razy.<br>
-    Ostatnia aktualizacja: 17.12.2025, 21:58:34
-</p>
+    Strona stworzona przez obywateli Imperium Lechitów. <br><br>
 <img class="award" src="https://theoldnet.com/images/award.gif">
 <img class="award" src="https://theoldnet.com/images/goldstar.gif">
 
@@ -156,8 +171,8 @@
 <script src="assets/infobox.js"></script>
 <script src="assets/imieniny.js"></script>
 <script type="module" src="./assets/firebase-conf.js"></script>
-
-<script type="module">
+ 
+<script type="module"> // ksiega wpisow
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
   import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
@@ -210,6 +225,34 @@
 
   loadLatestEntry();
 </script>
+
+<script type="module">
+import { auth } from "./assets/firebase-auth.js";
+import { onAuthStateChanged, signOut } 
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+const status = document.getElementById("czyzal");
+const link = document.getElementById("loginlink");
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    status.textContent = `Zalogowany jako: ${user.email}`;
+    link.textContent = "Wyloguj się";
+    link.href = "#";
+    link.onclick = (e) => {
+      e.preventDefault();
+      signOut(auth);
+    };
+  } else {
+    status.textContent = "Nie jesteś zalogowany";
+    link.textContent = "Dołącz do Imperium";
+    link.href = "register.html";
+    link.onclick = null;
+  }
+});
+</script>
+
+
 
 </body>
 </html>

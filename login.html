@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Imperium Lechitów - Logowanie</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+form#login-form{
+  max-width: 400px;
+  margin: 20px auto;
+  background: linear-gradient(to bottom, #f0f4f8, #d9e0f2);
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 6px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+form#login-form h2{
+  text-align: center;
+  color: #2b4a80;
+  margin-bottom: 15px;
+}
+
+form#login-form label{
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+form#login-form input{
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #888;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+form#login-form button{
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(to bottom, #4f81bd, #385d8a);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+form#login-form button:hover{
+  background: #5a8fd1;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+#login-status{
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.form-links{
+  text-align: center;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.form-links a{
+  margin: 0 5px;
+  color: #0033cc;
+  text-decoration: underline;
+}
+
+.form-links a:hover{
+  color: #cc0000;
+}
+
+@media(max-width:600px){
+  form#login-form {
+    width: 90%;
+    padding: 15px;
+  }
+  form#login-form button {
+    font-size: 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <a href="../../index.html" style="margin: auto; display:block; padding: 5px;">
+    <div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;">
+      <img src="../../logo.png" alt="logo Lechii" style="max-width:100%;">
+    </div>
+  </a>
+  <h1>Logowanie</h1>
+  <p style="text-shadow: 2px 2px 3px black; color: black;">Witaj w Imperium Lechitów</p>
+</div>
+
+<div id="container">
+    <div id="menu">
+        <a href="index.html">Strona główna</a> |
+        <a href="container/projekty/index.html">Projekty</a> | 
+        <a href="container/galeria/index.html">Galeria</a> |
+        <a href="container/kontakt/index.html">Kontakt</a> |
+        <a href="container/swiatynia/index.html">Świątynia</a> |
+        <a id="cwel" href="container/guestbook/index.html">Księga wpisów</a>
+    </div>
+
+  <form id="login-form">
+    <h2>Zaloguj się</h2>
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" required>
+
+    <label for="password">Hasło:</label>
+    <input type="password" name="password" id="password" required>
+
+    <button type="submit">Zaloguj</button>
+
+    <div class="form-links">
+      <a href="register.html">Ale ja chcialem się zarejestrować</a> | 
+      <a style="cursor: wait;" onclick="alertB()">Zapomniałem hasła</a>
+    </div>
+
+    <div id="login-status"></div>
+  </form>
+</div>
+
+<div class="footer">
+  Strona stworzona przez obywateli Imperium Lechitów.
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-wIxTuqRapc26UAKHOXatoADONeHzdAc",
+  authDomain: "lechlogin.firebaseapp.com",
+  projectId: "lechlogin",
+  storageBucket: "lechlogin.firebasestorage.app",
+  messagingSenderId: "1000327677896",
+  appId: "1:1000327677896:web:d146b03843b967b056a2fd",
+  measurementId: "G-9FYPY7JB5P"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const form = document.getElementById("login-form");
+const status = document.getElementById("login-status");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = form.email.value;
+  const password = form.password.value;
+
+  status.textContent = "Trwa logowanie...";
+  status.style.color = "black";
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+    status.textContent = `Zalogowano: ${user.email}. Przekierowanie...`;
+    status.style.color = "green";
+
+    setTimeout(() => window.location.href = "../../index.html", 1500);
+  } catch (error) {
+    console.error(error);
+    status.textContent = `Błąd: ${error.message}`;
+    status.style.color = "red";
+  }
+});
+</script>
+
+<script>
+    function alertB(){
+        alert("prosze sie skontaktowac poczta tradycyjna lub poprzez adres email. informacje znajdziesz w zakladce Kontakt. najszybciej bedzie przez kontakt osobisty ze mna w Baltimore")
+    }
+</script>
+</body>
+</html>

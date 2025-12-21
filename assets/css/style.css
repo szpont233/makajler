@@ -218,7 +218,27 @@ a:hover {
   margin-top: 15px;
 }
 
+#czyzal {
+    text-align: left;
+    padding-left: 10px;
+    font-size: 11px;
+}
+
+#loginlink{
+  padding-right: 10px;
+  font-size: 11px;
+  text-align: right;
+}
     
+#logan {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+
 @media(max-width: 600px) {
   body{
     font-size: 14px;
