@@ -134,15 +134,16 @@ form#login-form button:hover{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC-wIxTuqRapc26UAKHOXatoADONeHzdAc",
-  authDomain: "lechlogin.firebaseapp.com",
-  projectId: "lechlogin",
-  storageBucket: "lechlogin.firebasestorage.app",
-  messagingSenderId: "1000327677896",
-  appId: "1:1000327677896:web:d146b03843b967b056a2fd",
-  measurementId: "G-9FYPY7JB5P"
+  apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
+  authDomain: "guestbook-imperium.firebaseapp.com",
+  projectId: "guestbook-imperium",
+  storageBucket: "guestbook-imperium.firebasestorage.app",
+  messagingSenderId: "780071024560",
+  appId: "1:780071024560:web:3ff011266cd83f7bd60875",
+  measurementId: "G-665V4Q0410"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -162,7 +163,7 @@ form.addEventListener("submit", async (e) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    status.textContent = `Zalogowano: ${user.email}. Przekierowanie...`;
+    status.textContent = `Zalogowano: ${user.displayName}. Przekierowanie...`;
     status.style.color = "green";
 
     setTimeout(() => window.location.href = "../../index.html", 1500);

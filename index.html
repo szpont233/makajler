@@ -11,6 +11,18 @@
     color: white;
     background-color: #003366;
     }
+
+    #profreg{
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+    }
+    #profil{
+        padding-right: 15px;
+    }
+    #register{
+        padding-left: 10px;
+    }
 </style>
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
@@ -44,19 +56,25 @@
 
     <div id="logan">
         <p id="czyzal">Status...</p>
-        <a id="loginlink" href="register.html" style="text-align: right;">
+        <a id="profil" href="edytuj.html">Mój profil <img style="height: 17px; width: 14px; vertical-align:middle; margin-right:4px;" src="assets/icons/default.png"></a>
+    </div>
+    <div id="profreg">
+        <a id="register" href="register.html">
             <img src="assets/icons/icon_mini_login.gif" height="13" width="12" alt="*">
-            Dołącz do Imperium |
+            Dołącz do Imperium
         </a>
         <a id="loginlink" href="login.html">
-            <img src="#">
             Zaloguj się
+            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png">
         </a>
     </div>
 
     <div id="main">
         <div id="content">
             <h2>Nowości</h2>
+            <p id="nowe"><strong>23 grudnia 2025</strong><br><br>
+                1
+            </p>
             <p id="nowe"><strong>21 grudnia 2025</strong><br><br>
                  Nudzi mi sie w chuj dajcie jakies propozycje. Dodalem nowy system kont. Juz mozna sie rejestrowac/logowac. Wciaz w fazie beta!! Nie spodziewajcie sie kokosow
             </p>
@@ -123,13 +141,15 @@
             </aside>
             <aside class="infobox" id="bozena">
                 <h3>Wspólpraca z...</h3>
-                <img width="150px" height="150px" src="https://p16-pu-sign-no.tiktokcdn-eu.com/tos-no1a-avt-0068c001-no/3f1a83d4013ba1b27b6e2e4440f8934a~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=10399&refresh_token=a3ddebe6&x-expires=1766174400&x-signature=Al8bchN6Y%2BOIz8NjA%2FJ0Q3bq9Tc%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=no1a" alt="Bożena Boguslawska">
+                <img width="150px" height="150px" src="assets/bozena.jpeg" alt="Bożena Boguslawska">
                 <p>Wbijaj na tikotka Bożeny Boguslawskiej!!1</p>
                 <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
             </aside>
 
             <script type="module"> //status wpisow
-                import { db, collection, query, orderBy, limit, getDocs } from './assets/firebase-conf.js';
+                import { db } from './assets/firebase.js';
+
+                import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
                 async function loadLatestEntry() {
                     const container = document.getElementById('latest-guestbook-entry');
@@ -170,89 +190,30 @@
 
 <script src="assets/infobox.js"></script>
 <script src="assets/imieniny.js"></script>
-<script type="module" src="./assets/firebase-conf.js"></script>
- 
-<script type="module"> // ksiega wpisow
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getFirestore, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
-    authDomain: "guestbook-imperium.firebaseapp.com",
-    projectId: "guestbook-imperium",
-    storageBucket: "guestbook-imperium.firebasestorage.app",
-    messagingSenderId: "780071024560",
-    appId: "1:780071024560:web:3ff011266cd83f7bd60875",
-    measurementId: "G-665V4Q0410"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  async function loadLatestEntry() {
-    const container = document.getElementById('latest-guestbook-entry');
-    if (!container) return;
-
-    try {
-      const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(1));
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        container.innerHTML = "<p style='font-size: 11px;'>Brak wpisów.</p>";
-        return;
-      }
-
-      const data = querySnapshot.docs[0].data();
-      const date = data.createdAt ? data.createdAt.toDate().toLocaleString('pl-PL', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }) : "Niedawno";
-
-      container.innerHTML = `
-        <div style="font-size: 12px; border-left: 3px solid #c0392b; padding-left: 10px; margin-top: 10px;">
-          <strong>${data.name}</strong> <span style="font-size: 10px; color: #666;">(${date})</span><br>
-          <p style="margin: 5px 0;">${data.content}</p>
-        </div>
-      `;
-    } catch (e) {
-      console.error("Błąd Firestore:", e);
-      container.innerHTML = "Nie udało się połączyć z bazą.";
-    }
-  }
-
-  loadLatestEntry();
-</script>
-
 <script type="module">
-import { auth } from "./assets/firebase-auth.js";
-import { onAuthStateChanged, signOut } 
-from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { auth } from "./assets/firebase.js";
+    import { onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-const status = document.getElementById("czyzal");
-const link = document.getElementById("loginlink");
+    const status = document.getElementById("czyzal");
+    const link = document.getElementById("loginlink");
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    status.textContent = `Zalogowany jako: ${user.email}`;
-    link.textContent = "Wyloguj się";
-    link.href = "#";
-    link.onclick = (e) => {
-      e.preventDefault();
-      signOut(auth);
-    };
-  } else {
-    status.textContent = "Nie jesteś zalogowany";
-    link.textContent = "Dołącz do Imperium";
-    link.href = "register.html";
-    link.onclick = null;
-  }
-});
+    onAuthStateChanged(auth, (user) => {
+    if (user) {
+        status.textContent = "Zalogowany jako: " + user.displayName;
+        link.innerHTML = 'Wyloguj <img src="assets/icons/logout.png" alt="Wyloguj" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
+        link.href = "index.html";
+        link.onclick = (e) => {
+        e.preventDefault();
+        signOut(auth);
+        };
+    } else {
+        status.textContent = "Nie jesteś zalogowany";
+        link.textContent = "Zaloguj się";
+        link.href = "login.html";
+    }
+    });
 </script>
-
-
-
 </body>
 </html>

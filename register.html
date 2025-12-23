@@ -114,6 +114,8 @@ form#auth-form button:hover{
     <h2>Zarejestruj się</h2>
     <label for="email">Email:</label>
     <input type="email" name="email" id="email" required><br>
+    <label for="name">Nazwa:</label>
+    <input type="text" name="name" id="name" required><br>
     <label for="password">Hasło:</label>
     <input type="password" name="password" id="password" required><br>
     <input type="checkbox" name="zgoda" id="zgoda" required><span for="zgoda">Czy oddasz życie za IzraelaGPT i Benjamina Netanjahu?</span><br><br>
@@ -131,15 +133,16 @@ form#auth-form button:hover{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyC-wIxTuqRapc26UAKHOXatoADONeHzdAc",
-    authDomain: "lechlogin.firebaseapp.com",
-    projectId: "lechlogin",
-    storageBucket: "lechlogin.firebasestorage.app",
-    messagingSenderId: "1000327677896",
-    appId: "1:1000327677896:web:d146b03843b967b056a2fd",
-    measurementId: "G-9FYPY7JB5P"
+    apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
+    authDomain: "guestbook-imperium.firebaseapp.com",
+    projectId: "guestbook-imperium",
+    storageBucket: "guestbook-imperium.firebasestorage.app",
+    messagingSenderId: "780071024560",
+    appId: "1:780071024560:web:3ff011266cd83f7bd60875",
+    measurementId: "G-665V4Q0410"
   };
 
 const app = initializeApp(firebaseConfig);
@@ -150,26 +153,37 @@ const status = document.getElementById("signup-status");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const email = form.email.value;
+  const name = form.name.value;
   const password = form.password.value;
 
   status.textContent = "Trwa tworzenie konta...";
   status.style.color = "black";
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential =
+      await createUserWithEmailAndPassword(auth, email, password);
+
     const user = userCredential.user;
-    status.textContent = `Konto utworzone: ${user.email}`;
+
+    await updateProfile(user, {
+      displayName: name
+    });
+
     status.style.color = "green";
+    status.textContent = `Konto utworzone: ${user.displayName}. Prosimy się teraz zalogować...`;
+
     form.reset();
-    status.textContent = `Konto utworzone: ${user.email}. Przekierowanie do login.html...`;
     setTimeout(() => window.location.href = "login.html", 2000);
+
   } catch (error) {
     console.error(error);
     status.textContent = `Błąd: ${error.message}`;
     status.style.color = "red";
   }
 });
+
 </script>
 
 </body>

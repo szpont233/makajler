@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Imperium Lechitów - Ustawienia profilu</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: Verdana, Arial, Helvetica, sans-serif; background: #ffffff; }
+  #profile { max-width: 600px; margin: 30px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+  .field { margin-bottom: 15px; display: flex; align-items: center; }
+  .field label { width: 100px; font-weight: bold; }
+  .field span { flex: 1; }
+  .field input, .field textarea { flex: 1; padding: 5px; font-size: 14px; }
+  .edit-btn { cursor: pointer; margin-left: 10px; color: #2b4a80; }
+  .save-btn { margin-left: 10px; cursor: pointer; color: green; }
+  #status { text-align: center; margin-top: 10px; font-size: 14px; }
+  .olowek{
+    width: 12px;
+    height: 12px;
+  }
+</style>
+</head>
+<body>
+<a style="padding: 10px; font-size: 15px;" href="index.html">Wróć się</a>
+<div id="profile">
+  <h2>Mój profil</h2>
+  <div class="field">
+    <label>Nick:</label>
+    <span id="displayName">Ładowanie...</span>
+    <span class="edit-btn" onclick="editField('displayName')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+  </div>
+  <div class="field">
+    <label>Email:</label>
+    <span id="email">Ładowanie...</span>
+    <span class="edit-btn" onclick="editField('email')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+  </div>
+  <div class="field">
+    <label>Hasło:</label>
+    <span>********</span>
+    <span class="edit-btn" onclick="editPassword()"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+  </div>
+  <div class="field">
+    <label>Bio:</label>
+    <span id="bio">Ładowanie...</span>
+    <span class="edit-btn" onclick="editField('bio')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+  </div>
+  <div class="field">
+    <label>Zdjecie: </label>
+    <span id="profilowe"><img style="width: 48px; height: 50px; border: 1px solid black;" src="assets/icons/default.png"></span>
+    <span class="edit-btn" onclick=""><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+  </div>
+
+  <div id="status"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getAuth, updateProfile, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
+  authDomain: "guestbook-imperium.firebaseapp.com",
+  projectId: "guestbook-imperium",
+  storageBucket: "guestbook-imperium.firebasestorage.app",
+  messagingSenderId: "780071024560",
+  appId: "1:780071024560:web:3ff011266cd83f7bd60875"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const status = document.getElementById("status");
+
+async function loadProfile() {
+  const user = auth.currentUser;
+  if (!user) { status.textContent = "Nie jesteś zalogowany"; return; }
+
+  document.getElementById("displayName").textContent = user.displayName || "Brak";
+  document.getElementById("email").textContent = user.email;
+
+  const docRef = doc(db, "profiles", user.uid);
+  const docSnap = await getDoc(docRef);
+  document.getElementById("bio").textContent = docSnap.exists() ? docSnap.data().bio : "Brak";
+}
+
+auth.onAuthStateChanged(() => loadProfile());
+
+function editField(field) {
+  const user = auth.currentUser;
+  if (!user) { alert("Zaloguj się"); return; }
+
+  const span = document.getElementById(field);
+  const oldValue = span.textContent;
+  const input = document.createElement(field==="bio"? "textarea":"input");
+  input.value = oldValue;
+  span.replaceWith(input);
+
+  const saveBtn = document.createElement("span");
+  saveBtn.innerHTML = '<img src="assets/icons/zapisz.png">';
+  saveBtn.className = "save-btn";
+  input.parentNode.appendChild(saveBtn);
+
+  saveBtn.onclick = async () => {
+    status.textContent = "Zapisuje...";
+    try {
+      if(field === "displayName") {
+        await updateProfile(user, {displayName: input.value});
+      } else if(field === "email") {
+        const password = prompt("Podaj hasło aby zmienić email");
+        const credential = EmailAuthProvider.credential(user.email, password);
+        await reauthenticateWithCredential(user, credential);
+        await updateEmail(user, input.value);
+      } else if(field === "bio") {
+        await setDoc(doc(db, "profiles", user.uid), {bio: input.value}, {merge: true});
+      }
+      status.textContent = "Zapisano";
+      input.replaceWith(span);
+      span.textContent = input.value;
+      saveBtn.remove();
+    } catch(e) {
+      console.error(e);
+      status.textContent = "Błąd: " + e.message;
+    }
+  };
+}
+
+function editPassword() {
+  const user = auth.currentUser;
+  if (!user) { alert("Zaloguj się"); return; }
+  const newPassword = prompt("Podaj nowe hasło:");
+  if(!newPassword) return;
+  updatePassword(user, newPassword)
+    .then(() => { status.textContent = "Hasło zmienione"; })
+    .catch(e => { status.textContent = "Błąd: " + e.message; });
+}
+</script>
+</body>
+</html>
