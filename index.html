@@ -56,11 +56,11 @@
 
     <div id="logan">
         <p id="czyzal">Status...</p>
-        <a id="profil" href="edytuj.html">Mój profil <img style="height: 17px; width: 14px; vertical-align:middle; margin-right:4px;" src="assets/icons/default.png"></a>
+        <a id="profil" href="edytuj.html">Mój profil</a>
     </div>
     <div id="profreg">
         <a id="register" href="register.html">
-            <img src="assets/icons/icon_mini_login.gif" height="13" width="12" alt="*">
+            <img src="assets/icons/rejestruj.png" height="13" width="12" alt="*">
             Dołącz do Imperium
         </a>
         <a id="loginlink" href="login.html">
@@ -166,6 +166,7 @@
                         const date = data.createdAt?.toDate().toLocaleDateString('pl-PL') || "Niedawno";
                         
                         container.innerHTML = `
+                            <hr>
                             <p><strong>${data.name}</strong> (${date})</p>
                             <p style="font-style: italic;">"${data.content.substring(0, 50)}${data.content.length > 50 ? '...' : ''}"</p>
                         `;
@@ -210,7 +211,7 @@
         };
     } else {
         status.textContent = "Nie jesteś zalogowany";
-        link.textContent = "Zaloguj się";
+        link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png">';
         link.href = "login.html";
     }
     });
