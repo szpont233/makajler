@@ -117,7 +117,7 @@ h2 {
 }
 
 
-#nowe {
+.nowe {
   padding: 10px;
   border-left: 4px solid #2b4a80;
   background: #f0f4f8;
@@ -126,11 +126,11 @@ h2 {
   transition: transform 0.2s, background 0.2s;
 }
 
-#nowe:hover {
+.nowe:hover {
   background-color: #dbdbdb;
 }
 
-#nowe:not(:last-child) {
+.nowe:not(:last-child) {
   border-bottom: 1px dotted #ccc;
   margin-bottom: 12px;
 }
@@ -141,12 +141,12 @@ img, .button {
   height: auto;
 }
 
-#nowe strong {
+.nowe strong {
   color: #2b4a80;
   font-size: 14px;
 }
 
-#specjal {
+.specjal {
   padding: 10px;
   border-left: 4px solid gold;
   background: #f0f4f8;
@@ -155,16 +155,16 @@ img, .button {
   transition: transform 0.2s, background 0.2s;
 }
 
-#specjal:hover {
+.specjal:hover {
   background-color: #dbdbdb;
 }
 
-#specjal:not(:last-child) {
+.specjal:not(:last-child) {
   border-bottom: 1px dotted #ccc;
   margin-bottom: 12px;
 }
 
-#specjal strong {
+.specjal strong {
   color: goldenrod;
   font-size: 14px;
 }

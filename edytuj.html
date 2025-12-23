@@ -19,42 +19,53 @@
     width: 12px;
     height: 12px;
   }
+  #editor {
+  border: 1px solid #000;
+  padding: 10px;
+  min-height: 150px;
+  background: #fff;
+  font-family: Verdana;
+}
+#toolbar button {
+  margin-right: 4px;
+}
+
 </style>
 </head>
 <body>
 <a style="padding: 10px; font-size: 15px;" href="index.html">Wróć się</a>
-<div id="profile">
-  <h2>Mój profil</h2>
-  <div class="field">
-    <label>Nick:</label>
-    <span id="displayName">Ładowanie...</span>
-    <span class="edit-btn" onclick="editField('displayName')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
-  </div>
-  <div class="field">
-    <label>Email:</label>
-    <span id="email">Ładowanie...</span>
-    <span class="edit-btn" onclick="editField('email')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
-  </div>
-  <div class="field">
-    <label>Hasło:</label>
-    <span>********</span>
-    <span class="edit-btn" onclick="editPassword()"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
-  </div>
-  <div class="field">
-    <label>Bio:</label>
-    <span id="bio">Ładowanie...</span>
-    <span class="edit-btn" onclick="editField('bio')"><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
-  </div>
-  <div class="field">
-    <label>Zdjecie: </label>
-    <span id="profilowe"><img style="width: 48px; height: 50px; border: 1px solid black;" src="assets/icons/default.png"></span>
-    <span class="edit-btn" onclick=""><img class="olowek" src="assets/icons/olowek.png" alt="olowek"></span>
+<div id="profile-editor">
+  <h2>Edytuj profil</h2>
+
+  <label>Nick</label>
+  <input id="nick" maxlength="30">
+
+  <label>Profil (what you see is what you get)</label>
+
+  <div id="toolbar">
+    <button onclick="cmd('bold')"><b>B</b></button>
+    <button onclick="cmd('italic')"><i>I</i></button>
+    <button onclick="cmd('underline')"><u>U</u></button>
+    <button onclick="cmd('insertUnorderedList')">- Lista</button>
+    <button onclick="insertLink()">Link</button>
   </div>
 
+  <div id="editor" contenteditable="true"></div>
+
+  <button onclick="saveProfile()">Zapisz</button>
   <div id="status"></div>
 </div>
 
-<script type="module">
+<div id="public-profile">
+  <h2 id="nick"></h2>
+  <div id="bio"></div>
+</div>
+
+
+</div>
+
+<!-- <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getAuth, updateProfile, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -136,6 +147,84 @@ function editPassword() {
     .then(() => { status.textContent = "Hasło zmienione"; })
     .catch(e => { status.textContent = "Błąd: " + e.message; });
 }
+</script> -->
+
+<script type="module">
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+const auth = getAuth();
+const db = getFirestore();
+
+let currentUser;
+
+
+function cmd(command) {
+  document.execCommand(command, false, null);
+}
+
+function insertLink() {
+  const url = prompt("URL:");
+  if (url) document.execCommand("createLink", false, url);
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+
+  currentUser = user;
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const data = snap.data();
+    document.getElementById("nick").value = data.nick || "";
+    document.getElementById("editor").innerHTML = data.bioHtml || "";
+  } else {
+    // pierwszy raz
+    await setDoc(ref, {
+      nick: user.displayName || "Użytkownik",
+      bioHtml: "",
+      rank: "Nowicjusz",
+      posts: 0,
+      createdAt: serverTimestamp()
+    });
+  }
+});
+
+async function saveProfile() {
+  if (!currentUser) return;
+
+  const nick = document.getElementById("nick").value.trim();
+  const bioHtml = document.getElementById("editor").innerHTML;
+
+  if (nick.length === 0) {
+    status.textContent = "Nick nie może być pusty";
+    return;
+  }
+
+  try {
+    await setDoc(doc(db, "users", currentUser.uid), {
+      nick,
+      bioHtml,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+
+    status.textContent = "Zapisano profil";
+  } catch (e) {
+    status.textContent = "Błąd: " + e.message;
+  }
+}
+
+async function loadPublicProfile(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+  if (!snap.exists()) return;
+
+  document.getElementById("nick").textContent = snap.data().nick;
+  document.getElementById("bio").innerHTML = snap.data().bioHtml;
+}
+
+
 </script>
 </body>
 </html>
