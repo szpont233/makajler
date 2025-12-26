@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Imperium Lechitów - Kontakt</title>
+<title>Imperium Lechitów - Forum</title>
 
 <link rel="stylesheet" href="../../assets/css/style.css">
 
@@ -97,7 +97,10 @@ input[type="submit"]:hover {
     display: block;
     margin: 5px 0;
 }
-
+#submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
 </style>
 </head>
 <body>
@@ -143,10 +146,42 @@ input[type="submit"]:hover {
     <hr><br>
 
     <div id="content" style="max-width: 600px; margin: auto;">
-    <h2>Księga Wpisow</h2>
-    <p>Witaj na mini forum na mojej stronie. Nie biore odpowiedzialnosci za brak zdolności do rozróżniania dobra i zła, obojętność na moralność i celowe działanie wbrew nie naszych użytkowników. Pozdrawiam :)</p>
+    <h2>Księga Wpisów</h2>
+    <p id="regulamin-tekst">
+        Witaj na mini forum na mojej stronie. Nie biorę odpowiedzialności za brak zdolności do rozróżniania dobra i zła, obojętność na moralność i celowe działanie wbrew nie naszych użytkowników. Pozdrawiam :)
+    </p>
+
     <form id="guestbook-form">
-        <input type="text" id="guest-name" name="name" disabled placeholder=""><br>
+        <div style="background: #ffffcc; padding: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+            <input type="checkbox" id="akceptuje-szponta" required>
+            <label for="akceptuje-szponta" style="font-size: 11px;">
+                Przeczytałem, zrozumiałem i obiecuję godnie reprezentować Imperium
+            </label>
+        </div>
+    </form>
+    <script>
+    const checkbox = document.getElementById('akceptuje-szponta');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (localStorage.getItem('regulamin_zaakceptowany') === 'true') {
+        checkbox.checked = true;
+        submitBtn.disabled = false;
+    }
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            submitBtn.disabled = false;
+            localStorage.setItem('regulamin_zaakceptowany', 'true');
+        } else {
+            submitBtn.disabled = true;
+            localStorage.removeItem('regulamin_zaakceptowany');
+        }
+    });
+</script><br>
+    <form id="guestbook-form">
+        <label style="font-weight: bold;">Kim jestem?</label><br>
+        <input type="text" id="guest-name" name="name" disabled placeholder="Zaloguj się by pisać"><br><br>
+        <label style="font-weight: bold;">Napisz na ściane</label><br>
         <textarea id="guest-content" maxlength="500" rows="4" cols="50" 
           placeholder="Treść wpisu (max 1000 znaków)" required ></textarea><br><br>
         <button type="submit" class="button">Dodaj wpis</button>
