@@ -92,6 +92,9 @@
     <div id="main">
         <div id="content">
             <h2>Nowości</h2>
+            <p class="nowe"><strong>26 grudnia 2025</strong><br><br>
+            Zamiast spedzac swieta z rodzina to siedze w piwnicy i pisze z czatem schizoweb <img src="assets/icons/pointup.png"><br>
+            Od teraz wpisy sa dla wszystkich ale Szekspire musza sie zarejestrowac zeby dalej pisac.. Pozdrawiamy.</p>
             <p class="nowe" id="swieta"><strong>24 grudnia 2025</strong><br><br>
              Zdrowych wesołych, wspaniałych świąt oraz szczęśliwego nowego roku wszystkim życzę!
             </p>
@@ -171,7 +174,6 @@
 
             <script type="module"> //status wpisow
                 import { db } from './assets/firebase.js';
-
                 import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
                 async function loadLatestEntry() {

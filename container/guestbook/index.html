@@ -74,6 +74,29 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: #385d8a;
 }
+#content{
+  background-color: #fafafa;
+}
+
+    #profreg{
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+    }
+    #profil{
+        padding-right: 15px;
+    }
+    #register{
+        padding-left: 10px;
+    }
+.entry img {
+    max-width: 300px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 5px 0;
+}
 
 </style>
 </head>
@@ -95,12 +118,31 @@ input[type="submit"]:hover {
         <a id="new" href="#">Księga wpisów</a>
     </div>
 
+    <div id="logan">
+        <p id="czyzal">Status...</p>
+        <a id="profil" href="../../edytuj.html">Mój profil</a>
+    </div>
+    <div id="profreg">
+        <a id="register" href="../../register.html">
+            <img src="../../assets/icons/rejestruj.png" height="13" width="12" alt="*">
+            Dołącz do Imperium
+        </a>
+        <a id="loginlink" href="../../login.html">
+            Zaloguj się
+            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">
+        </a>
+    </div><br>
+
+    <hr><br>
+
     <div id="content" style="max-width: 600px; margin: auto;">
     <h2>Księga Wpisow</h2>
-    <form id="guestbook-form" style="background: #f0f4f8; padding: 15px; border: 1px solid #ccc;">
-        <input type="text" id="guest-name" placeholder="Twoje imię" required style="width: 100%; margin-bottom: 10px; padding: 5px;"><br>
-        <textarea id="guest-content" placeholder="Treść wpisu (max 500 znaków)" required style="width: 100%; height: 80px; padding: 5px;"></textarea><br>
-        <button type="submit" class="button" style="cursor: pointer; margin-top: 10px;">Dodaj wpis</button>
+    <p>Witaj na mini forum na mojej stronie. Nie biore odpowiedzialnosci za brak zdolności do rozróżniania dobra i zła, obojętność na moralność i celowe działanie wbrew nie naszych użytkowników. Pozdrawiam :)</p>
+    <form id="guestbook-form">
+        <input type="text" id="guest-name" name="name" disabled placeholder=""><br>
+        <textarea id="guest-content" maxlength="500" rows="4" cols="50" 
+          placeholder="Treść wpisu (max 1000 znaków)" required ></textarea><br><br>
+        <button type="submit" class="button">Dodaj wpis</button>
     </form>
 
     <hr>
@@ -108,55 +150,148 @@ input[type="submit"]:hover {
 </div>
 
 <script type="module">
-    import { db } from '../../assets/firebase.js';
-    import { collection, addDoc, query, orderBy, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { auth, db } from '../../assets/firebase.js';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-    const form = document.getElementById('guestbook-form');
-    const list = document.getElementById('entries-list');
+// Formatowanie daty
+function formatDate(timestamp) {
+    if (!timestamp) return "Teraz";
+    const date = timestamp.toDate();
+    return date.toLocaleString("pl-PL", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
 
-    async function loadEntries() {
-        const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
-        list.innerHTML = "";
-        snap.forEach(doc => {
-        const d = doc.data();
-        const date = d.createdAt ? d.createdAt.toDate().toLocaleString('pl-PL', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }) : "Teraz";
+// Sanitizacja wpisów – whitelist: <a>, <img>, <p>
+function sanitizeHtml(str) {
+    const temp = document.createElement('div');
+    temp.innerHTML = str;
+    const allowedTags = ['A','IMG','P'];
 
-        list.innerHTML += `
-            <div style="border-bottom: 1px dotted #888; margin-bottom: 10px; padding: 5px;">
-                <strong>${d.name}</strong> <small style="color: #666;">(${date})</small><br>
-                <div style="margin-top: 5px;">${d.content}</div>
-            </div>`;
-                });
+    function clean(node) {
+        if (node.nodeType === 1) {
+            if (!allowedTags.includes(node.tagName)) {
+                const text = document.createTextNode(node.textContent);
+                node.parentNode.replaceChild(text, node);
+            } else {
+                if (node.tagName === 'A') {
+                    const href = node.getAttribute('href');
+                    node.setAttribute('href', href || '#');
+                    node.setAttribute('target','_blank');
+                }
+                if (node.tagName === 'IMG') {
+                    const src = node.getAttribute('src');
+                    node.setAttribute('src', src || '');
+                    node.setAttribute('alt','');
+                    node.setAttribute('loading','lazy');
+                    node.removeAttribute('onerror');
+                    node.style.maxWidth = '300px';
+                    node.style.maxHeight = '200px';
+                    node.style.width = 'auto';
+                    node.style.height = 'auto';
+                }
+            }
+        }
+        Array.from(node.childNodes).forEach(clean);
     }
 
-    form.onsubmit = async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('guest-name').value;
-        const content = document.getElementById('guest-content').value;
+    Array.from(temp.childNodes).forEach(clean);
+    return temp.innerHTML;
+}
 
-        try {
-            await addDoc(collection(db, "guestbook"), {
-                name: name,
-                content: content,
-                createdAt: serverTimestamp()
-            });
-            form.reset();
-            loadEntries();
-        } catch (err) {
-            alert("Błąd podczas dodawania. Sprawdź limity znaków.");
-        }
-    };
+// Renderowanie wpisu
+function renderEntry(id, d) {
+    const user = auth.currentUser;
+    const canEdit = user && (user.uid === d.uid || user.isAdmin);
 
-    loadEntries();
+    return `
+    <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px;">
+        <strong>${d.name}</strong>
+        <small style="color:#666">(${formatDate(d.createdAt)})</small>
+        <p style="margin-top:5px;">${sanitizeHtml(d.content)}</p>
+        ${canEdit ? `<button onclick="deleteEntry('${id}')">Usuń</button>` : ""}
+    </div>`;
+}
+
+// Usuwanie wpisu
+window.deleteEntry = async (id) => {
+    if (!confirm("Usunąć wpis?")) return;
+    await deleteDoc(doc(db, "guestbook", id));
+};
+
+// Ładowanie wpisów
+const list = document.getElementById('entries-list');
+const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+
+onSnapshot(q, (snap) => {
+    list.innerHTML = "";
+    snap.forEach(doc => {
+        const d = doc.data();
+        list.innerHTML += renderEntry(doc.id, d);
+    });
+});
+
+// Formularz dodawania wpisu
+const form = document.getElementById('guestbook-form');
+const nameInput = document.getElementById('guest-name');
+
+form.onsubmit = async (e) => {
+    e.preventDefault();
+    const user = auth.currentUser;
+    if (!user) { alert("Musisz być zalogowany."); return; }
+
+    const content = document.getElementById('guest-content').value.trim();
+    if (content.length < 3) return;
+
+    try {
+        await addDoc(collection(db, "guestbook"), {
+            uid: user.uid,
+            name: user.displayName || "Anon",
+            content,
+            createdAt: serverTimestamp(),
+            edited: false
+        });
+        form.reset();
+    } catch (err) {
+        console.error(err);
+        alert("Błąd podczas dodawania. Sprawdź limity znaków.");
+    }
+};
+
+// Wyświetlanie nicku zalogowanego użytkownika
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        nameInput.value = user.displayName || "Anon";
+        nameInput.disabled = true;
+    } else {
+        nameInput.value = "";
+        nameInput.placeholder = "Zaloguj się lub zarejestruj!";
+        nameInput.disabled = true;
+    }
+});
+
+// Status logowania w nagłówku
+const status = document.getElementById("czyzal");
+const link = document.getElementById("loginlink");
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        status.textContent = "Zalogowany jako: " + user.displayName;
+        link.innerHTML = 'Wyloguj <img src="../../assets/icons/logout.png" alt="*" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
+        link.href = "../../index.html";
+        link.onclick = (e) => { e.preventDefault(); signOut(auth); };
+    } else {
+        status.textContent = "Nie jesteś zalogowany";
+        link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">';
+        link.href = "../../login.html";
+    }
+});
 </script>
-
 </div>
 
 <div class="footer">
@@ -168,8 +303,5 @@ input[type="submit"]:hover {
 </div>
 
 <script type="module" src="../../assets/firebase.js"></script>
-
-
-
 </body>
 </html>
