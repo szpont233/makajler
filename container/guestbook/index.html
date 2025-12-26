@@ -101,6 +101,31 @@ input[type="submit"]:hover {
     background: #ccc;
     cursor: not-allowed;
 }
+
+#content{ 
+    background-color: #fafafa;
+    flex: 1; 
+    }
+#submit-btn:disabled{
+     background: #ccc; 
+     cursor: not-allowed; 
+    }
+    
+#main{
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 15px; 
+    }
+#sidebar{ 
+    width: 240px;
+    flex-shrink: 0;
+    }
+    
+@media(max-width: 900px) {
+    #main { flex-direction: column; }
+    #sidebar { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -123,7 +148,7 @@ input[type="submit"]:hover {
         <a href="../../index.html">Strona Główna</a> |
         <a href="../../container/projekty/index.html">Gry/Prodżekts</a> |
         <a href="../../container/galeria/index.html">Galeria</a> |
-        <a href="../../container/galeria/index.html">Kontakt</a> |
+        <a href="../../container/kontakt/index.html">Kontakt</a> |
         <a href="../../container/swiatynia/index.html">Świątynia</a> |
         <a id="new" href="#">Księga wpisów</a>
     </div>
@@ -144,21 +169,60 @@ input[type="submit"]:hover {
     </div><br>
 
     <hr><br>
-
+<div id="main">
     <div id="content" style="max-width: 600px; margin: auto;">
-    <h2>Księga Wpisów</h2>
-    <p id="regulamin-tekst">
-        Witaj na mini forum na mojej stronie. Nie biorę odpowiedzialności za brak zdolności do rozróżniania dobra i zła, obojętność na moralność i celowe działanie wbrew nie naszych użytkowników. Pozdrawiam :)
-    </p>
+        <h2>Księga Wpisów</h2>
+        <p id="regulamin-tekst">
+            Witaj na mini forum na mojej stronie. Nie biorę odpowiedzialności za brak zdolności do rozróżniania dobra i zła... Pozdrawiam :)
+        </p>
 
-    <form id="guestbook-form">
-        <div style="background: #ffffcc; padding: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
-            <input type="checkbox" id="akceptuje-szponta" required>
-            <label for="akceptuje-szponta" style="font-size: 11px;">
-                Przeczytałem, zrozumiałem i obiecuję godnie reprezentować Imperium
-            </label>
-        </div>
-    </form>
+        <form id="guestbook-form">
+            <div style="background: #ffffcc; padding: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+                <input type="checkbox" id="akceptuje-szponta" required>
+                <label for="akceptuje-szponta" style="font-size: 11px;">
+                    Przeczytałem, zrozumiałem i obiecuję godnie reprezentować Imperium
+                </label>
+            </div>
+
+            <label style="font-weight: bold;">Kim jestem?</label><br>
+            <input type="text" id="guest-name" name="name" disabled placeholder="Zaloguj się by pisać"><br><br>
+            
+            <label style="font-weight: bold;">Napisz na ściane</label><br>
+            <textarea id="guest-content" maxlength="500" rows="4" cols="50" 
+                    placeholder="Treść wpisu (max 500 znaków)" required ></textarea><br><br>
+            
+            <button type="submit" id="submit-btn" class="button" disabled>Dodaj wpis</button>
+        </form>
+
+        <hr>
+        <div id="entries-list">Ładowanie wpisów...</div>
+</div>
+        <div id="sidebar">
+            <div class="infobox" style="border: 2px solid red; background: #ffe6e6; min-height: auto;">
+                <h3 style="color: red; margin-top: 0; font-size: 14px;">Centrum Naprawcze</h3>
+                <p style="font-size: 10px; margin-bottom: 8px;">Strona wyglada jak rozjechane gówno? Kliknij to aby poprawic</p>
+                <button onclick="wyczyscDlaImperium()" style="width: 100%; background: red; color: white; border: 1px solid black; cursor: pointer; font-weight: bold; padding: 8px;">
+                    AKTUALIZUJ STRONE
+                </button>
+                <script>
+    document.addEventListener('click', function() {
+        const audio = new Audio('../../assets/witaj.mp3');
+        audio.play();
+    }, { once: true });
+
+    function wyczyscDlaImperium() {
+        localStorage.clear();
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf("=");
+            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+        location.reload(true);
+    }
+</script>
+            </div>
     <script>
     const checkbox = document.getElementById('akceptuje-szponta');
     const submitBtn = document.getElementById('submit-btn');
@@ -178,17 +242,6 @@ input[type="submit"]:hover {
         }
     });
 </script><br>
-    <form id="guestbook-form">
-        <label style="font-weight: bold;">Kim jestem?</label><br>
-        <input type="text" id="guest-name" name="name" disabled placeholder="Zaloguj się by pisać"><br><br>
-        <label style="font-weight: bold;">Napisz na ściane</label><br>
-        <textarea id="guest-content" maxlength="500" rows="4" cols="50" 
-          placeholder="Treść wpisu (max 1000 znaków)" required ></textarea><br><br>
-        <button type="submit" class="button">Dodaj wpis</button>
-    </form>
-
-    <hr>
-    <div id="entries-list">Ładowanie wpisów...</div>
 </div>
 
 <script type="module">
@@ -335,8 +388,10 @@ onAuthStateChanged(auth, (user) => {
 });
 </script>
 </div>
+</div>
 
 <div class="footer">
+    
     Strona stworzona przez obywateli Imperium Lechitów.
     <p style="text-align:center;">
     Odwiedzilo nas: <script type="text/javascript" src="https://counter.websiteout.com/js/21/0/0/0"></script> osob.
