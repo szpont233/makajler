@@ -306,7 +306,7 @@ function renderEntry(id, d) {
 
     return `
     <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px;">
-        <strong>${d.nick || "Anonim"}</strong> 
+        <strong>${d.name || d.nick || "Anonim"}</strong> 
         <small style="color:#666">(${formatDate(d.createdAt)})</small>
         <p style="margin-top:5px;">${sanitizeHtml(d.content)}</p>
         ${canEdit ? `<button onclick="deleteEntry('${id}')">Usuń</button>` : ""}
