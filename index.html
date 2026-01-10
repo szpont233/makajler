@@ -176,7 +176,7 @@
 
             <script type="module"> //status wpisow
                 import { db } from './assets/firebase.js';
-                import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+                import { collection, query, orderBy, limit, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
                 async function loadLatestEntry() {
                     const container = document.getElementById('latest-guestbook-entry');
@@ -191,14 +191,14 @@
 
                         const data = querySnapshot.docs[0].data();
                         const date = data.createdAt?.toDate().toLocaleDateString('pl-PL') || "Niedawno";
-                        
+                        const authorName = data.nick || data.name || "Anonimowy Lechita";
                         container.innerHTML = `
                             <hr>
-                            <p><strong>${data.name}</strong> (${date})</p>
+                            <p><strong>${authorName}</strong> (${date})</p>
                             <p style="font-style: italic;">"${data.content.substring(0, 50)}${data.content.length > 50 ? '...' : ''}"</p>
                         `;
                     } catch (e) {
-                        container.innerHTML = "Błąd ładowania.";
+                        container.innerHTML = "Błąd ładowania";
                         console.error(e);
                     }
                 }
