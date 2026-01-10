@@ -121,6 +121,76 @@ input[type="submit"]:hover {
     width: 240px;
     flex-shrink: 0;
     }
+
+.entry-content {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+
+.entry-content.collapsed {
+    overflow: hidden;
+    max-height: 7.5em;
+}
+
+.entry-content.expanded {
+    max-height: none;
+}
+
+/* Kontener na treść wpisu z ograniczeniem do 5 linii */
+.entry-content {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word; /* Zapobiega wychodzeniu długich słów poza kontener */
+    overflow-wrap: break-word;
+    line-height: 1.5; /* Ustalona wysokość linii dla precyzyjnego ucinania */
+    max-height: 7.5em; /* 5 linii * 1.5 line-height */
+    transition: max-height 0.3s ease;
+}
+
+/* Klasa usuwająca limity po kliknięciu "Rozwiń" */
+.entry-content.expanded {
+    display: block;
+    -webkit-line-clamp: unset;
+    max-height: none;
+}
+
+/* Styl przycisku rozwijania */
+.expand-btn {
+    display: none; /* Domyślnie ukryty, pokazujemy go tylko gdy tekst jest za długi */
+    background: #e1ecf4;
+    color: #39739d;
+    border: 1px solid #7aa7c7;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.expand-btn:hover {
+    background: #cee0ed;
+}
+
+.expand-btn {
+    display: none;
+    background: #e1ecf4;
+    color: #39739d;
+    border: 1px solid #7aa7c7;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.expand-btn:hover {
+    background: #cee0ed;
+}
     
 @media(max-width: 900px) {
     #main { flex-direction: column; }
@@ -299,37 +369,79 @@ function sanitizeHtml(str) {
     Array.from(temp.childNodes).forEach(clean);
     return temp.innerHTML;
 }
+const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"))
 
 function renderEntry(id, d) {
     const user = auth.currentUser;
     const uid = d.uid || "";
     const canEdit = user && uid && (user.uid === uid || user.isAdmin);
-    
     const authorName = d.nick || d.name || "Anonim";
-    
     const profileLink = uid ? `../profile/index.html?uid=${uid}` : "#";
-    
     const displayId = uid ? uid.substring(0,8) : "Konto OG";
 
     return `
-    <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px; background: #fdfdfd;">
+    <div class="entry" id="entry-${id}" style="border-bottom:1px dotted #888; margin-bottom:10px; background: #fdfdfd;">
         <a href="${profileLink}" style="color: #2b4a80; text-decoration: none; font-weight: bold;">
             ${authorName}
         </a> 
         <span style="color: #444; font-size: 0.9em;">ID: ${displayId}</span>
         <small style="color:#666">(${formatDate(d.createdAt)})</small>
-        <p style="margin-top:5px; white-space: pre-wrap;">${sanitizeHtml(d.content)}</p>
-        ${canEdit ? `<button onclick="deleteEntry('${id}')" style="font-size: 10px;">[Usuń]</button>` : ""}
+        
+        <div id="content-${id}" class="entry-content" style="padding: 7px; padding-left: 2px; padding-bottom: 4px; padding-top: 4px;">
+            ${sanitizeHtml(d.content)}
+        </div>
+        
+        <button id="btn-${id}" class="expand-btn" style="float: right;" onclick="toggleExpand('${id}')">Pokaż więcej</button>
+        
+        <div style="margin-top: 5px;">
+            ${canEdit ? `<button onclick="deleteEntry('${id}')" style="font-size: 11px;">Usuń</button>` : ""}
+        </div>
     </div>`;
 }
+
+// Funkcja rozwijająca/zwijająca wpis
+window.toggleExpand = (id) => {
+    const contentDiv = document.getElementById(`content-${id}`);
+    const btn = document.getElementById(`btn-${id}`);
+    
+    if (contentDiv.classList.contains('expanded')) {
+        contentDiv.classList.remove('expanded');
+        btn.textContent = 'Pokaż więcej';
+    } else {
+        contentDiv.classList.add('expanded');
+        btn.textContent = 'Zwiń';
+    }
+};
+
+// Zmodyfikowany onSnapshot, który sprawdza wysokość po każdym renderowaniu
+onSnapshot(q, (snap) => {
+    list.innerHTML = "";
+    snap.forEach(doc => {
+        const d = doc.data();
+        list.innerHTML += renderEntry(doc.id, d);
+    });
+
+    // Czekamy chwilę na wyrenderowanie DOM, aby zmierzyć wysokości
+    setTimeout(() => {
+        snap.forEach(doc => {
+            const id = doc.id;
+            const contentDiv = document.getElementById(`content-${id}`);
+            const btn = document.getElementById(`btn-${id}`);
+            
+            // Jeśli wysokość zawartości jest większa niż widoczny kontener, pokaż przycisk
+            if (contentDiv && contentDiv.scrollHeight > contentDiv.offsetHeight + 2) {
+                btn.style.display = 'inline-block';
+            }
+        });
+    }, 100);
+});
 
 window.deleteEntry = async (id) => {
     if (!confirm("Usunąć wpis?")) return;
     await deleteDoc(doc(db, "guestbook", id));
 };
 
-const list = document.getElementById('entries-list');
-const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+const list = document.getElementById('entries-list');;
 
 onSnapshot(q, (snap) => {
     list.innerHTML = "";
