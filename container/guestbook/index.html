@@ -223,6 +223,7 @@ input[type="submit"]:hover {
     }
 </script>
             </div>
+
     <script>
     const checkbox = document.getElementById('akceptuje-szponta');
     const submitBtn = document.getElementById('submit-btn');
@@ -244,9 +245,11 @@ input[type="submit"]:hover {
 </script><br>
 </div>
 
+
+
 <script type="module">
 import { auth, db } from '../../assets/firebase.js';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 function formatDate(timestamp) {
@@ -297,27 +300,24 @@ function sanitizeHtml(str) {
     return temp.innerHTML;
 }
 
-// renderowanie wpisu
 function renderEntry(id, d) {
     const user = auth.currentUser;
-    const canEdit = user && (user.uid === d.uid || user.isAdmin);
+    const canEdit = user && (user.uid === d.uid);
 
     return `
     <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px;">
-        <strong>${d.name}</strong>
+        <strong>${d.nick || "Anonim"}</strong> 
         <small style="color:#666">(${formatDate(d.createdAt)})</small>
         <p style="margin-top:5px;">${sanitizeHtml(d.content)}</p>
         ${canEdit ? `<button onclick="deleteEntry('${id}')">Usuń</button>` : ""}
     </div>`;
 }
 
-// usuwanie wpisu
 window.deleteEntry = async (id) => {
     if (!confirm("Usunąć wpis?")) return;
     await deleteDoc(doc(db, "guestbook", id));
 };
 
-// ladowanie wpisów
 const list = document.getElementById('entries-list');
 const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
 
@@ -329,7 +329,7 @@ onSnapshot(q, (snap) => {
     });
 });
 
-// Formularz dodawania wpisu
+// dodawanie wpisow formularz
 const form = document.getElementById('guestbook-form');
 const nameInput = document.getElementById('guest-name');
 
@@ -342,17 +342,24 @@ form.onsubmit = async (e) => {
     if (content.length < 3) return;
 
     try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        let userNick = user.displayName || "Anonim";
+
+        if (userDoc.exists()) {
+            userNick = userDoc.data().nick;
+        }
+
         await addDoc(collection(db, "guestbook"), {
             uid: user.uid,
-            name: user.displayName || "Anon",
-            content,
-            createdAt: serverTimestamp(),
-            edited: false
+            nick: userNick,
+            content: content,
+            createdAt: serverTimestamp()
         });
+        
         form.reset();
     } catch (err) {
-        console.error(err);
-        alert("Błąd podczas dodawania. Sprawdź limity znaków.");
+        console.error("Szczegóły błędu:", err);
+        alert("Bląd: Twoje reguły Firestore odrzuciły wpis. Upewnij się, że masz utworzony profil użytkownika");
     }
 };
 
