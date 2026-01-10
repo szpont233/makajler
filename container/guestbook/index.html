@@ -249,7 +249,6 @@ import { auth, db } from '../../assets/firebase.js';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-// Formatowanie daty
 function formatDate(timestamp) {
     if (!timestamp) return "Teraz";
     const date = timestamp.toDate();
@@ -262,11 +261,10 @@ function formatDate(timestamp) {
     });
 }
 
-// Sanitizacja wpisów – whitelist: <a>, <img>, <p>
 function sanitizeHtml(str) {
     const temp = document.createElement('div');
     temp.innerHTML = str;
-    const allowedTags = ['A','IMG','P'];
+    const allowedTags = ['A','IMG','P', 'BUTTON'];
 
     function clean(node) {
         if (node.nodeType === 1) {
@@ -299,7 +297,7 @@ function sanitizeHtml(str) {
     return temp.innerHTML;
 }
 
-// Renderowanie wpisu
+// renderowanie wpisu
 function renderEntry(id, d) {
     const user = auth.currentUser;
     const canEdit = user && (user.uid === d.uid || user.isAdmin);
@@ -313,13 +311,13 @@ function renderEntry(id, d) {
     </div>`;
 }
 
-// Usuwanie wpisu
+// usuwanie wpisu
 window.deleteEntry = async (id) => {
     if (!confirm("Usunąć wpis?")) return;
     await deleteDoc(doc(db, "guestbook", id));
 };
 
-// Ładowanie wpisów
+// ladowanie wpisów
 const list = document.getElementById('entries-list');
 const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
 
