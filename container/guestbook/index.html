@@ -302,14 +302,19 @@ function sanitizeHtml(str) {
 
 function renderEntry(id, d) {
     const user = auth.currentUser;
-    const canEdit = user && (user.uid === d.uid);
+    const canEdit = user && (user.uid === d.uid || user.isAdmin);
+    const authorName = d.nick || d.name || "Anonim";
+    const profileLink = `../profile/index.html?uid=${d.uid}`;
 
     return `
-    <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px;">
-        <strong>${d.name || d.nick || "Anonim"}</strong> 
+    <div class="entry" style="border-bottom:1px dotted #888; margin-bottom:10px; padding:5px; background: #fdfdfd;">
+        <a href="${profileLink}" style="color: #2b4a80; text-decoration: none; font-weight: bold;">
+            ${authorName}
+        </a> 
+        <span style="color: #444; font-size: 0.9em;">ID: ${d.uid.substring(0,8)}</span>
         <small style="color:#666">(${formatDate(d.createdAt)})</small>
-        <p style="margin-top:5px;">${sanitizeHtml(d.content)}</p>
-        ${canEdit ? `<button onclick="deleteEntry('${id}')">Usuń</button>` : ""}
+        <p style="margin-top:5px; white-space: pre-wrap;">${sanitizeHtml(d.content)}</p>
+        ${canEdit ? `<button onclick="deleteEntry('${id}')" style="font-size: 10px;">[Usuń]</button>` : ""}
     </div>`;
 }
 

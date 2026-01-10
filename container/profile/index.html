@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Imperium Lechitów - Mój Profil</title>
+<title>Imperium Lechitów - Profil</title>
 <link rel="stylesheet" href="../../assets/css/style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -26,7 +26,6 @@
         width: 80px;
         height: 80px;
         background: #ccc;
-        border-radius: 50%;
         margin-right: 20px;
         display: flex;
         align-items: center;
@@ -44,18 +43,13 @@
         padding: 10px;
         border-radius: 5px;
     }
-    .stat-item {
-        text-align: center;
-    }
+    .stat-item { text-align: center; }
     .stat-value {
         font-weight: bold;
         color: #2b4a80;
         font-size: 1.2em;
     }
-    .stat-label {
-        font-size: 0.8em;
-        color: #666;
-    }
+    .stat-label { font-size: 0.8em; color: #666; }
     textarea#bio-input {
         width: 100%;
         height: 100px;
@@ -67,27 +61,18 @@
         box-sizing: border-box; 
     }
     .save-btn {
-        background: #28a745;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-weight: bold;
-        border-radius: 3px;
-        margin-top: 10px;
+        background: linear-gradient(to bottom, #2bb14a, #238f3c);
+        color: white; border: none; padding: 10px 20px;
+        cursor: pointer; font-weight: bold; border-radius: 3px; margin-top: 10px;
     }
-    .save-btn:hover { background: #218838; }
+    .save-btn:hover { background: linear-gradient(to bottom, #1e7c34, #1a6e2e);}
     
     .logout-btn {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 3px;
-        font-size: 0.8em;
-        margin-left: auto;
+        background: linear-gradient(to bottom, #dc3545, #a12632);
+        color: white; border: none; padding: 5px 10px;
+        cursor: pointer; border-radius: 3px; font-size: 0.8em; margin-left: auto;
     }
+    .logout-btn:hover{ background: linear-gradient(to bottom, #a82835, #8b222c); }
 </style>
 </head>
 <body>
@@ -98,8 +83,8 @@
       <img src="../../logo.png" alt="logo Lechii" style="max-width:100%;">
     </div>
   </a>
-  <h1>Profil Obywatela</h1>
-  <p style="text-shadow: 2px 2px 3px black; color: black;">Twoja karta w kartotece Imperium</p>
+  <h1 id="page-title">Profil Obywatela</h1>
+  <p style="text-shadow: 2px 2px 3px black; color: black;">Archiwum Imperium Lechitów</p>
 </div>
 
 <div id="container">
@@ -113,7 +98,7 @@
     </div>
 
     <div class="profile-card">
-        <div id="loading-msg">Ładowanie danych z archiwum...</div>
+        <div id="loading-msg">Przeszukiwanie kartoteki...</div>
         
         <div id="profile-content" style="display:none;">
             <div class="profile-header">
@@ -140,21 +125,22 @@
             </div>
 
             <div style="margin-bottom: 20px;">
-                <label for="bio-input" style="font-weight: bold; display: block; margin-bottom: 5px;">O mnie (Bio):</label>
-                <textarea id="bio-input" placeholder="Napisz coś o sobie..."></textarea>
+                <label for="bio-input" style="font-weight: bold; display: block; margin-bottom: 5px;">Bio Obywatela:</label>
+                <textarea id="bio-input"></textarea>
                 <button id="btn-save" class="save-btn">Zapisz zmiany</button>
                 <span id="save-status" style="margin-left: 10px; font-size: 0.9em;"></span>
             </div>
 
             <div style="font-size: 0.8em; color: #999; text-align: right;">
-                Dołączył: <span id="display-date">-</span>
+                Obywatel od: <span id="display-date">-</span>
             </div>
         </div>
     </div>
-</div>
 
-<div class="footer">
-  Strona stworzona przez obywateli Imperium Lechitów.
+    <div class="profile-card">
+        <h1>Tablica Chwały</h1>
+        <p>Tu w przyszłości pojawią się komentarze i odznaczenia tego Obywatela.</p>
+    </div>
 </div>
 
 <script type="module">
@@ -168,8 +154,7 @@
     projectId: "guestbook-imperium",
     storageBucket: "guestbook-imperium.firebasestorage.app",
     messagingSenderId: "780071024560",
-    appId: "1:780071024560:web:3ff011266cd83f7bd60875",
-    measurementId: "G-665V4Q0410"
+    appId: "1:780071024560:web:3ff011266cd83f7bd60875"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -189,50 +174,61 @@
     bio: document.getElementById('bio-input'),
     saveBtn: document.getElementById('btn-save'),
     status: document.getElementById('save-status'),
-    logoutBtn: document.getElementById('btn-logout')
+    logoutBtn: document.getElementById('btn-logout'),
+    title: document.getElementById('page-title')
   };
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      // nie jestes zalogowany?? won do logowania!!!!!!!!!1
+  onAuthStateChanged(auth, async (me) => {
+    // 1. Sprawdzamy czyj profil wyświetlić
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUid = urlParams.get('uid') || (me ? me.uid : null);
+
+    if (!targetUid) {
       window.location.href = "../../login.html";
       return;
     }
 
-    els.email.textContent = user.email;
-    els.uid.textContent = user.uid;
-    
+    const isMyProfile = me && (targetUid === me.uid);
+
+    // 2. Jeśli nie mój profil - ukrywamy przyciski akcji
+    if (!isMyProfile) {
+        els.saveBtn.style.display = 'none';
+        els.logoutBtn.style.display = 'none';
+        els.bio.readOnly = true;
+        els.title.textContent = "Karta Obywatela";
+    }
+
     try {
-      const docRef = doc(db, "users", user.uid);
+      const docRef = doc(db, "users", targetUid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        const data = docSnap.data();
-        fillProfile(data);
-      } else {
-        // Fallback dla starych użytkowników (bez dokumentu w users)
-        console.log("Brak profilu w Firestore! Tworzę domyślny...");
+        fillProfile(docSnap.data(), targetUid);
+      } else if (isMyProfile) {
+        // Autonaprawa dla zalogowanego bez profilu
         const defaultData = {
-            nick: user.displayName || "Nieznany",
+            nick: me.displayName || "Nieznany",
             rank: "Chłop",
             points: 0,
             bio: "Użytkownik sprzed reformy systemu.",
             createdAt: new Date()
         };
         await setDoc(docRef, defaultData);
-        fillProfile(defaultData);
+        fillProfile(defaultData, targetUid);
+      } else {
+        els.loading.textContent = "Ten uzytkownik nie posiada karty \"Moja Lechia\".";
       }
     } catch (error) {
-        console.error("Błąd pobierania profilu:", error);
-        els.loading.textContent = "Błąd: " + error.message;
+        els.loading.textContent = "Błąd Archiwum.";
     }
   });
 
-  function fillProfile(data) {
-    els.nick.textContent = data.nick || "Bezimienny";
+  function fillProfile(data, uid) {
+    els.nick.textContent = data.nick || "Bezimienny Obywatel";
     els.rank.textContent = data.rank || "Chłop";
     els.points.textContent = data.points || 0;
     els.bio.value = data.bio || "";
+    els.uid.textContent = uid;
     
     if(data.createdAt && data.createdAt.toDate) {
         els.date.textContent = data.createdAt.toDate().toLocaleDateString('pl-PL');
@@ -248,22 +244,15 @@
   els.saveBtn.addEventListener('click', async () => {
     const user = auth.currentUser;
     if(!user) return;
-
-    const newBio = els.bio.value;
     els.saveBtn.disabled = true;
     els.status.textContent = "Zapisywanie...";
-    els.status.style.color = "black";
 
     try {
-        const docRef = doc(db, "users", user.uid);
-        await updateDoc(docRef, {
-            bio: newBio
-        });
+        await updateDoc(doc(db, "users", user.uid), { bio: els.bio.value });
         els.status.textContent = "Zapisano!";
         els.status.style.color = "green";
         setTimeout(() => els.status.textContent = "", 2000);
     } catch (e) {
-        console.error(e);
         els.status.textContent = "Błąd zapisu.";
         els.status.style.color = "red";
     } finally {
@@ -274,8 +263,6 @@
   els.logoutBtn.addEventListener('click', () => {
       signOut(auth).then(() => window.location.href = "../../index.html");
   });
-
 </script>
-
 </body>
 </html>
