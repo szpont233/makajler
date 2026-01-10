@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Imperium Lechitów - Mój Profil</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    .profile-card {
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #2b4a80;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+    .avatar-placeholder {
+        width: 80px;
+        height: 80px;
+        background: #ccc;
+        border-radius: 50%;
+        margin-right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        color: #fff;
+        font-weight: bold;
+    }
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+        background: #f0f4f8;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .stat-item {
+        text-align: center;
+    }
+    .stat-value {
+        font-weight: bold;
+        color: #2b4a80;
+        font-size: 1.2em;
+    }
+    .stat-label {
+        font-size: 0.8em;
+        color: #666;
+    }
+    textarea#bio-input {
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        border: 1px solid #999;
+        border-radius: 3px;
+        font-family: inherit;
+        resize: vertical;
+        box-sizing: border-box; 
+    }
+    .save-btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 3px;
+        margin-top: 10px;
+    }
+    .save-btn:hover { background: #218838; }
+    
+    .logout-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 3px;
+        font-size: 0.8em;
+        margin-left: auto;
+    }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <a href="../../index.html" style="margin: auto; display:block; padding: 5px;">
+    <div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;">
+      <img src="../../logo.png" alt="logo Lechii" style="max-width:100%;">
+    </div>
+  </a>
+  <h1>Profil Obywatela</h1>
+  <p style="text-shadow: 2px 2px 3px black; color: black;">Twoja karta w kartotece Imperium</p>
+</div>
+
+<div id="container">
+    <div id="menu">
+        <a href="../../index.html">Strona główna</a> |
+        <a href="../projekty/index.html">Gry/Prodżekts</a> | 
+        <a href="../galeria/index.html">Galeria</a> |
+        <a href="../kontakt/index.html">Kontakt</a> |
+        <a href="../swiatynia/index.html">Świątynia</a> |
+        <a href="../guestbook/index.html">Księga wpisów</a>
+    </div>
+
+    <div class="profile-card">
+        <div id="loading-msg">Ładowanie danych z archiwum...</div>
+        
+        <div id="profile-content" style="display:none;">
+            <div class="profile-header">
+                <div class="avatar-placeholder" id="avatar-initial">?</div>
+                <div>
+                    <h2 id="display-nick" style="margin: 0; color: #2b4a80;">Obywatel</h2>
+                    <small id="display-email" style="color: #666;">...</small>
+                    <div style="margin-top: 5px; font-size: 0.8em; color: #888;">
+                        UID: <span id="display-uid">...</span>
+                    </div>
+                </div>
+                <button id="btn-logout" class="logout-btn">Wyloguj</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="display-rank">Chłop</div>
+                    <div class="stat-label">Ranga</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="display-points">0</div>
+                    <div class="stat-label">Punkty Chwały</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="bio-input" style="font-weight: bold; display: block; margin-bottom: 5px;">O mnie (Bio):</label>
+                <textarea id="bio-input" placeholder="Napisz coś o sobie..."></textarea>
+                <button id="btn-save" class="save-btn">Zapisz zmiany</button>
+                <span id="save-status" style="margin-left: 10px; font-size: 0.9em;"></span>
+            </div>
+
+            <div style="font-size: 0.8em; color: #999; text-align: right;">
+                Dołączył: <span id="display-date">-</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+  Strona stworzona przez obywateli Imperium Lechitów.
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4_yXWVorjyQHf5OMIoXTUpfcyy7sJPyE",
+    authDomain: "guestbook-imperium.firebaseapp.com",
+    projectId: "guestbook-imperium",
+    storageBucket: "guestbook-imperium.firebasestorage.app",
+    messagingSenderId: "780071024560",
+    appId: "1:780071024560:web:3ff011266cd83f7bd60875",
+    measurementId: "G-665V4Q0410"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const els = {
+    loading: document.getElementById('loading-msg'),
+    content: document.getElementById('profile-content'),
+    nick: document.getElementById('display-nick'),
+    email: document.getElementById('display-email'),
+    uid: document.getElementById('display-uid'),
+    rank: document.getElementById('display-rank'),
+    points: document.getElementById('display-points'),
+    date: document.getElementById('display-date'),
+    avatar: document.getElementById('avatar-initial'),
+    bio: document.getElementById('bio-input'),
+    saveBtn: document.getElementById('btn-save'),
+    status: document.getElementById('save-status'),
+    logoutBtn: document.getElementById('btn-logout')
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      // nie jestes zalogowany?? won do logowania!!!!!!!!!1
+      window.location.href = "../../login.html";
+      return;
+    }
+
+    els.email.textContent = user.email;
+    els.uid.textContent = user.uid;
+    
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        fillProfile(data);
+      } else {
+        // Fallback dla starych użytkowników (bez dokumentu w users)
+        console.log("Brak profilu w Firestore! Tworzę domyślny...");
+        const defaultData = {
+            nick: user.displayName || "Nieznany",
+            rank: "Chłop",
+            points: 0,
+            bio: "Użytkownik sprzed reformy systemu.",
+            createdAt: new Date()
+        };
+        await setDoc(docRef, defaultData);
+        fillProfile(defaultData);
+      }
+    } catch (error) {
+        console.error("Błąd pobierania profilu:", error);
+        els.loading.textContent = "Błąd: " + error.message;
+    }
+  });
+
+  function fillProfile(data) {
+    els.nick.textContent = data.nick || "Bezimienny";
+    els.rank.textContent = data.rank || "Chłop";
+    els.points.textContent = data.points || 0;
+    els.bio.value = data.bio || "";
+    
+    if(data.createdAt && data.createdAt.toDate) {
+        els.date.textContent = data.createdAt.toDate().toLocaleDateString('pl-PL');
+    }
+
+    const firstLetter = (data.nick || "?").charAt(0).toUpperCase();
+    els.avatar.textContent = firstLetter;
+
+    els.loading.style.display = 'none';
+    els.content.style.display = 'block';
+  }
+
+  els.saveBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const newBio = els.bio.value;
+    els.saveBtn.disabled = true;
+    els.status.textContent = "Zapisywanie...";
+    els.status.style.color = "black";
+
+    try {
+        const docRef = doc(db, "users", user.uid);
+        await updateDoc(docRef, {
+            bio: newBio
+        });
+        els.status.textContent = "Zapisano!";
+        els.status.style.color = "green";
+        setTimeout(() => els.status.textContent = "", 2000);
+    } catch (e) {
+        console.error(e);
+        els.status.textContent = "Błąd zapisu.";
+        els.status.style.color = "red";
+    } finally {
+        els.saveBtn.disabled = false;
+    }
+  });
+
+  els.logoutBtn.addEventListener('click', () => {
+      signOut(auth).then(() => window.location.href = "../../index.html");
+  });
+
+</script>
+
+</body>
+</html>
