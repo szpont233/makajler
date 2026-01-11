@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Imperium Lechitów - Profil</title>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/xp.css"
+>
 <link rel="stylesheet" href="../../assets/css/style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -207,7 +211,6 @@
       if (docSnap.exists()) {
         fillProfile(docSnap.data(), targetUid);
       } else if (isMyProfile) {
-        // Autonaprawa dla zalogowanego bez profilu
         const defaultData = {
             nick: me.displayName || "Nieznany",
             rank: "Chłop",
@@ -232,6 +235,12 @@
     els.bio.value = data.bio || "";
     els.uid.textContent = uid;
     
+    const userColor = data.avatarColor || "#2b4a80";
+    els.avatar.style.backgroundColor = userColor;
+    if(document.getElementById('color-picker')) {
+        document.getElementById('color-picker').value = userColor;
+    }
+
     if(data.createdAt && data.createdAt.toDate) {
         els.date.textContent = data.createdAt.toDate().toLocaleDateString('pl-PL');
     }
@@ -242,27 +251,23 @@
     els.loading.style.display = 'none';
     els.content.style.display = 'block';
   }
-
-    // Przy ładowaniu strony ustaw aktualny kolor z bazy
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists()) {
-        document.getElementById('color-picker').value = userDoc.data().avatarColor || "#2b4a80";
-    }
-
-    // Przy zapisywaniu profilu:
-    const selectedColor = document.getElementById('color-picker').value;
-    await updateDoc(doc(db, "users", user.uid), {
-        avatarColor: selectedColor // Aktualizacja koloru w bazy
-    });
-
   els.saveBtn.addEventListener('click', async () => {
     const user = auth.currentUser;
     if(!user) return;
+    
     els.saveBtn.disabled = true;
     els.status.textContent = "Zapisywanie...";
 
+    const selectedColor = document.getElementById('color-picker').value;
+
     try {
-        await updateDoc(doc(db, "users", user.uid), { bio: els.bio.value });
+        await updateDoc(doc(db, "users", user.uid), { 
+            bio: els.bio.value,
+            avatarColor: selectedColor 
+        });
+        
+        els.avatar.style.backgroundColor = selectedColor;
+        
         els.status.textContent = "Zapisano!";
         els.status.style.color = "green";
         setTimeout(() => els.status.textContent = "", 2000);
