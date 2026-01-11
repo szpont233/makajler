@@ -114,10 +114,7 @@
         color: #12213b;
     }
 </style>
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/xp.css"
->
+<link rel="stylesheet" href="assets/css/xp.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
@@ -175,7 +172,7 @@
             Witam w nowym roku.</p>
             <p class="nowe"><strong>31 grudnia 2025</strong><br><br>
             Szczęśliwego nowego roku!<br>
-            <img src="https://img1.picmix.com/output/pic/normal/8/2/4/8/7318428_e233c.gif" height="290px" width="240px"></p>
+            <img src="assets/nowyrok2-ezgif.com-optimize.gif" height="290px" width="240px"></p>
             <p class="nowe"><strong>26 grudnia 2025</strong><br><br>
             Zamiast spedzac swieta z rodzina to siedze w piwnicy i pisze z czatem schizoweb <img src="assets/icons/pointup.png"><br>
             Od teraz wpisy sa dla wszystkich ale Szekspire musza sie zarejestrowac zeby dalej pisac.. Pozdrawiamy.</p>
@@ -239,7 +236,7 @@
                 <div id="mlawa-info">Lapanie sygnalu z marsa...</div>
                 <p style="text-align:center;">
                     <hr>
-                    <b>Odwiedzieliscie nas:</b><br> <script type="text/javascript" src="https://counter.websiteout.com/js/21/8/891/0"></script>  razy.<br><br>
+                    <b>Odwiedzieliscie nas:</b><br> <script type="text/javascript" src="https://counter.websiteout.com/js/21/8/891/0" defer></script>  razy.<br><br>
                     <b>Ostatnia aktualizacja:</b> 10.12.2025 23:52:55
                 </p>
             </aside>
@@ -260,7 +257,7 @@
                 <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
             </aside>
 
-            <script type="module"> //status wpisow
+            <script type="module" defer> //status wpisow
                 import { db } from './assets/firebase.js';
                 import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
@@ -356,9 +353,9 @@
 
 </div>
 
-<script src="assets/infobox.js"></script>
-<script src="assets/imieniny.js"></script>
-<script src="wkurw_dzwiek.js"></script>
+<script src="assets/infobox.js" defer></script>
+<script src="assets/imieniny.js" defer></script>
+<script src="wkurw_dzwiek.js" defer></script>
 <script type="module">
     import { auth } from "./assets/firebase.js";
     import { onAuthStateChanged, signOut }
