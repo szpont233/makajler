@@ -319,7 +319,7 @@ input[type="submit"]:hover {
 
 <script type="module">
 import { auth, db } from '../../assets/firebase.js';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc, getDoc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
 function formatDate(timestamp) {
@@ -378,35 +378,122 @@ function renderEntry(id, d) {
     const authorName = d.nick || d.name || "Anonim";
     const profileLink = uid ? `../profile/index.html?uid=${uid}` : "#";
     const displayId = uid ? uid.substring(0,8) : "Konto OG";
+    const score = d.score || 0;
 
     return `
-    <div class="entry" id="entry-${id}" style="border-bottom:1px dotted #888; margin-bottom:10px; background: #fdfdfd;">
-        <a href="${profileLink}" style="color: #2b4a80; text-decoration: none; font-weight: bold;">
-            ${authorName}
-        </a> 
-        <span style="color: #444; font-size: 0.9em;">ID: ${displayId}</span>
-        <small style="color:#666">(${formatDate(d.createdAt)})</small>
+    <div class="entry" id="entry-${id}" style="border-bottom:1px dotted #888; margin-bottom:15px; background: #fdfdfd; padding: 10px;">
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <a href="${profileLink}" style="color: #2b4a80; text-decoration: none; font-weight: bold;">${authorName}</a> 
+                <span style="color: #444; font-size: 0.9em;">ID: ${displayId}</span>
+                <small style="color:#666">(${formatDate(d.createdAt)})</small>
+            </div>
+            <div style="display: flex; align-items: center; gap: 5px; background: #eee; padding: 2px 8px; border-radius: 10px;">
+                <button onclick="vote('${id}', 1)" style="cursor:pointer; border:none; background:none; font-weight:bold; color:green;">+</button>
+                <span id="score-${id}" style="font-weight:bold; min-width: 20px; text-align:center;">${score}</span>
+                <button onclick="vote('${id}', -1)" style="cursor:pointer; border:none; background:none; font-weight:bold; color:red;">-</button>
+            </div>
+        </div>
         
-        <div id="content-${id}" class="entry-content" style="padding: 7px; padding-left: 2px; padding-bottom: 4px; padding-top: 4px;">
+        <div id="content-${id}" class="entry-content" style="padding: 7px 2px 4px 2px;">
             ${sanitizeHtml(d.content)}
         </div>
         
-        <button id="btn-${id}" class="expand-btn" style="float: right;" onclick="toggleExpand('${id}')">Pokaż więcej</button>
-        
-        <div style="margin-top: 5px;">
-            ${canEdit ? `<button onclick="deleteEntry('${id}')" style="font-size: 11px;">Usuń</button>` : ""}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+            <div>
+                <button class="expand-btn" id="btn-${id}" onclick="toggleExpand('${id}')">Pokaż więcej</button>
+                <button onclick="showReplyForm('${id}')" style="font-size: 11px; cursor:pointer;">Odpowiedz</button>
+                ${canEdit ? `<button onclick="deleteEntry('${id}')" style="font-size: 11px; cursor:pointer; color: brown;">Usuń</button>` : ""}
+            </div>
+        </div>
+
+        <div id="reply-box-${id}" style="display:none; margin-top:10px; padding-left: 20px; border-left: 2px solid #ccc;">
+            <textarea id="reply-input-${id}" placeholder="Napisz odpowiedź..." style="width:100%; font-size:12px;"></textarea>
+            <button onclick="sendReply('${id}')" style="font-size:10px; margin-top:5px;">Wyślij odpowiedź</button>
+        </div>
+
+        <div id="replies-${id}" style="margin-left: 20px; font-size: 0.9em; color: #555;">
+             ${d.replies ? d.replies.map(r => `
+                <div style="margin-top:5px; border-top: 1px dashed #ccc; padding-top:2px;">
+                    <strong>${r.nick}:</strong> ${sanitizeHtml(r.content)}
+                </div>
+             `).join('') : ''}
         </div>
     </div>`;
 }
 
-// Funkcja rozwijająca/zwijająca wpis
+window.vote = async (entryId, change) => {
+    const user = auth.currentUser;
+    if (!user) { alert("Musisz być zalogowany, by oceniać!"); return; }
+
+    const entryRef = doc(db, "guestbook", entryId);
+    const entrySnap = await getDoc(entryRef);
+    const data = entrySnap.data();
+
+    // Sprawdzanie czy użytkownik już głosował
+    if (data.voters && data.voters.includes(user.uid)) {
+        alert("Już oddałeś głos na ten wpis!");
+        return;
+    }
+
+    try {
+        // 1. Zmień wynik wpisu i dodaj usera do listy głosujących
+        await updateDoc(entryRef, {
+            score: increment(change),
+            voters: arrayUnion(user.uid)
+        });
+
+        // 2. Zaktualizuj punkty w profilu autora wpisu
+        if (data.uid) {
+            const authorRef = doc(db, "users", data.uid);
+            await updateDoc(authorRef, {
+                points: increment(change)
+            });
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+window.showReplyForm = (id) => {
+    const box = document.getElementById(`reply-box-${id}`);
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+};
+
+window.sendReply = async (entryId) => {
+    const user = auth.currentUser;
+    const input = document.getElementById(`reply-input-${entryId}`);
+    const content = input.value.trim();
+
+    if (!user) return alert("Zaloguj się!");
+    if (content.length < 2) return;
+
+    const entryRef = doc(db, "guestbook", entryId);
+    
+    // Pobierz nick zalogowanego
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const myNick = userDoc.exists() ? userDoc.data().nick : "Anon";
+
+    await updateDoc(entryRef, {
+        replies: arrayUnion({
+            uid: user.uid,
+            nick: myNick,
+            content: content,
+            createdAt: new Date()
+        })
+    });
+
+    input.value = "";
+    document.getElementById(`reply-box-${entryId}`).style.display = 'none';
+};
+
 window.toggleExpand = (id) => {
     const contentDiv = document.getElementById(`content-${id}`);
     const btn = document.getElementById(`btn-${id}`);
     
     if (contentDiv.classList.contains('expanded')) {
         contentDiv.classList.remove('expanded');
-        btn.textContent = 'Pokaż więcej';
+        btn.textContent = 'Pokaż więcej..';
     } else {
         contentDiv.classList.add('expanded');
         btn.textContent = 'Zwiń';
@@ -471,12 +558,19 @@ form.onsubmit = async (e) => {
             userNick = userDoc.data().nick;
         }
 
-        await addDoc(collection(db, "guestbook"), {
-            uid: user.uid,
-            nick: userNick,
-            content: content,
-            createdAt: serverTimestamp()
-        });
+    await addDoc(collection(db, "guestbook"), {
+        uid: user.uid,
+        nick: userNick,
+        content: content,
+        score: 1,
+        voters: [],
+        replies: [],
+        createdAt: serverTimestamp()
+    });
+
+    await updateDoc(doc(db, "users", user.uid), {
+        points: increment(1)
+    });
         
         form.reset();
     } catch (err) {

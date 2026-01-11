@@ -98,7 +98,7 @@
     </div>
 
     <div class="profile-card">
-        <div id="loading-msg">Przeszukiwanie kartoteki...</div>
+        <div id="loading-msg">Przeszukiwanie rumuńskich urzędów...<br><progress></progress></div>
         
         <div id="profile-content" style="display:none;">
             <div class="profile-header">
@@ -115,24 +115,28 @@
 
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-value" id="display-rank">Chłop</div>
+                    <div class="stat-value" id="display-rank">Chlop</div>
                     <div class="stat-label">Ranga</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" id="display-points">0</div>
-                    <div class="stat-label">Punkty Chwały</div>
+                    <div class="stat-label">Punkty czegoś</div>
                 </div>
             </div>
 
             <div style="margin-bottom: 20px;">
-                <label for="bio-input" style="font-weight: bold; display: block; margin-bottom: 5px;">Bio Obywatela:</label>
+                <label for="bio-input" style="font-weight: bold; display: block; margin-bottom: 5px;">Moje bio:</label>
                 <textarea id="bio-input"></textarea>
-                <button id="btn-save" class="save-btn">Zapisz zmiany</button>
+                <div class="field">
+                    <label>Twój kolor profilu:</label>
+                    <input type="color" id="color-picker" style="height: 20px; width: 30px; cursor: pointer;">
+                </div>
+                <button id="btn-save" class="save-btn">Zapisz</button>
                 <span id="save-status" style="margin-left: 10px; font-size: 0.9em;"></span>
             </div>
 
             <div style="font-size: 0.8em; color: #999; text-align: right;">
-                Obywatel od: <span id="display-date">-</span>
+                Obywatel od: <span id="display-date">Nie wiem</span>
             </div>
         </div>
     </div>
@@ -179,7 +183,6 @@
   };
 
   onAuthStateChanged(auth, async (me) => {
-    // 1. Sprawdzamy czyj profil wyświetlić
     const urlParams = new URLSearchParams(window.location.search);
     const targetUid = urlParams.get('uid') || (me ? me.uid : null);
 
@@ -190,7 +193,6 @@
 
     const isMyProfile = me && (targetUid === me.uid);
 
-    // 2. Jeśli nie mój profil - ukrywamy przyciski akcji
     if (!isMyProfile) {
         els.saveBtn.style.display = 'none';
         els.logoutBtn.style.display = 'none';
@@ -240,6 +242,18 @@
     els.loading.style.display = 'none';
     els.content.style.display = 'block';
   }
+
+    // Przy ładowaniu strony ustaw aktualny kolor z bazy
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+        document.getElementById('color-picker').value = userDoc.data().avatarColor || "#2b4a80";
+    }
+
+    // Przy zapisywaniu profilu:
+    const selectedColor = document.getElementById('color-picker').value;
+    await updateDoc(doc(db, "users", user.uid), {
+        avatarColor: selectedColor // Aktualizacja koloru w bazy
+    });
 
   els.saveBtn.addEventListener('click', async () => {
     const user = auth.currentUser;

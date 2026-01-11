@@ -172,17 +172,31 @@ form#auth-form button:hover{
       await updateProfile(user, {
         displayName: name
       });
+      const generateRandomColor = () => {
+      const colors = ['#2b4a80', '#c0392b', '#16a085', '#27ae60', '#f39c12', '#8e44ad'];
+      return colors[Math.floor(Math.random() * colors.length)];
+  };
 
       // 3. TWORZENIE PROFILU W FIRESTORE (Kluczowy moment!)
       // Używamy setDoc i wskazujemy ID dokumentu takie samo jak UID użytkownika
       await setDoc(doc(db, "users", user.uid), {
         nick: name,
         email: email,          // Opcjonalnie, przydatne dla admina
+        avatarColor: userColor,
         bio: "Obywatel Imperium Lechitów", // Domyślny opis
         rank: "Chłop",         // Ranga startowa
         points: 0,             // Punkty startowe
-        createdAt: serverTimestamp() // Czas serwera
+        createdAt: serverTimestamp()
       });
+
+// Podczas rejestracji w bloku try:
+const userColor = generateRandomColor();
+// Zapisz to w Firestore (zakładając, że masz kolekcję 'users')
+await setDoc(doc(db, "users", user.uid), {
+    uid: user.uid,
+    nick: name,
+    avatarColor: userColor // Tutaj zapisujemy wylosowany kolor
+});
 
       status.style.color = "green";
       status.textContent = `Witaj w Imperium, ${name}! Profil utworzony. Przekierowanie...`;
