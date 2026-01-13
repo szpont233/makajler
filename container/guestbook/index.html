@@ -191,6 +191,28 @@ input[type="submit"]:hover {
 .expand-btn:hover {
     background: #cee0ed;
 }
+
+/* Styl paska narzędzi */
+.toolbar button {
+    background: #f0f0f0;
+    border: 1px solid #777;
+    border-radius: 2px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.toolbar button:hover {
+    background: #fff;
+    border-color: #000;
+}
+
+/* Żeby textarea nie miała zaokrąglonych rogów na górze, gdy styka się z toolbar */
+#guest-content {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border: 1px solid #999 !important;
+}
     
 @media(max-width: 900px) {
     #main { flex-direction: column; }
@@ -248,18 +270,21 @@ input[type="submit"]:hover {
         <form id="guestbook-form">
             <div style="background: #ffffcc; padding: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
                 <input type="checkbox" id="akceptuje-szponta" required>
-                <label for="akceptuje-szponta" style="font-size: 11px;">
-                    Przeczytałem, zrozumiałem i obiecuję godnie reprezentować Imperium
-                </label>
+                <label for="akceptuje-szponta" style="font-size: 11px;"> Przeczytałem, zrozumiałem i obiecuję godnie reprezentować Imperium</label>
             </div>
 
             <label style="font-weight: bold;">Kim jestem?</label><br>
             <input type="text" id="guest-name" name="name" disabled placeholder="Zaloguj się by pisać"><br><br>
-            
             <label style="font-weight: bold;">Napisz na ściane</label><br>
-            <textarea id="guest-content" maxlength="500" rows="4" cols="50" 
-                    placeholder="Treść wpisu (max 500 znaków)" required ></textarea><br><br>
-            
+            <div class="toolbar" style="background: #e1e1e1; border: 1px solid #999; border-bottom: none; padding: 4px; display: flex; gap: 5px; border-top-left-radius: 3px; border-top-right-radius: 3px;">
+                <button type="button" onclick="wrapText('B')" title="Pogrubienie" style="font-weight: bold; width: 25px;">B</button>
+                <button type="button" onclick="wrapText('P')" title="Akapit" style="width: 25px;">P</button>
+                <button type="button" onclick="insertLink()" title="Wstaw link" style="color: blue; text-decoration: underline; cursor: pointer;">URL</button>
+                <button type="button" onclick="insertImageTag()" title="Wstaw obrazek" style="cursor: pointer; display: flex; align-items: center; gap: 3px;">
+                    <img src="../../assets/icons/image.png" alt="" style="width: 13px; height: 13px;"> IMG
+                </button>
+            </div>
+            <textarea id="guest-content" maxlength="500" rows="4" cols="50" placeholder="Treść wpisu (max 500 znaków)" required ></textarea><br><br>
             <button type="submit" id="submit-btn" class="button" disabled>Dodaj wpis</button>
         </form>
 
@@ -274,10 +299,6 @@ input[type="submit"]:hover {
                     AKTUALIZUJ STRONE
                 </button>
                 <script>
-    document.addEventListener('click', function() {
-        const audio = new Audio('../../assets/witaj.mp3');
-        audio.play();
-    }, { once: true });
 
     function wyczyscDlaImperium() {
         localStorage.clear();
@@ -336,7 +357,7 @@ function formatDate(timestamp) {
 function sanitizeHtml(str) {
     const temp = document.createElement('div');
     temp.innerHTML = str;
-    const allowedTags = ['A','IMG','P', 'BUTTON'];
+    const allowedTags = ['A', 'IMG', 'P', 'B', 'STRONG', 'BUTTON', 'BR'];
 
     function clean(node) {
         if (node.nodeType === 1) {
@@ -620,5 +641,40 @@ onAuthStateChanged(auth, (user) => {
 </div>
 
 <script type="module" src="../../assets/firebase.js"></script>
+<script>
+    window.wrapText = (tag) => {
+        const textarea = document.getElementById('guest-content');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const selectedText = textarea.value.substring(start, end);
+        const replacement = `<${tag}>${selectedText}</${tag}>`;
+        
+        textarea.value = textarea.value.substring(0, start) + replacement + textarea.value.substring(end);
+        textarea.focus();
+        const pos = selectedText ? start + replacement.length : start + tag.length + 2;
+        textarea.setSelectionRange(pos, pos);
+    };
+
+    window.insertLink = () => {
+        const url = prompt("Podaj adres URL (np. https://google.com):", "https://");
+        if (url) {
+            const textarea = document.getElementById('guest-content');
+            const start = textarea.selectionStart;
+            const text = `<a href="${url}">Link</a>`;
+            textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(textarea.selectionEnd);
+            textarea.focus();
+        }
+    };
+
+    window.insertImageTag = () => {
+        const textarea = document.getElementById('guest-content');
+        const start = textarea.selectionStart;
+        const imgTag = '<img src="">';
+        textarea.value = textarea.value.substring(0, start) + imgTag + textarea.value.substring(textarea.selectionEnd);
+        textarea.focus();
+        const cursorFallback = start + 10;
+        textarea.setSelectionRange(cursorFallback, cursorFallback);
+    };
+</script>
 </body>
 </html>
