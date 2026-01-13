@@ -113,6 +113,15 @@
         font-weight: bold;
         color: #12213b;
     }
+    @media (max-width: 600px) {
+    .nowe, .specjal {
+        padding: 8px;
+        font-size: 13px;
+    }
+    #content {
+        padding: 10px;
+    }
+}
 </style>
 <link rel="stylesheet" href="assets/css/xp.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -162,7 +171,38 @@
             <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png">
         </a>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const newsItems = Array.from(document.querySelectorAll('#content .nowe, #content .specjal'));
+        const limit = 5;
+        const btn = document.getElementById('show-more-news');
+        if (newsItems.length <= limit) return;
 
+        let isExpanded = false;
+
+        function toggleNews() {
+            newsItems.forEach((item, index) => {
+                if (index >= limit) {
+                    item.style.display = isExpanded ? 'block' : 'none';
+                }
+            });
+
+            btn.textContent = isExpanded ? '[-] Pokaż mniej' : '[+] Pokaż więcej';
+        }
+
+        toggleNews();
+        btn.style.display = 'block';
+
+        btn.onclick = function() {
+            isExpanded = !isExpanded;
+            toggleNews();
+            
+            if (!isExpanded) {
+                document.querySelector('.nagl').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+    });
+    </script>
     <div id="main">
         <div id="content">
             <span class="nagl">Nowości</span>
@@ -218,13 +258,14 @@
             <p class="nowe"><strong>18 października 2025</strong><br> Dodano nową strone glowna i posortowano wszystko na różne kategorie. Pozdrawiam wszystkich Lechitów!</p>
             <p class="nowe"><strong>16 października 2025</strong> <br> Obczaj nowego Szpontoklikera <a href="projekty/makajler/index.html">tutaj</a></p>
             <p class="specjal"><strong>15 października 2025</strong><br> Narodziny Lechistanu w internecie.</p>
+            <button id="show-more-news" style="color: white; display: none; width: 100%; padding: 5px; margin: 10px 0; cursor: pointer; background: linear-gradient(to bottom, #4f81bd, #385d8a); border: 1px solid #1c3057;; font-family: Verdana; font-size: 11px;">
+                [+] Pokaż więcej nowości
+            </button>
+
             <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
 
             <span class="nagl">O nas</span>
             <p>Jesteśmy potomkami wladcow Imperium Lechickiego i w ramach tego stworzylismy strone internetowa. Zapraszamy.</p>
-
-            <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
-
             <span class="nagl">Do pobrania</span>
             <p><a class="button" href="assets/lechia.jpg">Pobierz tapetę (415kB)</a></p>
         </div>

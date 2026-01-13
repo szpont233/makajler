@@ -75,6 +75,9 @@ form#auth-form button:hover{
 .form-links a:hover{
   color: #cc0000;
 }
+#zycie{
+  padding-left: 20px;
+}
 
 @media(max-width:600px){
   form#auth-form {
@@ -119,7 +122,12 @@ form#auth-form button:hover{
     <input type="text" name="name" id="name" required><br>
     <label for="password">Hasło:</label>
     <input type="password" name="password" id="password" required><br>
-    <input type="checkbox" name="zgoda" id="zgoda" required><span for="zgoda">Czy oddasz życie za IzraelaGPT i Benjamina Netanjahu?</span><br><br>
+    <div id="zycie" style="margin: 10px 0;">
+        <input type="checkbox" name="zgoda" id="zgoda" required>
+        <label for="zgoda" style="display: inline; font-weight: normal;">
+            Czy oddasz życie za IzraelaGPT i Benjamina Netanjahu?
+        </label>
+    </div>
     <button type="submit">Załóż konto</button><br><br>
     <a href="login.html">Ale ja się chcialem zalogować</a>
     <div id="signup-status"></div>
@@ -132,7 +140,6 @@ form#auth-form button:hover{
 </div>
 
 <script type="module">
-  // 1. Importujemy dodatkowe funkcje z Firestore
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
   import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -149,8 +156,7 @@ form#auth-form button:hover{
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app); // Inicjalizacja bazy danych
-
+  const db = getFirestore(app);
   const form = document.getElementById("auth-form");
   const status = document.getElementById("signup-status");
 
@@ -165,42 +171,30 @@ form#auth-form button:hover{
     status.style.color = "black";
 
     try {
-      // 1. Tworzenie konta w Auth (Email/Hasło)
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // 2. Aktualizacja profilu Auth (DisplayName - przydatne jako backup)
-      await updateProfile(user, {
-        displayName: name
-      });
-      const generateRandomColor = () => {
-      const colors = ['#2b4a80', '#c0392b', '#16a085', '#27ae60', '#f39c12', '#8e44ad'];
-      return colors[Math.floor(Math.random() * colors.length)];
-  };
+      await updateProfile(user, { displayName: name });
 
-      // 3. TWORZENIE PROFILU W FIRESTORE (Kluczowy moment!)
-      // Używamy setDoc i wskazujemy ID dokumentu takie samo jak UID użytkownika
+      const generateRandomColor = () => {
+        const colors = ['#2b4a80', '#c0392b', '#16a085', '#27ae60', '#f39c12', '#8e44ad'];
+        return colors[Math.floor(Math.random() * colors.length)];
+      };
+
+      const userColor = generateRandomColor();
+
       await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
         nick: name,
-        email: email,          // Opcjonalnie, przydatne dla admina
+        email: email,
         avatarColor: userColor,
-        bio: "Obywatel Imperium Lechitów", // Domyślny opis
-        rank: "Chłop",         // Ranga startowa
-        points: 0,             // Punkty startowe
+        bio: "Obywatel Imperium Lechitów",
+        rank: "Chłop",
+        points: 0,
         createdAt: serverTimestamp()
       });
-
-// Podczas rejestracji w bloku try:
-const userColor = generateRandomColor();
-// Zapisz to w Firestore (zakładając, że masz kolekcję 'users')
-await setDoc(doc(db, "users", user.uid), {
-    uid: user.uid,
-    nick: name,
-    avatarColor: userColor // Tutaj zapisujemy wylosowany kolor
-});
-
       status.style.color = "green";
-      status.textContent = `Witaj w Imperium, ${name}! Profil utworzony. Przekierowanie...`;
+      status.textContent = `Wrota do Starej Otoczni otwarte, ${name}! Profil utworzony. Przekierowanie...`;
 
       form.reset();
       setTimeout(() => window.location.href = "login.html", 2000);
