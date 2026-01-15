@@ -259,7 +259,7 @@
             <p class="nowe"><strong>16 października 2025</strong> <br> Obczaj nowego Szpontoklikera <a href="projekty/makajler/index.html">tutaj</a></p>
             <p class="specjal"><strong>15 października 2025</strong><br> Narodziny Lechistanu w internecie.</p>
             <button id="show-more-news" style="color: white; display: none; width: 100%; padding: 5px; margin: 10px 0; cursor: pointer; background: linear-gradient(to bottom, #4f81bd, #385d8a); border: 1px solid #1c3057;; font-family: Verdana; font-size: 11px;">
-                [+] Pokaż więcej nowości
+                [+] Pokaż więcej
             </button>
 
             <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
@@ -325,7 +325,6 @@
 
                         entries = querySnapshot.docs.map(doc => doc.data());
 
-                        // Create carousel entries
                         entries.forEach((data, index) => {
                             const date = data.createdAt?.toDate().toLocaleDateString('pl-PL') || "Niedawno";
                             const authorName = data.nick || data.name || "Anonimowy";
@@ -341,7 +340,6 @@
                             container.appendChild(entryEl);
                         });
 
-                        // Create navigation dots
                         if (entries.length > 1) {
                             entries.forEach((_, index) => {
                                 const dot = document.createElement('div');
@@ -350,11 +348,10 @@
                                 navContainer.appendChild(dot);
                             });
 
-                            // Auto-rotate every 4 seconds
                             autoRotateInterval = setInterval(() => {
                                 currentIndex = (currentIndex + 1) % entries.length;
                                 updateCarousel();
-                            }, 4000);
+                            }, 5000);
                         }
                     } catch (e) {
                         container.innerHTML = '<p style="color:#d00;">Błąd</p>';
