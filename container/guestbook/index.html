@@ -274,7 +274,7 @@ input[type="submit"]:hover {
             </div>
 
             <label style="font-weight: bold;">Kim jestem?</label><br>
-            <input type="text" id="guest-name" name="name" disabled placeholder="Zaloguj się by pisać"><br><br>
+            <input type="text" id="guest-name" name="name"><br><br>
             <label style="font-weight: bold;">Napisz na ściane</label><br>
             <div class="toolbar" style="background: #e1e1e1; border: 1px solid #999; border-bottom: none; padding: 4px; display: flex; gap: 5px; border-top-left-radius: 3px; border-top-right-radius: 3px;">
                 <button type="button" onclick="wrapText('B')" title="Pogrubienie" style="font-weight: bold; width: 25px;">B</button>
@@ -394,10 +394,14 @@ const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"))
 function renderEntry(id, d) {
     const user = auth.currentUser;
     const uid = d.uid || "";
+        const isGuest = d.guest === true;
+    const badge = isGuest
+    ? `<span style="color:#999;font-size:10px;">[GOŚĆ]</span>`
+    : "";
     const canEdit = user && uid && (user.uid === uid || user.isAdmin);
     const authorName = d.nick || d.name || "Anonim";
     const profileLink = uid ? `../profile/index.html?uid=${uid}` : "#";
-    const displayId = uid ? uid.substring(0,8) : "Konto OG";
+    const displayId = uid ? uid.substring(0,8) : "Niezarejestrowany";
     const score = d.score || 0;
 
     return `
@@ -563,68 +567,99 @@ const form = document.getElementById('guestbook-form');
 const nameInput = document.getElementById('guest-name');
 
 form.onsubmit = async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if (!user) { alert("Musisz być zalogowany."); return; }
+  e.preventDefault();
 
-    const content = document.getElementById('guest-content').value.trim();
-    if (content.length < 3) return;
+  const content = document.getElementById('guest-content').value.trim();
+  if (content.length < 3) {
+    alert("Treść wpisu musi mieć minimum 3 znaki.");
+    return;
+  }
 
-    try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        let userNick = user.displayName || "Anonim";
+  const user = auth.currentUser;
 
-        if (userDoc.exists()) {
-            userNick = userDoc.data().nick;
-        }
+  try {
+    if (!user) {
+      const guestNick = document.getElementById('guest-name').value.trim() || "Anonim";
+      const lastPost = Number(localStorage.getItem("last_guest_post") || 0);
+      if (Date.now() - lastPost < 60000) {
+        alert("Poczekaj minutę zanim dodasz kolejny wpis.");
+        return;
+      }
+      localStorage.setItem("last_guest_post", Date.now());
 
-    await addDoc(collection(db, "guestbook"), {
-        uid: user.uid,
-        nick: userNick,
-        content: content,
-        score: 1,
-        voters: [],
-        replies: [],
+      await addDoc(collection(db, "guestbook"), {
+        guest: true,
+        uid: null,
+        nick: nameInput.value || "Anonim",
+        content,
         createdAt: serverTimestamp()
-    });
+      });
 
-    await updateDoc(doc(db, "users", user.uid), {
+    } else {
+      // Zalogowany
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const nick = userDoc.exists() ? userDoc.data().nick : user.displayName || "Anonim";
+
+      await addDoc(collection(db, "guestbook"), {
+        guest: false,
+        uid: user.uid,
+        nick,
+        content,
+        score: 0,
+        voters: [],
+        createdAt: serverTimestamp()
+      });
+
+      await updateDoc(doc(db, "users", user.uid), {
         points: increment(1)
-    });
-        
-        form.reset();
-    } catch (err) {
-        console.error("Szczegóły błędu:", err);
-        alert("Bląd: Twoje reguły Firestore odrzuciły wpis. Upewnij się, że masz utworzony profil użytkownika");
+      });
     }
+
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    alert("Wystąpil bląd podczas dodawania wpisu");
+  }
 };
 
-// Wyświetlanie nicku zalogowanego użytkownika
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        nameInput.value = user.displayName || "Anon";
-        nameInput.disabled = true;
-    } else {
-        nameInput.value = "";
-        nameInput.placeholder = "Zaloguj się lub zarejestruj!";
-        nameInput.disabled = true;
-    }
-});
 
-// Status logowania w nagłówku
-const status = document.getElementById("czyzal");
-const link = document.getElementById("loginlink");
+// --- ZMODYFIKOWANA OBSŁUGA STATUSU I NICKU ---
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+    const nameInput = document.getElementById('guest-name');
+    const status = document.getElementById("czyzal");
+    const link = document.getElementById("loginlink");
+
     if (user) {
-        status.textContent = "Zalogowany jako: " + user.displayName;
+        // SCENARIUSZ: UŻYTKOWNIK ZALOGOWANY
+        let userNick = user.displayName || "Obywatel";
+        
+        // Opcjonalnie: pobierz świeży nick z bazy 'users' jeśli displayName jest pusty
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists() && userDoc.data().nick) {
+                userNick = userDoc.data().nick;
+            }
+        } catch (e) { console.error("Błąd pobierania nicku:", e); }
+
+        nameInput.value = userNick;
+        nameInput.disabled = true; // Zablokowane, bo ma konto
+        nameInput.style.backgroundColor = "#e9ecef"; // Wizualne potwierdzenie blokady
+        
+        status.textContent = "Zalogowany jako: " + userNick;
         link.innerHTML = 'Wyloguj <img src="../../assets/icons/logout.png" alt="*" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
-        link.href = "../../index.html";
         link.onclick = (e) => { e.preventDefault(); signOut(auth); };
     } else {
-        status.textContent = "Nie jesteś zalogowany";
+        // SCENARIUSZ: GOŚĆ
+        nameInput.value = ""; 
+        nameInput.disabled = false; // GOŚĆ MOŻE WPISAĆ NICK
+        nameInput.placeholder = "Wpisz swój nick (Gość)...";
+        nameInput.style.backgroundColor = "#fff";
+        
+        status.textContent = "Nie jesteś zalogowany (tryb gościa)";
         link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">';
         link.href = "../../login.html";
+        link.onclick = null; // Resetujemy akcję wylogowania
     }
 });
 </script>
