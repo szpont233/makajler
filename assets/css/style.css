@@ -1,7 +1,21 @@
 * {
   box-sizing: border-box;
+  font-family: 'LechitaSans';
+  -webkit-font-smoothing: none; /* Safari/Chrome */
+  -moz-osx-font-smoothing: grayscale; /* Firefox na macOS */
+  text-rendering: optimizeLegibility;
 }
 
+@font-face {
+  font-family: 'LechitaSans';
+  src: url('../assets/font/ms-sans-serif-1.otf.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  -webkit-font-smoothing: none; /* Safari/Chrome */
+  -moz-osx-font-smoothing: grayscale; /* Firefox na macOS */
+  text-rendering: optimizeLegibility;
+}
 
 html, body {
   height: 100%;
@@ -13,10 +27,13 @@ html, body {
 body {
   background: linear-gradient(to bottom, #d7e0f0, #b9c6dd);
   color: #333;
-  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-family: Tahoma, Verdana, "Liberation Sans", Arial, sans-serif;
   font-size: 13px;
   padding: 0;
-  
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 #header {
@@ -83,6 +100,33 @@ h1 {
 h2 {
   color: #2b4a80;
   font-size: 18px;
+}
+.projekt {
+  width: 120px;
+  text-align: center;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.projekt:hover {
+  background: #e0e0e0;
+}
+
+.projekt img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #999;
+  margin-bottom: 8px;
+}
+#projekty-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
 }
 
 .footer {
