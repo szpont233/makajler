@@ -121,6 +121,9 @@ input[type="submit"]:hover {
     width: 240px;
     flex-shrink: 0;
     }
+#entries-list{
+    font-family: 'Courier New';
+    }
 
 .entry-content {
     word-wrap: break-word;
@@ -197,7 +200,7 @@ input[type="submit"]:hover {
     background: #f0f0f0;
     border: 1px solid #777;
     border-radius: 2px;
-    font-family: Arial, sans-serif;
+    font-family: Verdana, sans-serif;
     font-size: 11px;
     cursor: pointer;
 }
@@ -552,15 +555,7 @@ window.deleteEntry = async (id) => {
     await deleteDoc(doc(db, "guestbook", id));
 };
 
-const list = document.getElementById('entries-list');;
-
-onSnapshot(q, (snap) => {
-    list.innerHTML = "";
-    snap.forEach(doc => {
-        const d = doc.data();
-        list.innerHTML += renderEntry(doc.id, d);
-    });
-});
+const list = document.getElementById('entries-list');
 
 // dodawanie wpisow formularz
 const form = document.getElementById('guestbook-form');
