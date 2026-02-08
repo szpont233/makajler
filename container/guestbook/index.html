@@ -564,16 +564,20 @@ const nameInput = document.getElementById('guest-name');
 form.onsubmit = async (e) => {
   e.preventDefault();
 
-    const content = document.getElementById('guest-content').value.trim();
-    if (content.length < 3 || content.length > 500) {
+  const content = document.getElementById('guest-content').value.trim();
+  
+  // Dodaj walidację maksymalnej długości
+  if (content.length < 3 || content.length > 500) {
     alert("Treść wpisu musi mieć od 3 do 500 znaków.");
     return;
-    }
+  }
 
   const user = auth.currentUser;
 
   try {
     if (!user) {
+      // === GOŚĆ ===
+      console.log("Tryb GOŚCIA - dodawanie wpisu...");
       const guestNick = document.getElementById('guest-name').value.trim() || "Anonim";
       const lastPost = Number(localStorage.getItem("last_guest_post") || 0);
       if (Date.now() - lastPost < 60000) {
@@ -582,41 +586,57 @@ form.onsubmit = async (e) => {
       }
       localStorage.setItem("last_guest_post", Date.now());
 
-      await addDoc(collection(db, "guestbook"), {
+      const guestData = {
         guest: true,
         uid: null,
-        nick: nameInput.value || "Anonim",
-        content,
+        nick: guestNick,
+        content: content,
         createdAt: serverTimestamp()
-      });
+      };
+      
+      console.log("Dane gościa do wysłania:", guestData);
+      await addDoc(collection(db, "guestbook"), guestData);
+      console.log("✅ Wpis gościa dodany!");
 
     } else {
-      // Zalogowany
+      // === ZALOGOWANY ===
+      console.log("Tryb ZALOGOWANEGO - dodawanie wpisu...");
+      console.log("User UID:", user.uid);
+      
       const userDoc = await getDoc(doc(db, "users", user.uid));
       const nick = userDoc.exists() ? userDoc.data().nick : user.displayName || "Anonim";
 
-      await addDoc(collection(db, "guestbook"), {
+      const userData = {
         guest: false,
         uid: user.uid,
-        nick,
-        content,
+        nick: nick,
+        content: content,
         score: 0,
         voters: [],
         createdAt: serverTimestamp()
-      });
+      };
+      
+      console.log("Dane zalogowanego do wysłania:", userData);
+      await addDoc(collection(db, "guestbook"), userData);
+      console.log("Wpis zalogowanego dodany!");
 
+      console.log("Aktualizacja punktów użytkownika...");
       await updateDoc(doc(db, "users", user.uid), {
         points: increment(1)
       });
+      console.log("Punkty zaktualizowane!");
     }
 
     form.reset();
+    alert("Wpis dodany pomyślnie!");
+    
   } catch (err) {
-    console.error(err);
-    alert("Wystąpil bląd podczas dodawania wpisu");
+    console.error("BŁĄD SZCZEGÓŁOWY:", err);
+    console.error("Kod błędu:", err.code);
+    console.error("Wiadomość:", err.message);
+    alert("Błąd: " + err.message);
   }
 };
-
 
 // --- ZMODYFIKOWANA OBSŁUGA STATUSU I NICKU ---
 
