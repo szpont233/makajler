@@ -564,11 +564,11 @@ const nameInput = document.getElementById('guest-name');
 form.onsubmit = async (e) => {
   e.preventDefault();
 
-  const content = document.getElementById('guest-content').value.trim();
-  if (content.length < 3) {
-    alert("Treść wpisu musi mieć minimum 3 znaki.");
+    const content = document.getElementById('guest-content').value.trim();
+    if (content.length < 3 || content.length > 500) {
+    alert("Treść wpisu musi mieć od 3 do 500 znaków.");
     return;
-  }
+    }
 
   const user = auth.currentUser;
 
