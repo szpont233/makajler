@@ -142,29 +142,26 @@ input[type="submit"]:hover {
     max-height: none;
 }
 
-/* Kontener na treść wpisu z ograniczeniem do 5 linii */
 .entry-content {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
-    word-wrap: break-word; /* Zapobiega wychodzeniu długich słów poza kontener */
+    word-wrap: break-word;
     overflow-wrap: break-word;
-    line-height: 1.5; /* Ustalona wysokość linii dla precyzyjnego ucinania */
-    max-height: 7.5em; /* 5 linii * 1.5 line-height */
+    line-height: 1.5;
+    max-height: 7.5em;
     transition: max-height 0.3s ease;
 }
 
-/* Klasa usuwająca limity po kliknięciu "Rozwiń" */
 .entry-content.expanded {
     display: block;
     -webkit-line-clamp: unset;
     max-height: none;
 }
 
-/* Styl przycisku rozwijania */
 .expand-btn {
-    display: none; /* Domyślnie ukryty, pokazujemy go tylko gdy tekst jest za długi */
+    display: none;
     background: #e1ecf4;
     color: #39739d;
     border: 1px solid #7aa7c7;
@@ -195,7 +192,6 @@ input[type="submit"]:hover {
     background: #cee0ed;
 }
 
-/* Styl paska narzędzi */
 .toolbar button {
     background: #f0f0f0;
     border: 1px solid #777;
@@ -210,7 +206,6 @@ input[type="submit"]:hover {
     border-color: #000;
 }
 
-/* Żeby textarea nie miała zaokrąglonych rogów na górze, gdy styka się z toolbar */
 #guest-content {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
@@ -457,20 +452,17 @@ window.vote = async (entryId, change) => {
     const entrySnap = await getDoc(entryRef);
     const data = entrySnap.data();
 
-    // Sprawdzanie czy użytkownik już głosował
     if (data.voters && data.voters.includes(user.uid)) {
         alert("Już oddałeś głos na ten wpis!");
         return;
     }
 
     try {
-        // 1. Zmień wynik wpisu i dodaj usera do listy głosujących
         await updateDoc(entryRef, {
             score: increment(change),
             voters: arrayUnion(user.uid)
         });
 
-        // 2. Zaktualizuj punkty w profilu autora wpisu
         if (data.uid) {
             const authorRef = doc(db, "users", data.uid);
             await updateDoc(authorRef, {
@@ -497,7 +489,6 @@ window.sendReply = async (entryId) => {
 
     const entryRef = doc(db, "guestbook", entryId);
     
-    // Pobierz nick zalogowanego
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const myNick = userDoc.exists() ? userDoc.data().nick : "Anon";
 
@@ -527,7 +518,6 @@ window.toggleExpand = (id) => {
     }
 };
 
-// Zmodyfikowany onSnapshot, który sprawdza wysokość po każdym renderowaniu
 onSnapshot(q, (snap) => {
     list.innerHTML = "";
     snap.forEach(doc => {
@@ -535,14 +525,12 @@ onSnapshot(q, (snap) => {
         list.innerHTML += renderEntry(doc.id, d);
     });
 
-    // Czekamy chwilę na wyrenderowanie DOM, aby zmierzyć wysokości
     setTimeout(() => {
         snap.forEach(doc => {
             const id = doc.id;
             const contentDiv = document.getElementById(`content-${id}`);
             const btn = document.getElementById(`btn-${id}`);
             
-            // Jeśli wysokość zawartości jest większa niż widoczny kontener, pokaż przycisk
             if (contentDiv && contentDiv.scrollHeight > contentDiv.offsetHeight + 2) {
                 btn.style.display = 'inline-block';
             }
@@ -566,7 +554,6 @@ form.onsubmit = async (e) => {
 
   const content = document.getElementById('guest-content').value.trim();
   
-  // Dodaj walidację maksymalnej długości
   if (content.length < 3 || content.length > 500) {
     alert("Treść wpisu musi mieć od 3 do 500 znaków.");
     return;
@@ -576,7 +563,6 @@ form.onsubmit = async (e) => {
 
   try {
     if (!user) {
-      // === GOŚĆ ===
       console.log("Tryb GOŚCIA - dodawanie wpisu...");
       const guestNick = document.getElementById('guest-name').value.trim() || "Anonim";
       const lastPost = Number(localStorage.getItem("last_guest_post") || 0);
@@ -599,7 +585,6 @@ form.onsubmit = async (e) => {
       console.log("Wpis gościa dodany!");
 
     } else {
-      // === ZALOGOWANY ===
       console.log("Tryb ZALOGOWANEGO - dodawanie wpisu...");
       console.log("User UID:", user.uid);
       
@@ -638,7 +623,6 @@ form.onsubmit = async (e) => {
   }
 };
 
-// --- ZMODYFIKOWANA OBSŁUGA STATUSU I NICKU ---
 
 onAuthStateChanged(auth, async (user) => {
     const nameInput = document.getElementById('guest-name');
@@ -646,10 +630,8 @@ onAuthStateChanged(auth, async (user) => {
     const link = document.getElementById("loginlink");
 
     if (user) {
-        // SCENARIUSZ: UŻYTKOWNIK ZALOGOWANY
         let userNick = user.displayName || "Obywatel";
         
-        // Opcjonalnie: pobierz świeży nick z bazy 'users' jeśli displayName jest pusty
         try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
             if (userDoc.exists() && userDoc.data().nick) {
@@ -658,23 +640,22 @@ onAuthStateChanged(auth, async (user) => {
         } catch (e) { console.error("Błąd pobierania nicku:", e); }
 
         nameInput.value = userNick;
-        nameInput.disabled = true; // Zablokowane, bo ma konto
-        nameInput.style.backgroundColor = "#e9ecef"; // Wizualne potwierdzenie blokady
+        nameInput.disabled = true;
+        nameInput.style.backgroundColor = "#e9ecef";
         
         status.textContent = "Zalogowany jako: " + userNick;
         link.innerHTML = 'Wyloguj <img src="../../assets/icons/logout.png" alt="*" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
         link.onclick = (e) => { e.preventDefault(); signOut(auth); };
     } else {
-        // SCENARIUSZ: GOŚĆ
         nameInput.value = ""; 
-        nameInput.disabled = false; // GOŚĆ MOŻE WPISAĆ NICK
+        nameInput.disabled = false;
         nameInput.placeholder = "Wpisz swój nick (Gość)...";
         nameInput.style.backgroundColor = "#fff";
         
         status.textContent = "Nie jesteś zalogowany (tryb gościa)";
         link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">';
         link.href = "../../login.html";
-        link.onclick = null; // Resetujemy akcję wylogowania
+        link.onclick = null;
     }
 });
 </script>

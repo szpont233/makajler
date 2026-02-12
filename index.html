@@ -158,6 +158,11 @@
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#c0392b" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://guestbook-imperium.firebaseapp.com">
+<link rel="preconnect" href="https://firestore.googleapis.com">
+<link rel="preconnect" href="https://www.googleapis.com">
+<link rel="preconnect" href="https://www.gstatic.com">
+<link rel="dns-prefetch" href="https://i.imgur.com">
 
 <meta name="description" content="Poznaj prawdę o Imperium Lechitów. Dowody historyczne, mapy i zapomniane dzieje Wielkiej Lechii w jednym miejscu. Wejdź i odkryj naszą prawdziwą historię">
 <meta property="og:title" content="Imperium Lechtów">
@@ -167,7 +172,7 @@
 <body>
 <audio src="assets/witaj.mp3" hidden></audio>
 <div id="header">
-    <a href="#" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="logo.png" alt="logo Lechii" ></div></a>
+    <a href="#" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="logo.png" alt="logo Lechii" width="48" height="48"></div></a>
     <h1>Strona główna</h1>
     <p style="text-shadow: 2px 2px 3px black; color: black;">Tu znajdziesz wszystko.</p>
 </div>
@@ -188,12 +193,12 @@
     </div>
     <div id="profreg">
         <a id="register" href="register.html">
-            <img src="assets/icons/rejestruj.png" height="13" width="12" alt="*">
+            <img src="assets/icons/rejestruj.png" height="13" width="12" alt="*" loading="lazy">
             Dołącz do Imperium
         </a>
         <a id="loginlink" href="login.html">
             Zaloguj się
-            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png">
+            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png" loading="lazy">
         </a>
     </div>
     <script>
@@ -231,6 +236,7 @@
     <div id="main">
         <div id="content">
             <span class="nagl">Nowości</span>
+            
             <p class="nowe"><strong>8-9 luty 2026</strong><br><br>
             Już wszystko śmiga!<br><br>
             <s style="text-decoration: line-through rgb(255, 0, 0);">Od jakiegoś czasu nie działają wpisy, błąd jest od strony serwera. Staramy się to naprawić</s> </p>
@@ -244,15 +250,15 @@
             Witam w nowym roku.</p>
             <p class="nowe"><strong>31 grudnia 2025</strong><br><br>
             Szczęśliwego nowego roku!<br>
-            <img src="assets/nowyrok2-ezgif.com-optimize.gif" height="290px" width="240px"></p>
+            <img src="assets/nowyrok2-ezgif.com-optimize.gif" height="290px" width="240px" loading="lazy"></p>
             <p class="nowe"><strong>26 grudnia 2025</strong><br><br>
-            Zamiast spedzac swieta z rodzina to siedze w piwnicy i pisze z czatem schizoweb <img src="assets/icons/pointup.png"><br>
+            Zamiast spedzac swieta z rodzina to siedze w piwnicy i pisze z czatem schizoweb <img src="assets/icons/pointup.png" loading="lazy"><br>
             Od teraz wpisy sa dla wszystkich ale Szekspire musza sie zarejestrowac zeby dalej pisac.. Pozdrawiamy.</p>
             <p class="nowe" id="swieta"><strong>24 grudnia 2025</strong><br><br>
              Zdrowych wesołych, wspaniałych świąt oraz szczęśliwego nowego roku wszystkim życzę!
             </p>
             <p class="nowe"><strong>23 grudnia 2025</strong><br><br>
-                Robie wlasnego icon packa. Niedlugo bedzie jak w Gadu Gadu <img class="emotikon" src="assets/icons/usmiech.png"> 
+                Robie wlasnego icon packa. Niedlugo bedzie jak w Gadu Gadu <img class="emotikon" src="assets/icons/usmiech.png" loading="lazy"> 
             </p>
             <p class="nowe"><strong>21 grudnia 2025</strong><br><br>
                  Nudzi mi sie w chuj dajcie jakies propozycje. Dodalem nowy system kont. Juz mozna sie rejestrowac/logowac. Wciaz w fazie beta!! Nie spodziewajcie sie kokosow
@@ -267,7 +273,7 @@
             Mala pierdola (kafelki) po prawej stronie. Dodalem byle co bo mi sie tak podoba</p>
             <p class="specjal"><strong>8 grudnia 2025</strong><br><br>
                 Szpont mlodziezowym slowem roku!!! Chwala i pozdrowienia dla Wielkiego Igora Szponciciela! <br>
-                <img src="assets/szpont_selfie.jpg"></p>
+                <img src="assets/szpont_selfie.jpg" loading="lazy"></p>
             <p class="nowe"><strong>29 listopada 2025</strong><br><br>
                 Zrobilem nowa gre "Twierdza". Wejdz w "Projekty" i obczaj!
             </p>
@@ -300,21 +306,21 @@
                 <div id="projekty-container">
                 <div class="projekt">
                     <a href="../../projekty/makajler/index.html" style="text-decoration: none; color: inherit;">
-                    <img src="../../projekty/makajler/assets/img/baza0.png" alt="Szpontokliker">
+                    <img src="../../projekty/makajler/assets/img/baza0.png" alt="Szpontokliker" loading="lazy">
                     <strong>Szpontokliker</strong><br>
                     <span>Kliknij</span>
                     </a>
                 </div>
                 <div class="projekt">
                     <a href="../../projekty/jebanie_niemca_po_kasku/index.html" style="text-decoration: none; color: inherit;">
-                    <img src="../../assets/drugaic.jpg" alt="Twierdza">
+                    <img src="../../assets/drugaic.jpg" alt="Twierdza" loading="lazy">
                     <strong>Twierdza - Gniezno</strong><br>
                     <span>Kliknij</span>
                     </a>
                 </div>
                 <div class="projekt">
                     <a href="xddd.html" style="text-decoration: none; color: inherit;">
-                    <img src="https://i1.sndcdn.com/avatars-000076539144-rw6rj4-t500x500.jpg" alt="Giera 3">
+                    <img src="https://i1.sndcdn.com/avatars-000076539144-rw6rj4-t500x500.jpg" alt="Giera 3" loading="lazy">
                     <strong>Losowator Zawkrzańskich Czarów</strong><br>
                     <span>Kliknij</span>
                     </a>
@@ -354,7 +360,7 @@
             <aside class="infobox" id="bozena">
                 <span class="sid">Współpraca z Bożeną Bogusławską</span><br>
                 <hr>
-                <img width="150px" height="150px" src="assets/bozena.jpeg" alt="Bożena Boguslawska">
+                <img width="150px" height="150px" src="assets/bozena.jpeg" alt="Bożena Boguslawska" loading="lazy">
                 <p>Wbijaj na tikotka Bożeny Boguslawskiej!!1</p>
                 <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
             </aside>
@@ -447,8 +453,8 @@
 
 <div class="footer">
     Strona stworzona przez obywateli Imperium Lechitów. <br><br>
-<img class="award" src="https://theoldnet.com/images/award.gif">
-<img class="award" src="https://theoldnet.com/images/goldstar.gif">
+<img class="award" src="https://theoldnet.com/images/award.gif" loading="lazy">
+<img class="award" src="https://theoldnet.com/images/goldstar.gif" loading="lazy">
 
 </div>
 
