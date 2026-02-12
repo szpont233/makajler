@@ -596,7 +596,7 @@ form.onsubmit = async (e) => {
       
       console.log("Dane gościa do wysłania:", guestData);
       await addDoc(collection(db, "guestbook"), guestData);
-      console.log("✅ Wpis gościa dodany!");
+      console.log("Wpis gościa dodany!");
 
     } else {
       // === ZALOGOWANY ===
