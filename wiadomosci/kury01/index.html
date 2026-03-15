@@ -145,6 +145,20 @@
         padding: 5px;
         border: 1px solid #ccc;
     }
+    #main{
+        display:flex;
+        gap:20px;
+    }
+
+    #sidebar{
+        order:2;
+        width:250px;
+    }
+
+    #content{
+        order:1;
+        flex:1;
+    }
     #content { border: 1px solid #BA000A; padding: 10px; background: #fff; }
     @media (max-width: 600px) {
     .nowe, .specjal {
@@ -153,8 +167,16 @@
     }
     #content {
         padding: 10px;
+        order: 1;
     }
-}
+    #main{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        order:2;
+    }
+    }  
 </style>
 <link rel="stylesheet" href="../../assets/css/xp.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="../../assets/css/style.css">

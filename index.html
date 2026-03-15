@@ -145,6 +145,19 @@
         padding: 5px;
         border: 1px solid #ccc;
     }
+    #main{
+        display:flex;
+        gap:20px;
+    }
+    #sidebar{
+        order:2;
+        width:250px;
+    }
+    #content{
+        order:2;
+        flex:1;
+    }
+
     @media (max-width: 600px) {
     .nowe, .specjal {
         padding: 8px;
@@ -152,6 +165,14 @@
     }
     #content {
         padding: 10px;
+        order: 1;
+    }
+    #main{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        order:2;
     }
 }
 </style>
@@ -172,7 +193,7 @@
 <link rel="dns-prefetch" href="https://i.imgur.com">
 
 <meta name="description" content="Poznaj prawdę o Imperium Lechitów. Dowody historyczne, mapy i zapomniane dzieje Wielkiej Lechii w jednym miejscu. Wejdź i odkryj naszą prawdziwą historię">
-<meta property="og:title" content="Imperium Lechtów">
+<meta property="og:title" content="Imperium Lechitów">
 <meta property="og:description" content="Poznaj prawdę o Imperium Lechitów. Gry, forum, zapomniane kroniki Lechistanu. Dołącz do nas już dziś!">
 
 </head>
