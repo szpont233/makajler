@@ -6,7 +6,7 @@
 <link rel="canonical" href="https://imperiumlechtow.pl/">
 <meta property="og:url" content="https://imperiumlechtow.pl/">
 <style>
-    * {
+     * {
         font-family: 'LechitaSans';
         -webkit-font-smoothing: none;
         -moz-osx-font-smoothing: grayscale;
@@ -145,6 +145,7 @@
         padding: 5px;
         border: 1px solid #ccc;
     }
+    #content { border: 1px solid #BA000A; padding: 10px; background: #fff; }
     @media (max-width: 600px) {
     .nowe, .specjal {
         padding: 8px;
@@ -155,93 +156,48 @@
     }
 }
 </style>
-<link rel="stylesheet" href="assets/css/xp.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-<link rel="shortcut icon" href="assets/favicon.ico" />
-<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
-<link rel="manifest" href="assets/site.webmanifest" />
+<link rel="stylesheet" href="../../assets/css/xp.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png" />
 <meta name="theme-color" content="#fafafa" />
 <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#c0392b" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://guestbook-imperium.firebaseapp.com">
-<link rel="preconnect" href="https://firestore.googleapis.com">
-<link rel="preconnect" href="https://www.googleapis.com">
-<link rel="preconnect" href="https://www.gstatic.com">
-<link rel="dns-prefetch" href="https://i.imgur.com">
-
-<meta name="description" content="Poznaj prawdę o Imperium Lechitów. Dowody historyczne, mapy i zapomniane dzieje Wielkiej Lechii w jednym miejscu. Wejdź i odkryj naszą prawdziwą historię">
-<meta property="og:title" content="Imperium Lechtów">
-<meta property="og:description" content="Poznaj prawdę o Imperium Lechitów. Gry, forum, zapomniane kroniki Lechistanu. Dołącz do nas już dziś!">
 
 </head>
 <body>
-<audio src="assets/witaj.mp3" hidden></audio>
 <div id="header">
-    <a href="#" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="logo.png" alt="logo Lechii"></div></a>
-    <h1>Strona główna</h1>
-    <p style="text-shadow: 2px 2px 3px black; color: black;">Tu znajdziesz wszystko.</p>
+    <a href="#" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii"></div></a>
 </div>
 
 <div id="container">
     <div id="menu">
         <a href="#">Strona główna</a> |
-        <a href="container/projekty/index.html">Gry/Prodżekts</a> |
-        <a href="container/galeria/index.html">Galeria</a> |
-        <a href="container/kontakt/index.html">Kontakt</a> |
-        <a href="container/swiatynia/index.html">Świątynia</a> |
-        <a id="cwel" href="container/guestbook/index.html">Księga wpisów</a>
+        <a href="../../container/projekty/index.html">Gry/Prodżekts</a> |
+        <a href="../../container/galeria/index.html">Galeria</a> |
+        <a href="../../container/kontakt/index.html">Kontakt</a> |
+        <a href="../../container/swiatynia/index.html">Świątynia</a> |
+        <a id="cwel" href="../../container/guestbook/index.html">Księga wpisów</a>
     </div>
 
     <div id="logan">
         <p id="czyzal">Status...</p>
-        <a id="profil" href="container/profile/index.html">Mój profil</a>
+        <a id="profil" href="../../container/profile/index.html">Mój profil</a>
     </div>
     <div id="profreg">
-        <a id="register" href="register.html">
-            <img src="assets/icons/rejestruj.png" height="13" width="12" alt="*" loading="lazy">
+        <a id="register" href="../../register.html">
+            <img src="../../assets/icons/rejestruj.png" height="13" width="12" alt="*" loading="lazy">
             Dołącz do Imperium
         </a>
-        <a id="loginlink" href="login.html">
+        <a id="loginlink" href="../../login.html">
             Zaloguj się
-            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png" loading="lazy">
+            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png" loading="lazy">
         </a>
     </div>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const newsItems = Array.from(document.querySelectorAll('#content .nowe, #content .specjal'));
-        const limit = 3;
-        const btn = document.getElementById('show-more-news');
-        if (newsItems.length <= limit) return;
-
-        let isExpanded = false;
-
-        function toggleNews() {
-            newsItems.forEach((item, index) => {
-                if (index >= limit) {
-                    item.style.display = isExpanded ? 'block' : 'none';
-                }
-            });
-
-            btn.textContent = isExpanded ? '[-] Pokaż mniej' : '[+] Pokaż więcej';
-        }
-
-        toggleNews();
-        btn.style.display = 'block';
-
-        btn.onclick = function() {
-            isExpanded = !isExpanded;
-            toggleNews();
-            
-            if (!isExpanded) {
-                document.querySelector('.nagl').scrollIntoView({ behavior: 'smooth' });
-            }
-        };
-    });
-    </script>
-    <div id="main">
-        <div id="sidebar">
+        <div id="main">
+            <div id="sidebar">
             <aside class="infobox">
                 <span class="sid">Informacje ogólne</span>
                 <hr>
@@ -262,7 +218,7 @@
                 <div id="latest-guestbook-entry"></div>
                 <div class="carousel-nav" id="carousel-nav"></div>
                 <hr>
-                <a href="container/guestbook/index.html" style="font-weight: bold;">Zobacz wszystkie / Napisz</a>
+                <a href="../../container/guestbook/index.html" style="font-weight: bold;">Zobacz wszystkie / Napisz</a>
             </aside>
             <br>
             <aside class="infobox" id="bozena">
@@ -282,7 +238,7 @@
                     <p><strong>18 stycznia 2026:</strong> Zostala stworzona nowa tapeta. Specjalnie wykuta przez skandynawskich krasnali i islamskich programistów na tablicy z kamieni, <a href="container/galeria/index.html"> zobacz tutaj</a> w galerii!!</p>
                     <p><strong>10 stycznia 2026:</strong> Upgrade systemu kont. Od teraz jest jakiś sensowny profil. Na razie jest możliwość aby zmiany bio. Wejdźcie na "Mój profil" jak jesteście zalogowani. Inni użytkownicy mogą wejść na twój profil przez kliknięcie na nick w <a href="container/guestbook/index.html">Księdze wpisów</a>. Dobranoc.</p>
                     <p><strong>01 stycznia 2026:</strong> Witam w nowym roku.</p>
-                    <p><strong>31 grudnia 2025:</strong> Szczęśliwego nowego roku! <img src="assets/nowyrok2-ezgif.com-optimize.gif" height="50px" width="40px" loading="lazy"></p>
+                    <p><strong>31 grudnia 2025:</strong> Szczęśliwego nowego roku! <img src="../../assets/nowyrok2-ezgif.com-optimize.gif" height="50px" width="40px" loading="lazy"></p>
                     <p><strong>26 grudnia 2025:</strong> Zamiast spędzać święta z rodziną to siedzę w piwnicy i piszę z czatem schizoweb <img src="assets/icons/pointup.png" loading="lazy"><br> Od teraz wpisy są dla wszystkich ale Szekspire muszą się zarejestrować żeby dalej pisać.. Pozdrawiamy.</p>
                     <p><strong>24 grudnia 2025:</strong> Zdrowych wesołych, wspaniałych świąt oraz szczęśliwego nowego roku wszystkim życzę!</p>
                     <p><strong>23 grudnia 2025:</strong> Robię własnego icon packa. Niedługo będzie jak w Gadu Gadu <img class="emotikon" src="assets/icons/usmiech.png" loading="lazy"></p>
@@ -297,13 +253,13 @@
                     <p><strong>28 października 2025:</strong> Ulepszono UI strony i dodałem parę drobności<br> Obczaj też nową wersję Szpontklikera BETA w wersji 1.4!!!</p>
                     <p><strong>22 października 2025:</strong> Do tej pory to jest największy update. Wymieniam w punktach: <br>1.1 Jest już dostępna nowa wersja <a href="projekty/makajler/index.html">Szpontoklikera!</a> <br>1.2 Dodano ulepszenia, sklep i inne funkcje do Szpontoklikera. <br>2. Stworzono również nowe logo dla naszego Imperium Lechickiego <br>3. Dodano działający formularz który automatycznie wysyła gołębia z listem do nas. Jest w zakładce <a href="container/kontakt/index.html">Kontakt</a>. <br>4. Dodano parę nowych zdjęć do galerii. Jak chcecie to wysyłajcie na podanego maila. <br>A to jest dopiero początek. Chwała Imperium</p>
                     <p><strong>18 października 2025:</strong> Dodano nową stronę główną i posortowano wszystko na różne kategorie. Pozdrawiam wszystkich Lechitów!</p>
-                    <p><strong>16 października 2025:</strong> Obczaj nowego Szpontoklikera <a href="projekty/makajler/index.html">tutaj</a></p>
+                    <p><strong>16 października 2025:</strong> Obczaj nowego Szpontoklikera <a href="../../projekty/makajler/index.html">tutaj</a></p>
                     <p><strong>15 października 2025:</strong> Narodziny Lechistanu w internecie.</p>
                 </div>
             </aside>
 
             <script type="module" defer> //status wpisow
-                import { db } from './assets/firebase.js';
+                import { db } from './../../assets/firebase.js';
                 import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
                 let currentIndex = 0;
@@ -383,61 +339,45 @@
 
                 loadEntries();
             </script>
-        </div>
-        <div id="content">
-            <span class="nagl">Wiadomości</span><br><br>
-            <div id="news">
-                <div class="artykul">
-                    <img src="https://pliki.farmer.pl/i/10/69/17/106917_r0_940.jpg" alt="thumbnail" style="float: left; margin-right: 10px; height: 65px; width: 75px; border: 1px #999 solid; padding: 2px;" loading="lazy"><br>
-                    <a href="wiadomosci/kury01/index.html"><strong>"Czy wy robicie z tej Uni cyrk?!" Ustawa o afere "kurową" w Parlamencie Europejskim.</strong></a><br>
-                    <p style="color: #a7a7a7; font-size: 8px; font-style: italic;">15.03.2026</p>
-                </div>
             </div>
-            <br><hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
-            <span class="nagl">Giery</span><br><br>
-                <div id="projekty-container">
-                <div class="projekt">
-                    <a href="../../projekty/makajler/index.html" style="text-decoration: none; color: inherit;">
-                    <img src="../../projekty/makajler/assets/img/baza0.png" alt="Szpontokliker" loading="lazy">
-                    <strong>Szpontokliker</strong><br>
-                    <span>Kliknij</span>
-                    </a>
-                </div>
-                <div class="projekt">
-                    <a href="../../projekty/jebanie_niemca_po_kasku/index.html" style="text-decoration: none; color: inherit;">
-                    <img src="../../assets/drugaic.jpg" alt="Twierdza" loading="lazy">
-                    <strong>Twierdza - Gniezno</strong><br>
-                    <span>Kliknij</span>
-                    </a>
-                </div>
-                <div class="projekt">
-                    <a href="xddd.html" style="text-decoration: none; color: inherit;">
-                    <img src="https://i1.sndcdn.com/avatars-000076539144-rw6rj4-t500x500.jpg" alt="Giera 3" loading="lazy">
-                    <strong>Losowator Zawkrzańskich Czarów</strong><br>
-                    <span>Kliknij</span>
-                    </a>
-                </div>
-                </div><br>
-            <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
-            <span class="nagl">O nas</span>
-            <p>Jesteśmy potomkami wladcow Imperium Lechickiego i w ramach tego stworzylismy strone internetowa. Zapraszamy.</p>
+            <div id="content">
+                <b style="color:#860107; text-decoration: none;">Raport specjalny</b>
+                <h2 style="color: #BA000A; font-size: 20px; margin: 0 0 10px 0; ">"Czy wy robicie z tej Uni cyrk?!" Ustawa o afere "kurową" w Parlamencie Europejskim.</h2>
+                <p style="color: #a7a7a7; font-size: 12px; font-style: italic;">Niedziela, 15.03.2026.   Bolesław Brzuchohój</p>
+                <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
+                <p><strong>„Czy wy robicie z tej Unii cyrk?!”</strong> – tak krzyczą rolnicy i internauci po projekcie nowej unijnej regulacji. Kury na łańcuchach w każdym gospodarstwie? To ma być „bezpieczeństwo” czy absurd Brukseli?</p>
+                <figure style="float: right; width: 220px; margin: 0 0 15px 15px; text-align: center;">
+                <img src="https://pliki.farmer.pl/i/10/69/17/106917_r0_940.jpg" alt="Kura" style="height: 150px; width: 210px; border: #999 1px solid; padding: 2px; display: block; margin: 0 auto;" loading="lazy">
+                <figcaption style="color: #a7a7a7; font-size: 12px; font-style: italic; margin-top: 6px; line-height: 1.3;">
+                    Zdjęcie poglądowe. Źródło: Centrala w Brzozowie Utratach, imperiumlechitow.pl
+                </figcaption>
+                </figure>
+                <p>Niezależnie od liczby posiadanych zwierząt, projekt przepisów obejmuje zarówno duże gospodarstwa rolne, jak i małe przydomowe hodowle na terenach wiejskich, czy też podmiejskich.
+<strong>Autorzy ustawy argumentują</strong> te nowe regulacje, że mają na celu one przede wszystkim poprawę bezpieczeństwa.
+W uzasadnieniu wskazuje się, że swobodnie poruszające się kury stanowią <strong>potencjalne zagrożenie zarówno dla siebie, jak i dla otoczenia.</strong>
+Zwraca się uwagę na przypadki, w których ptactwo wchodzi na drogi publiczne, wpada pod nadjeżdżające samochody, a także powoduje kolizje, które mogą prowadzić do niebezpiecznych sytuacji drogowych.
+Istotnym elementem projektu jest również kwestia kontroli produkcji jaj.</p>
+                <p>Według twórców ustawy kury poruszające się bez nadzoru znoszą jaja w miejscach przypadkowych, w rowach, przydrożnych, w zaroślach, czy w sąsiednich posesjach.
+I także na podwórkach. Ma to prowadzić do strakt gospodarczych, problemów sanitarnych oraz trudności w nadzorze weterynaryjnym.
+Obowiązek trzymania kur na łańcuchach miałby zapewnić pełną kontrolę nad miejscem znoszenia jaj oraz ułatwić ich ewidencję.
+Na obecnym etapie nie jest jeszcze jasne, czy nowe przepisy wejdą w życie w proponowanym kształcie.</p>
+                <p>Coraz częściej pojawia się jednak pytanie, czy ustawę podobnie jak inne <strong>kontrowersyjne</strong> regulacje zawetuje prezydent, czy też zdecyduje się podpisać,
+argumentując koniecznością zapewnienia kontrowersji.
+Niebezpieczeństwa i porządków w przestrzeni publicznej.</p>
+            </div>
+            </div>
         </div>
-    </div>
 </div>
-
+</div>
 
 <div class="footer">
     Strona stworzona przez obywateli Imperium Lechitów. <br><br>
-<img class="award" src="https://theoldnet.com/images/award.gif" loading="lazy">
-<img class="award" src="https://theoldnet.com/images/goldstar.gif" loading="lazy">
-
 </div>
 
-<script src="assets/infobox.js" defer></script>
-<script src="assets/imieniny.js" defer></script>
-<script src="wkurw_dzwiek.js" defer></script>
+<script src="../../assets/infobox.js" defer></script>
+<script src="../../assets/imieniny.js" defer></script>
 <script type="module">
-    import { auth } from "./assets/firebase.js";
+    import { auth } from "./../../assets/firebase.js";
     import { onAuthStateChanged, signOut }
     from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
     import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -448,7 +388,7 @@
     onAuthStateChanged(auth, (user) => {
     if (user) {
         status.textContent = "Zalogowany jako: " + user.displayName;
-        link.innerHTML = 'Wyloguj <img src="assets/icons/logout.png" alt="Wyloguj" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
+        link.innerHTML = 'Wyloguj <img src="../../assets/icons/logout.png" alt="Wyloguj" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
         link.href = "index.html";
         link.onclick = (e) => {
         e.preventDefault();
@@ -456,7 +396,7 @@
         };
     } else {
         status.textContent = "Nie jesteś zalogowany";
-        link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="assets/icons/login.png">';
+        link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">';
         link.href = "login.html";
     }
     });
