@@ -33,24 +33,25 @@
   <div id="level">Poziom 1 – Bezrobotny Szpont</div>
     <img id="img" src="assets/img/baza0.png" alt="klikaj" />
 
-  <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+<div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
     <button id="reset">Reset</button>
     <button id="save">Zapisz</button>
     <button id="dzwieki">Wyłącz dźwięki</button>
+    <button id="rebirthBtn" style="background: gold; color: black; font-weight: bold;">ODRODZENIE</button>
 </div>
 <hr>
 
 <div>
 <strong>Nowe wieści:</strong>
 <ul id="tabela">
-    <li><strong>v1.50 beta,  witamy ponownie!</strong></li>
-    <li>Dodano opcje rozjebania kogos fidorem. Zabiera iles puntkow i daje debuffy wybranemu uzytkownikowi</li>
-    <li>Dodano Rebirthy. Tak jak w Pet Simulator na robloxie. Dostajesz multiplier do klikania</li>
+    <li><strong>v1.51 beta</strong></li>
+    <li>Ujednolicono kod. Nie ma już pierdyliard plików. Na starych Samsungach i Xperiach to złoto. Nawet jak się postarasz to pójdzie na lodówce.</li>
+    <li>Dodano Rebrthy (Odrodzenie). Tak jak w Pet Simulator na robloxie. Dostajesz multiplier do klikania</li>
     <li>Naprawiono (chyba) juz wszystkie bugi</li>
     <li>Jak cos sie spierdoli to raportuj tutaj: <a href="https://forms.gle/DAiB3XD5RyU45du28">tutaj</a></li>
 </ul>
 <ul id="tabela">
-  <li><strong>v1.41 beta</strong></li>
+  <li><strong>v1.44 beta</strong></li>
   <li>Dodano DZIALAJACY ranking online, wciaz moga byc drobne bugi np. nie zapisuje sie ranking po manualnym klikniecniu na "Zapisz" (trzeba odczekac 10 sekund)</li>
   <li>Ogarnieto lepsza stylistyke strony (juz nie wyglada jak rozjechane surowe gowno)</li>
 </ul>
@@ -101,14 +102,10 @@
   imperiumlechitow.pl <br>
   <a href="https://forms.gle/jQinbBHWugDWPmFr7" target="_blank" style="font-size:12px; color: red;">Co dodać następnym razem?</a>
 </footer>
-
-<script src="/projekty/makajler/js/state.js"></script>
-<script src="/projekty/makajler/js/audio.js"></script>
-<script src="/projekty/makajler/js/ui.js"></script>
-<script src="/projekty/makajler/js/game.js"></script>
-<script type="module" src="/projekty/makajler/js/firebase.js"></script>
-<script src="/projekty/makajler/js/main.js"></script>
-<script src="/projekty/makajler/js/other.js"></script>
-
+<script src="app.js" type="module"></script>
+<script>
+    const rebirthBtn = document.getElementById('rebirthBtn');
+      if (rebirthBtn) rebirthBtn.addEventListener('click', () => window.performRebirth());
+</script>
 </body>
 </html>

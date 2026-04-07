@@ -276,7 +276,50 @@ a:hover {
     justify-content: space-between;
     align-items: center;
 }
+#floating-shoutbox {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    transition: transform 0.3s ease-in-out;
+}
 
+/* Stan schowany */
+.shoutbox-collapsed {
+    transform: translateY(-50%) translateX(250px) !important;
+}
+
+#shoutbox-toggle {
+    background: linear-gradient(to bottom, #2b4a80, #1c3057);
+    color: white;
+    padding: 10px 5px;
+    cursor: pointer;
+    border: 2px outset #8ca0c0;
+    border-right: none;
+    border-radius: 5px 0 0 5px;
+    font-weight: bold;
+    font-size: 10px;
+    text-align: center;
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.3);
+}
+
+#shoutbox-container {
+    width: 250px;
+    background: white;
+    box-shadow: -2px 2px 10px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 600px) {
+    #shoutbox-container {
+        width: 200px;
+    }
+    .shoutbox-collapsed {
+        transform: translateY(-50%) translateX(200px) !important;
+    }
+}
 
 
 
