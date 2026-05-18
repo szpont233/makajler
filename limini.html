@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limini</title>
+    <link rel="stylesheet" href="assets/css/xp.css" media="print" onload="this.media='all'">
+    <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="shortcut icon" href="assets/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+    <link rel="manifest" href="assets/site.webmanifest" />
+    <meta name="theme-color" content="#fafafa" />
+    <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#c0392b" />
+    <style>
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #0d0d0d;
+    color: #ddd;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+}
+
+body {
+    display: flex;
+}
+
+
+#sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #111;
+    border-right: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+#sidebar-header {
+    padding: 14px 12px;
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+    border-bottom: 1px solid #222;
+    letter-spacing: 1px;
+}
+
+#sidebar-footer {
+    padding: 14px 12px;
+    font-size: 12px;
+    color: #777;
+    border-bottom: 1px solid #222;
+    letter-spacing: 1px;
+}
+
+#new-chat-btn {
+    margin: 8px;
+    padding: 10px;
+    border: 0;
+    background: #1b1b1b;
+    color: #ddd;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+}
+
+#new-chat-btn:active {
+    background: #2b2b2b;
+}
+
+#chat-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 10px;
+    border-bottom: 1px solid #1a1a1a;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.chat-item.active {
+    background: #16202b;
+    color: #fff;
+    border-left: 2px solid #509db3;
+}
+
+.chat-item-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-delete-btn {
+    background: none;
+    border: 0;
+    color: #666;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.chat-delete-btn:active {
+    color: #ff6666;
+}
+
+/* MAIN */
+
+#main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #0d0d0d;
+}
+
+/* TOPBAR */
+
+#top-bar {
+    padding: 8px;
+    border-bottom: 1px solid #222;
+    text-align: center;
+    background: #111;
+}
+
+#top-bar a {
+    text-decoration: none;
+}
+
+.logo-box {
+    display: inline-block;
+    padding: 4px;
+}
+
+.logo-box img {
+    height: 28px;
+    display: block;
+}
+
+.app-title {
+    margin: 4px 0 0;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 400;
+}
+
+.app-subtitle {
+    display: none;
+}
+
+/* API KEY */
+
+#key-section {
+    padding: 8px;
+    border-bottom: 1px solid #1a1a1a;
+    background: #101010;
+    display: flex;
+    gap: 6px;
+}
+
+#key-section input {
+    flex: 1;
+    background: #1b1b1b;
+    color: #ddd;
+    border: 1px solid #333;
+    padding: 10px;
+    font-size: 13px;
+}
+
+#key-section button {
+  background: linear-gradient(to bottom, #4f81bd, #385d8a);
+    color: white;
+    border: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+/* CHAT */
+
+#chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background: #0d0d0d;
+}
+
+.msg {
+    padding: 10px 12px;
+    margin: 8px 0;
+    max-width: 92%;
+    line-height: 1.5;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.msg.user {
+    background: #2b6cb0;
+    color: #fff;
+    margin-left: auto;
+}
+
+.msg.ai {
+    background: #161616;
+    color: #ddd;
+    border-left: 2px solid #509db3;
+}
+
+.msg.loading {
+    background: transparent;
+    color: #777;
+    font-style: italic;
+    border-left: 2px solid #444;
+}
+
+.empty-chat {
+    text-align: center;
+    color: #555;
+    margin-top: 40px;
+}
+
+
+#bottom-bar {
+    padding: 6px;
+    border-top: 1px solid #222;
+    background: #111;
+}
+
+#history-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+#history-info {
+    color: #666;
+    font-size: 11px;
+}
+
+#clear-btn {
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 6px 8px;
+    font-size: 11px;
+}
+
+#input-row {
+    display: flex;
+    gap: 6px;
+}
+
+#input-row input {
+    flex: 1;
+    background: #1b1b1b;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 10px;
+    height: 42px;
+    font-size: 14px;
+}
+
+#input-row button {
+    min-width: 72px;
+    border: 0;
+    background: linear-gradient(to bottom, #4f81bd, #385d8a);
+    color: white;
+    font-size: 14px;
+}
+
+/* SCROLLBAR */
+
+#chat-area::-webkit-scrollbar,
+#chat-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+#chat-area::-webkit-scrollbar-thumb,
+#chat-list::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+/* MOBILE */
+
+#menu-btn {
+    display: none;
+}
+
+@media (max-width: 700px) {
+
+    body {
+        position: relative;
+    }
+
+    #sidebar {
+        position: fixed;
+        transform: translateX(-220px);
+        transition: transform .2s;
+        top: 0;
+        height: 100%;
+        transition: left .2s;
+    }
+
+    #sidebar.open {
+        transform: translateX(0);
+    }
+
+    #main {
+        width: 100%;
+    }
+
+#menu-btn {
+    display: block;
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 9999;
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    background: #1b1b1b;
+    color: #fff;
+    font-size: 24px;
+    border: 1px solid #333;
+    user-select: none;
+}
+
+    .app-title {
+        font-size: 18px;
+    }
+
+    #input-row button {
+        min-width: 64px;
+    }
+}
+    </style>
+</head>
+<body>
+
+<div id="menu-btn" onclick="toggleSidebar()">≡</div>
+<div id="sidebar">
+    <div id="sidebar-header">Czaty</div>
+    <button id="new-chat-btn" onclick="newChat()">+ Nowy czat</button>
+    <div id="chat-list"></div>
+    <div id="sidebar-footer"><hr><a style="color: white;" href="olimini.html">Co to Limini</a></div>
+</div>
+
+<div id="main">
+    <div id="top-bar">
+        <a href="https://imperiumlechitow.pl">
+            <div class="logo-box"><img src="https://imperiumlechitow.pl/logo.png" alt="logo"></div>
+        </a>
+        <p class="app-title">Limini</p>
+        <p class="app-subtitle">Te AI bazuje na Gemini Flash 2.5. Stworzona dla Androida 5.1</p>
+    </div>
+
+    <div id="key-section">
+        <label for="api-key" style="white-space:nowrap;">Gemini API Key:</label>
+        <input id="api-key" type="text" placeholder="Wklej swój klucz API...">
+        <button onclick="saveKey()">Zapisz</button>
+    </div>
+
+    <div id="chat-area"></div>
+
+    <div id="bottom-bar">
+        <div id="history-meta">
+            <span id="history-info">Wiadomości: 0</span>
+            <button id="clear-btn" onclick="clearCurrentChat()"> Wyczyść czat</button>
+        </div>
+        <div id="input-row">
+            <input id="prompt" placeholder="Zapytaj coś...">
+            <button onclick="send()">Wyślij</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+const MAX_TURNS = 20;
+const CHATS_KEY = "limini_chats";
+const PREFIX    = "limini_chat_";
+
+
+
+let currentChatId = null;
+let conversationHistory = []; // format Gemini: [{role, parts:[{text}]}]
+let displayMessages = [];     // format wyświetlania: [{role:"user"|"model", text}]
+
+
+
+document.getElementById("api-key").value = localStorage.getItem("gemini_api_key") || "";
+
+function saveKey() {
+    const key = document.getElementById("api-key").value.trim();
+    localStorage.setItem("gemini_api_key", key);
+    alert("Klucz został zapisany lokalnie!");
+}
+
+function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+
+    if (sidebar.className.indexOf("open") !== -1) {
+        sidebar.className = sidebar.className.replace("open", "");
+    } else {
+        sidebar.className += " open";
+    }
+}
+
+function escapeHTML(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+function renderMarkdown(text) {
+    text = text.replace(/\r\n/g, "\n");
+    text = text.replace(/^### (.*$)/gim, '<div style="font-size:18px;font-weight:bold;margin-top:12px;margin-bottom:6px;color:#333;">$1</div>');
+    text = text.replace(/^## (.*$)/gim,  '<div style="font-size:20px;font-weight:bold;margin-top:14px;margin-bottom:6px;color:#222;">$1</div>');
+    text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    text = text.replace(/^\* (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
+    text = text.replace(/^---$/gim, '<hr style="border:0;border-top:1px dashed #ccc;margin:10px 0;">');
+    return text;
+}
+
+
+
+function getChatIndex() {
+    try { return JSON.parse(localStorage.getItem(CHATS_KEY)) || []; }
+    catch { return []; }
+}
+
+function saveChatIndex(index) {
+    localStorage.setItem(CHATS_KEY, JSON.stringify(index));
+}
+
+function loadChatData(id) {
+    try { return JSON.parse(localStorage.getItem(PREFIX + id)) || { history: [], messages: [] }; }
+    catch { return { history: [], messages: [] }; }
+}
+
+function saveChatData(id, history, messages) {
+    localStorage.setItem(PREFIX + id, JSON.stringify({ history, messages }));
+}
+
+function deleteChatData(id) {
+    localStorage.removeItem(PREFIX + id);
+    saveChatIndex(getChatIndex().filter(c => c.id !== id));
+}
+
+
+
+
+function renderSidebar() {
+    const list = document.getElementById("chat-list");
+    const index = getChatIndex();
+    list.innerHTML = "";
+
+    if (index.length === 0) {
+        list.innerHTML = '<div style="padding:10px;font-size:12px;color:#555;">Brak czatów</div>';
+        return;
+    }
+
+    [...index].reverse().forEach(chat => {
+        const item = document.createElement("div");
+        item.className = "chat-item" + (chat.id === currentChatId ? " active" : "");
+        item.innerHTML = `
+            <span class="chat-item-title" title="${escapeHTML(chat.title)}">${escapeHTML(chat.title)}</span>
+            <button class="chat-delete-btn" title="Usuń czat" onclick="deleteChat(event,'${chat.id}')">✕</button>
+        `;
+        item.addEventListener("click", () => openChat(chat.id));
+        list.appendChild(item);
+    });
+}
+
+
+
+function renderChatArea() {
+    const chatBox = document.getElementById("chat-area");
+    chatBox.innerHTML = "";
+
+    if (displayMessages.length === 0) {
+        chatBox.innerHTML = '<p style="color:#aaa;text-align:center;margin-top:40px;">Zacznij gawendzić</p>';
+        updateHistoryInfo();
+        return;
+    }
+
+    displayMessages.forEach(msg => {
+        if (msg.role === "user") {
+            chatBox.innerHTML += `<p><b>Ty:</b> ${escapeHTML(msg.text)}</p>`;
+        } else {
+            chatBox.innerHTML += `<p><b>Limini:</b></p><div>${renderMarkdown(msg.text)}</div><hr style="border:0;border-top:1px solid #ddd;margin-top:12px;">`;
+        }
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+    updateHistoryInfo();
+}
+
+function updateHistoryInfo() {
+    document.getElementById("history-info").textContent = `Wiadomości: ${conversationHistory.length}`;
+}
+
+
+
+function newChat() {
+    const id = "chat_" + Date.now();
+    const index = getChatIndex();
+    index.push({ id, title: "Nowy czat" });
+    saveChatIndex(index);
+    saveChatData(id, [], []);
+
+    currentChatId = id;
+    conversationHistory = [];
+    displayMessages = [];
+
+    renderSidebar();
+    renderChatArea();
+    document.getElementById("prompt").focus();
+}
+
+function openChat(id) {
+    currentChatId = id;
+    const data = loadChatData(id);
+    conversationHistory = data.history || [];
+    displayMessages = data.messages || [];
+
+    renderSidebar();
+    renderChatArea();
+    document.getElementById("prompt").focus();
+}
+
+function deleteChat(event, id) {
+    event.stopPropagation();
+    if (!confirm("Usunąć ten czat?")) return;
+
+    deleteChatData(id);
+
+    if (currentChatId === id) {
+        const index = getChatIndex();
+        if (index.length > 0) {
+            openChat(index[index.length - 1].id);
+        } else {
+            newChat();
+        }
+    } else {
+        renderSidebar();
+    }
+}
+
+function clearCurrentChat() {
+    if (!currentChatId || conversationHistory.length === 0) return;
+    if (!confirm("Wyczyścić wiadomości tego czatu? Model zapomni kontekst.")) return;
+
+    conversationHistory = [];
+    displayMessages = [];
+    saveChatData(currentChatId, [], []);
+
+    const index = getChatIndex();
+    const chat = index.find(c => c.id === currentChatId);
+    if (chat) { chat.title = "Nowy czat"; saveChatIndex(index); }
+
+    renderSidebar();
+    renderChatArea();
+}
+
+
+document.getElementById("prompt").addEventListener("keydown", e => {
+    if (e.key === "Enter") send();
+});
+
+async function send() {
+    const inputField = document.getElementById("prompt");
+    const input = inputField.value.trim();
+    if (!input) return;
+
+    if (!currentChatId) newChat();
+
+    const apiKey = localStorage.getItem("gemini_api_key") || document.getElementById("api-key").value.trim();
+    if (!apiKey) { alert("Błąd: Najpierw podaj i zapisz swój klucz API!"); return; }
+
+    inputField.value = "";
+
+    const chatBox = document.getElementById("chat-area");
+
+    const placeholder = chatBox.querySelector("p[style*='color:#aaa']");
+    if (placeholder) placeholder.remove();
+
+    chatBox.innerHTML += `<p><b>Ty:</b> ${escapeHTML(input)}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    conversationHistory.push({ role: "user", parts: [{ text: input }] });
+    displayMessages.push({ role: "user", text: input });
+
+    const index = getChatIndex();
+    const chat = index.find(c => c.id === currentChatId);
+    if (chat && (chat.title === "Nowy czat" || chat.title === "")) {
+        chat.title = input.length > 40 ? input.slice(0, 40) + "…" : input;
+        saveChatIndex(index);
+        renderSidebar();
+    }
+
+    // Wskaźnik ładowania
+    const loadingId = "loading-" + Date.now();
+    chatBox.innerHTML += `<p id="${loadingId}" style="color:#888;font-style:italic;">Limini myśli...</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const trimmedHistory = conversationHistory.slice(-MAX_TURNS);
+
+    try {
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: trimmedHistory })
+            }
+        );
+
+        const data = await response.json();
+        document.getElementById(loadingId)?.remove();
+
+        if (data.error) {
+            chatBox.innerHTML += `<p style="color:red;"><b>Błąd API:</b> ${escapeHTML(data.error.message)}</p>`;
+            conversationHistory.pop();
+            displayMessages.pop();
+        } else {
+            const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "(brak odpowiedzi)";
+
+            conversationHistory.push({ role: "model", parts: [{ text: replyText }] });
+            displayMessages.push({ role: "model", text: replyText });
+
+            chatBox.innerHTML += `<p><b>Limini:</b></p><div>${renderMarkdown(replyText)}</div><hr style="border:0;border-top:1px solid #ddd;margin-top:12px;">`;
+
+            saveChatData(currentChatId, conversationHistory, displayMessages);
+        }
+
+    } catch (error) {
+        document.getElementById(loadingId)?.remove();
+        chatBox.innerHTML += `<p style="color:red;"><b>Błąd:</b> ${escapeHTML(error.message || "Nie można uzyskać odpowiedzi")}</p>`;
+        conversationHistory.pop();
+        displayMessages.pop();
+    }
+
+    updateHistoryInfo();
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+(function init() {
+    const index = getChatIndex();
+    if (index.length > 0) {
+        openChat(index[index.length - 1].id);
+    } else {
+        newChat();
+    }
+})();
+</script>
+</body>
+</html>
