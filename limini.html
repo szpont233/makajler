@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Limini</title>
-    <link rel="stylesheet" href="assets/css/xp.css" media="print" onload="this.media='all'">
     <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="shortcut icon" href="assets/favicon.ico" />
@@ -34,7 +33,6 @@ body {
     display: flex;
 }
 
-
 #sidebar {
     width: 220px;
     min-width: 220px;
@@ -47,19 +45,33 @@ body {
 }
 
 #sidebar-header {
-    padding: 14px 12px;
+    padding: 14px 12px 6px 12px;
     font-size: 12px;
     color: #777;
     text-transform: uppercase;
-    border-bottom: 1px solid #222;
     letter-spacing: 1px;
+}
+
+#search-box {
+    padding: 6px 8px;
+    border-bottom: 1px solid #222;
+}
+
+#search-input {
+    width: 100%;
+    background: #1b1b1b;
+    color: #ddd;
+    border: 1px solid #333;
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 3px;
 }
 
 #sidebar-footer {
     padding: 14px 12px;
     font-size: 12px;
     color: #777;
-    border-bottom: 1px solid #222;
+    border-top: 1px solid #222;
     letter-spacing: 1px;
 }
 
@@ -72,6 +84,7 @@ body {
     font-size: 14px;
     text-align: left;
     cursor: pointer;
+    border-radius: 3px;
 }
 
 #new-chat-btn:active {
@@ -120,7 +133,6 @@ body {
     color: #ff6666;
 }
 
-
 #main {
     flex: 1;
     display: flex;
@@ -128,8 +140,6 @@ body {
     overflow: hidden;
     background: #0d0d0d;
 }
-
-
 
 #top-bar {
     padding: 8px;
@@ -163,32 +173,85 @@ body {
     display: none;
 }
 
-#key-section {
-    padding: 8px;
-    border-bottom: 1px solid #1a1a1a;
-    background: #101010;
+
+#settings-toggle-bar {
+    padding: 8px 12px;
+    background: #141414;
+    border-bottom: 1px solid #222;
+    cursor: pointer;
     display: flex;
-    gap: 6px;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
 }
 
-#key-section input {
+#settings-toggle-bar:hover {
+    background: #181818;
+}
+
+#settings-panel {
+    display: none;
+    padding: 12px;
+    background: #101010;
+    border-bottom: 1px solid #222;
+    font-size: 12px;
+}
+
+.settings-group {
+    margin-bottom: 10px;
+}
+
+.settings-group label {
+    display: block;
+    margin-bottom: 4px;
+    color: #aaa;
+}
+
+.settings-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.settings-field {
     flex: 1;
+    min-width: 140px;
+}
+
+#settings-panel input[type="password"],
+#settings-panel input[type="text"],
+#settings-panel select,
+#settings-panel textarea {
+    width: 100%;
     background: #1b1b1b;
     color: #ddd;
     border: 1px solid #333;
-    padding: 10px;
-    font-size: 13px;
+    padding: 7px;
+    font-size: 12px;
+    border-radius: 3px;
 }
 
-#key-section button {
-  background: linear-gradient(to bottom, #4f81bd, #385d8a);
+#settings-panel button {
+    background: #222;
+    color: #ccc;
+    border: 1px solid #444;
+    padding: 6px 10px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#settings-panel button:hover {
+    background: #333;
+    color: #fff;
+}
+
+#settings-panel button.primary-btn {
+    background: linear-gradient(to bottom, #4f81bd, #385d8a);
     color: white;
     border: 0;
-    padding: 10px 12px;
-    font-size: 13px;
 }
 
-/* CHAT */
 
 #chat-area {
     flex: 1;
@@ -204,6 +267,7 @@ body {
     line-height: 1.5;
     word-wrap: break-word;
     font-size: 14px;
+    border-radius: 4px;
 }
 
 .msg.user {
@@ -218,11 +282,27 @@ body {
     border-left: 2px solid #509db3;
 }
 
-.msg.loading {
-    background: transparent;
-    color: #777;
-    font-style: italic;
-    border-left: 2px solid #444;
+.msg-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    background: #222;
+    color: #ccc;
+    border: 1px solid #444;
+    padding: 3px 8px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: #333;
+    color: #fff;
 }
 
 .empty-chat {
@@ -254,8 +334,26 @@ body {
     background: transparent;
     border: 1px solid #333;
     color: #888;
-    padding: 6px 8px;
+    padding: 4px 8px;
     font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#clear-btn:hover {
+    color: #ff6666;
+    border-color: #662222;
+}
+
+#image-preview-area {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #181818;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    border: 1px solid #2a2a2a;
 }
 
 #input-row {
@@ -263,7 +361,22 @@ body {
     gap: 6px;
 }
 
-#input-row input {
+#add-img-btn {
+    min-width: 38px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#add-img-btn:hover {
+    background: #333;
+}
+
+#prompt {
     flex: 1;
     background: #1b1b1b;
     color: #fff;
@@ -271,16 +384,22 @@ body {
     padding: 10px;
     height: 42px;
     font-size: 14px;
+    border-radius: 3px;
 }
 
-#input-row button {
+#send-btn {
     min-width: 72px;
     border: 0;
     background: linear-gradient(to bottom, #4f81bd, #385d8a);
     color: white;
     font-size: 14px;
+    cursor: pointer;
+    border-radius: 3px;
 }
 
+#send-btn:active {
+    opacity: 0.9;
+}
 
 #chat-area::-webkit-scrollbar,
 #chat-list::-webkit-scrollbar {
@@ -292,7 +411,6 @@ body {
     background: #333;
 }
 
-/* MOBILE */
 
 #menu-btn {
     display: none;
@@ -310,7 +428,6 @@ body {
         transition: transform .2s;
         top: 0;
         height: 100%;
-        transition: left .2s;
     }
 
     #sidebar.open {
@@ -321,43 +438,46 @@ body {
         width: 100%;
     }
 
-#menu-btn {
-    display: block;
-    position: fixed;
-    top: 8px;
-    left: 8px;
-    z-index: 9999;
-    width: 42px;
-    height: 42px;
-    line-height: 42px;
-    text-align: center;
-    background: #1b1b1b;
-    color: #fff;
-    font-size: 24px;
-    border: 1px solid #333;
-    user-select: none;
-}
+    #menu-btn {
+        display: block;
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 9999;
+        width: 42px;
+        height: 42px;
+        line-height: 42px;
+        text-align: center;
+        background: #1b1b1b;
+        color: #fff;
+        font-size: 24px;
+        border: 1px solid #333;
+        user-select: none;
+        cursor: pointer;
+    }
 
     .app-title {
         font-size: 18px;
     }
 
-    #input-row button {
+    #send-btn {
         min-width: 64px;
     }
 }
     </style>
 </head>
 <body>
-<script>
-    alert("Ta strona została stworzona dla starszych urządzeń, nie dla nowych")
-</script>
+
 <div id="menu-btn" onclick="toggleSidebar()">≡</div>
+
 <div id="sidebar">
     <div id="sidebar-header">Czaty</div>
+    <div id="search-box">
+        <input id="search-input" placeholder="Szukaj czatu..." oninput="renderSidebar()">
+    </div>
     <button id="new-chat-btn" onclick="newChat()">+ Nowy czat</button>
     <div id="chat-list"></div>
-    <div id="sidebar-footer"><hr><a style="color: white;" href="olimini.html">Co to Limini</a></div>
+    <div id="sidebar-footer"><hr style="border:0;border-top:1px solid #222;margin-bottom:10px;"><a style="color: white;" href="olimini.html">Co to Limini</a></div>
 </div>
 
 <div id="main">
@@ -366,13 +486,61 @@ body {
             <div class="logo-box"><img src="https://imperiumlechitow.pl/logo.png" alt="logo"></div>
         </a>
         <p class="app-title">Limini</p>
-        <p class="app-subtitle">Te AI bazuje na Gemini Flash 2.5. Stworzona do działania nawet na kartoflu</p>
+        <p class="app-subtitle">Stworzona do działania nawet na kartoflu</p>
     </div>
 
-    <div id="key-section">
-        <label for="api-key" style="white-space:nowrap;">Klucz API:</label>
-        <input id="api-key" type="text" placeholder="Wklej swój klucz API...">
-        <button onclick="saveKey()">Zapisz</button>
+    <div id="settings-toggle-bar" onclick="toggleSettings()">
+        <span style="font-weight: bold; font-size: 12px; color: #ccc;">⚙️ Ustawienia & API</span>
+        <span id="settings-toggle-icon" style="font-size: 11px; color: #888;">▼ Pokaż</span>
+    </div>
+
+    <div id="settings-panel">
+        <div class="settings-group">
+            <label>Klucz API Gemini:</label>
+            <div style="display:flex; gap:6px;">
+                <input id="api-key" type="password" placeholder="Wklej swój klucz API...">
+                <button class="primary-btn" onclick="saveSettings()">Zapisz</button>
+            </div>
+        </div>
+
+        <div class="settings-row">
+            <div class="settings-field">
+                <label>Model Gemini:</label>
+                <select id="model-select" onchange="saveSettings()">
+                    <option value="gemini-3.6-flash">gemini-3.6-flash (Zalecany)</option>
+                    <option value="gemini-2.5-flash">gemini-2.5-flash</option>
+                </select>
+            </div>
+            <div class="settings-field">
+                <label>Temperatura: <span id="temp-val">0.7</span></label>
+                <input type="range" id="temp-slider" min="0.0" max="1.0" step="0.1" value="0.7" oninput="document.getElementById('temp-val').textContent = this.value; saveSettings();" style="width:100%;">
+            </div>
+        </div>
+
+        <div class="settings-group" style="margin-top:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <label style="margin:0;">Instrukcja systemowa (System Instruction):</label>
+                <select id="preset-select" onchange="applyPreset(this.value)" style="width:auto; padding:2px 6px;">
+                    <option value="">--- Presety ---</option>
+                    <option value="programmer">Programista</option>
+                    <option value="translator">Ekspert językowy</option>
+                    <option value="concise">Skrótowy asystent</option>
+                    <option value="direct">Prosto z mostu</option>
+                    <option value="submissive">Spicy</option>
+                </select>
+            </div>
+            <textarea id="system-instruction" rows="2" onchange="saveSettings()" placeholder="Opcjonalna instrukcja określająca zachowanie modelu..."></textarea>
+        </div>
+
+        <div class="settings-group" style="margin-top:10px; margin-bottom:0;">
+            <label>Zarządzanie historią rozmów:</label>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button onclick="exportChatJSON()">Eksport JSON</button>
+                <button onclick="exportChatMarkdown()">Eksport Markdown</button>
+                <button onclick="document.getElementById('import-file-input').click()">Import JSON</button>
+                <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importChatJSON(event)">
+            </div>
+        </div>
     </div>
 
     <div id="chat-area"></div>
@@ -380,41 +548,91 @@ body {
     <div id="bottom-bar">
         <div id="history-meta">
             <span id="history-info">Wiadomości: 0</span>
-            <button id="clear-btn" onclick="clearCurrentChat()"> Wyczyść czat</button>
+            <button id="clear-btn" onclick="clearCurrentChat()">Wyczyść czat</button>
         </div>
+        
+        <div id="image-preview-container" style="display:none;"></div>
+
         <div id="input-row">
+            <button id="add-img-btn" onclick="document.getElementById('image-file-input').click()" title="Dołącz obraz">+</button>
+            <input type="file" id="image-file-input" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
             <input id="prompt" placeholder="Zapytaj coś...">
-            <button onclick="send()">Wyślij</button>
+            <button id="send-btn" onclick="send()">Wyślij</button>
         </div>
     </div>
 
 </div>
-
 <script>
-
 const MAX_TURNS = 20;
 const CHATS_KEY = "limini_chats";
 const PREFIX    = "limini_chat_";
 
-
-
 let currentChatId = null;
-let conversationHistory = []; // format Gemini: [{role, parts:[{text}]}]
-let displayMessages = [];     // format wyświetlania: [{role:"user"|"model", text}]
+let conversationHistory = []; // format Gemini API: [{role, parts:[{text, inlineData}]}]
+let displayMessages = [];     // format UI: [{id, role:"user"|"model", text, image?}]
+let currentAttachedImage = null; // { mimeType, data }
+let isStreaming = false;
+
+const PRESETS = {
+    programmer: "Jesteś doświadczonym programistą. Twój kod jest czysty, bezpieczny i wydajny. Odpowiadaj zwięźle i precyzyjnie.",
+    translator: "Jesteś ekspertem językowym i tłumaczem. Pomagasz w poprawnej gramatyce, stylistyce oraz precyzyjnych tłumaczeniach.",
+    concise: "Odpowiadaj bardzo zwięźle, konkretnie i bez zbędnych wstępów.",
+    direct: "Odpowiadaj bez zbędnego owijania w bawełnę, w bezpośredni i szczery sposób. Staraj uderzać się w ego.",
+    submissive: "?"
+};
 
 
+function loadSettings() {
+    document.getElementById("api-key").value = localStorage.getItem("gemini_api_key") || "";
+    
+    const savedModel = localStorage.getItem("gemini_model") || "gemini-3.6-flash";
+    const modelSelect = document.getElementById("model-select");
+    if (modelSelect) modelSelect.value = savedModel;
+    
+    const savedTemp = localStorage.getItem("gemini_temperature") ?? "0.7";
+    const tempSlider = document.getElementById("temp-slider");
+    const tempVal = document.getElementById("temp-val");
+    if (tempSlider) tempSlider.value = savedTemp;
+    if (tempVal) tempVal.textContent = savedTemp;
+    
+    const savedSys = localStorage.getItem("gemini_system_instruction") || "";
+    const sysInstInput = document.getElementById("system-instruction");
+    if (sysInstInput) sysInstInput.value = savedSys;
+}
 
-document.getElementById("api-key").value = localStorage.getItem("gemini_api_key") || "";
-
-function saveKey() {
+function saveSettings() {
     const key = document.getElementById("api-key").value.trim();
+    const model = document.getElementById("model-select").value;
+    const temp = document.getElementById("temp-slider").value;
+    const sysInst = document.getElementById("system-instruction").value;
+    
     localStorage.setItem("gemini_api_key", key);
-    alert("Klucz został zapisany lokalnie!");
+    localStorage.setItem("gemini_model", model);
+    localStorage.setItem("gemini_temperature", temp);
+    localStorage.setItem("gemini_system_instruction", sysInst);
+}
+
+function toggleSettings() {
+    const panel = document.getElementById("settings-panel");
+    const icon = document.getElementById("settings-toggle-icon");
+    if (panel.style.display === "none" || !panel.style.display) {
+        panel.style.display = "block";
+        icon.textContent = "▲ Ukryj";
+    } else {
+        panel.style.display = "none";
+        icon.textContent = "▼ Pokaż";
+    }
+}
+
+function applyPreset(key) {
+    if (PRESETS[key]) {
+        document.getElementById("system-instruction").value = PRESETS[key];
+        saveSettings();
+    }
 }
 
 function toggleSidebar() {
     var sidebar = document.getElementById("sidebar");
-
     if (sidebar.className.indexOf("open") !== -1) {
         sidebar.className = sidebar.className.replace("open", "");
     } else {
@@ -423,24 +641,129 @@ function toggleSidebar() {
 }
 
 function escapeHTML(str) {
+    if (!str) return "";
     return str
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
+
 
 function renderMarkdown(text) {
-    text = text.replace(/\r\n/g, "\n");
-    text = text.replace(/^### (.*$)/gim, '<div style="font-size:18px;font-weight:bold;margin-top:12px;margin-bottom:6px;color:#333;">$1</div>');
-    text = text.replace(/^## (.*$)/gim,  '<div style="font-size:20px;font-weight:bold;margin-top:14px;margin-bottom:6px;color:#222;">$1</div>');
-    text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    text = text.replace(/\*(.*?)\*/g, "<em>$1</em>");
-    text = text.replace(/^\* (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
-    text = text.replace(/^---$/gim, '<hr style="border:0;border-top:1px dashed #ccc;margin:10px 0;">');
-    return text;
+    if (!text) return "";
+
+    let codeBlocks = [];
+
+    let processed = text.replace(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*?)```/g, function(match, lang, code) {
+        let id = "cb_" + Math.random().toString(36).substr(2, 9);
+        codeBlocks.push({ id, lang: lang.trim(), code: code.replace(/^\n/, '') });
+        return `___CODE_BLOCK_${id}___`;
+    });
+
+    let unclosedMatch = processed.match(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*)$/);
+    if (unclosedMatch) {
+        let lang = unclosedMatch[1].trim();
+        let code = unclosedMatch[2].replace(/^\n/, '');
+        let id = "cb_" + Math.random().toString(36).substr(2, 9);
+        codeBlocks.push({ id, lang, code });
+        processed = processed.replace(/```([a-zA-Z0-9_\-+#]*)\n?([\s\S]*)$/, `___CODE_BLOCK_${id}___`);
+    }
+
+    processed = escapeHTML(processed);
+
+    processed = processed.replace(/\r\n/g, "\n");
+    processed = processed.replace(/^### (.*$)/gim, '<div style="font-size:16px;font-weight:bold;margin-top:10px;margin-bottom:4px;color:#fff;">$1</div>');
+    processed = processed.replace(/^## (.*$)/gim, '<div style="font-size:18px;font-weight:bold;margin-top:12px;margin-bottom:6px;color:#fff;">$1</div>');
+    processed = processed.replace(/^# (.*$)/gim, '<div style="font-size:20px;font-weight:bold;margin-top:14px;margin-bottom:8px;color:#fff;">$1</div>');
+    processed = processed.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    processed = processed.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    processed = processed.replace(/`([^`]+)`/g, '<code style="background:#222;padding:2px 5px;border-radius:3px;font-family:monospace;font-size:13px;color:#f8f8f2;">$1</code>');
+    processed = processed.replace(/^\* (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
+    processed = processed.replace(/^- (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
+    processed = processed.replace(/^---$/gim, '<hr style="border:0;border-top:1px dashed #444;margin:10px 0;">');
+    processed = processed.replace(/\n/g, "<br>");
+
+    codeBlocks.forEach(item => {
+        let escapedCode = escapeHTML(item.code);
+        let langLabel = item.lang || "code";
+        
+        let rawCodeB64 = "";
+        try {
+            const bytes = new TextEncoder().encode(item.code);
+            let bin = "";
+            for (let i = 0; i < bytes.byteLength; i++) {
+                bin += String.fromCharCode(bytes[i]);
+            }
+            rawCodeB64 = btoa(bin);
+        } catch(e) {
+            rawCodeB64 = "";
+        }
+
+        let blockHtml = `
+<div class="code-container" style="position:relative;background:#181818;border:1px solid #333;border-radius:4px;margin:10px 0;overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;background:#222;padding:4px 10px;font-size:12px;color:#888;border-bottom:1px solid #333;">
+    <span>${langLabel}</span>
+    <button class="copy-code-btn" onclick="copyCodeFromB64('${rawCodeB64}', this)" style="background:#333;color:#ccc;border:0;padding:2px 8px;font-size:11px;border-radius:3px;cursor:pointer;">Kopiuj</button>
+  </div>
+  <pre style="margin:0;padding:10px;overflow-x:auto;font-family:Consolas, Monaco, monospace;font-size:13px;color:#dcdcdc;white-space:pre-wrap;word-break:break-all;"><code>${escapedCode}</code></pre>
+</div>`;
+        processed = processed.replace(`___CODE_BLOCK_${item.id}___`, blockHtml);
+    });
+
+    return processed;
 }
 
+function copyCodeFromB64(b64, btn) {
+    if (!b64) return;
+    try {
+        const bin = atob(b64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) {
+            bytes[i] = bin.charCodeAt(i);
+        }
+        const text = new TextDecoder().decode(bytes);
+        fallbackCopyTextToClipboard(text, btn);
+    } catch(e) {
+        console.error("Błąd dekodowania z Base64:", e);
+    }
+}
+
+function fallbackCopyTextToClipboard(text, btn) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+            if (btn) showCopiedTooltip(btn);
+        }).catch(() => {
+            execCommandCopy(text, btn);
+        });
+    } else {
+        execCommandCopy(text, btn);
+    }
+}
+
+function execCommandCopy(text, btn) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        if (btn) showCopiedTooltip(btn);
+    } catch (err) {
+        alert("Nie udało się skopiować tekstu.");
+    }
+    document.body.removeChild(textArea);
+}
+
+function showCopiedTooltip(btn) {
+    const orig = btn.textContent;
+    btn.textContent = "Skopiowano!";
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+}
 
 
 function getChatIndex() {
@@ -466,7 +789,25 @@ function deleteChatData(id) {
     saveChatIndex(getChatIndex().filter(c => c.id !== id));
 }
 
-
+function rebuildConversationHistory() {
+    conversationHistory = displayMessages.map(msg => {
+        if (msg.role === "user") {
+            let parts = [];
+            if (msg.image && msg.image.data) {
+                parts.push({
+                    inlineData: {
+                        mimeType: msg.image.mimeType,
+                        data: msg.image.data
+                    }
+                });
+            }
+            parts.push({ text: msg.text || "" });
+            return { role: "user", parts };
+        } else {
+            return { role: "model", parts: [{ text: msg.text || "" }] };
+        }
+    });
+}
 
 
 function renderSidebar() {
@@ -474,12 +815,24 @@ function renderSidebar() {
     const index = getChatIndex();
     list.innerHTML = "";
 
-    if (index.length === 0) {
-        list.innerHTML = '<div style="padding:10px;font-size:12px;color:#555;">Brak czatów</div>';
+    const searchQuery = (document.getElementById("search-input")?.value || "").toLowerCase().trim();
+
+    const filteredIndex = index.filter(chat => {
+        if (!searchQuery) return true;
+        if (chat.title && chat.title.toLowerCase().includes(searchQuery)) return true;
+        const data = loadChatData(chat.id);
+        if (data && data.messages) {
+            return data.messages.some(m => m.text && m.text.toLowerCase().includes(searchQuery));
+        }
+        return false;
+    });
+
+    if (filteredIndex.length === 0) {
+        list.innerHTML = `<div style="padding:10px;font-size:12px;color:#555;">${searchQuery ? "Brak wyników" : "Brak czatów"}</div>`;
         return;
     }
 
-    [...index].reverse().forEach(chat => {
+    [...filteredIndex].reverse().forEach(chat => {
         const item = document.createElement("div");
         item.className = "chat-item" + (chat.id === currentChatId ? " active" : "");
         item.innerHTML = `
@@ -491,24 +844,53 @@ function renderSidebar() {
     });
 }
 
-
-
 function renderChatArea() {
     const chatBox = document.getElementById("chat-area");
     chatBox.innerHTML = "";
 
     if (displayMessages.length === 0) {
-        chatBox.innerHTML = '<p style="color:#aaa;text-align:center;margin-top:40px;">Zacznij gawendzić</p>';
+        chatBox.innerHTML = '<p class="empty-chat" style="color:#aaa;text-align:center;margin-top:40px;">Zacznij gawendzić</p>';
         updateHistoryInfo();
         return;
     }
 
-    displayMessages.forEach(msg => {
-        if (msg.role === "user") {
-            chatBox.innerHTML += `<p><b>Ty:</b> ${escapeHTML(msg.text)}</p>`;
-        } else {
-            chatBox.innerHTML += `<p><b>Limini:</b></p><div>${renderMarkdown(msg.text)}</div><hr style="border:0;border-top:1px solid #ddd;margin-top:12px;">`;
+    displayMessages.forEach((msg, index) => {
+        const isUser = msg.role === "user";
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `msg ${isUser ? "user" : "ai"}`;
+        msgDiv.id = `msg-div-${msg.id}`;
+
+        let imgHtml = "";
+        if (msg.image && msg.image.data) {
+            imgHtml = `<img src="data:${msg.image.mimeType};base64,${msg.image.data}" style="max-width:100%; max-height:250px; border-radius:4px; margin-bottom:8px; display:block;">`;
         }
+
+        let contentHtml = isUser ? escapeHTML(msg.text) : renderMarkdown(msg.text);
+
+        let actionsHtml = `<div class="msg-actions">`;
+
+        if (isUser) {
+            actionsHtml += `<button class="action-btn" onclick="editUserMessage('${msg.id}')" title="Edytuj wiadomość">✏️ Edytuj</button>`;
+            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii">🗑️ Usuń</button>`;
+        } else {
+            actionsHtml += `<button class="action-btn" onclick="copyMessageText('${msg.id}', this)" title="Kopiuj tekst">📋 Kopiuj</button>`;
+            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii">🗑️ Usuń</button>`;
+            
+            if (index === displayMessages.length - 1 && !isStreaming) {
+                actionsHtml += `<button class="action-btn" onclick="regenerateLastResponse()" title="Wygeneruj ponownie">🔄 Ponów</button>`;
+            }
+        }
+
+        actionsHtml += `</div>`;
+
+        msgDiv.innerHTML = `
+            <div style="font-weight:bold; margin-bottom:4px; font-size:12px; opacity:0.7;">${isUser ? "Ty:" : "Limini:"}</div>
+            ${imgHtml}
+            <div id="content-${msg.id}" class="msg-content">${contentHtml}</div>
+            ${actionsHtml}
+        `;
+
+        chatBox.appendChild(msgDiv);
     });
 
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -519,9 +901,8 @@ function updateHistoryInfo() {
     document.getElementById("history-info").textContent = `Wiadomości: ${conversationHistory.length}`;
 }
 
-
-
 function newChat() {
+    if (isStreaming) return;
     const id = "chat_" + Date.now();
     const index = getChatIndex();
     index.push({ id, title: "Nowy czat" });
@@ -538,6 +919,7 @@ function newChat() {
 }
 
 function openChat(id) {
+    if (isStreaming) return;
     currentChatId = id;
     const data = loadChatData(id);
     conversationHistory = data.history || [];
@@ -550,6 +932,7 @@ function openChat(id) {
 
 function deleteChat(event, id) {
     event.stopPropagation();
+    if (isStreaming) return;
     if (!confirm("Usunąć ten czat?")) return;
 
     deleteChatData(id);
@@ -567,7 +950,7 @@ function deleteChat(event, id) {
 }
 
 function clearCurrentChat() {
-    if (!currentChatId || conversationHistory.length === 0) return;
+    if (isStreaming || !currentChatId || conversationHistory.length === 0) return;
     if (!confirm("Wyczyścić wiadomości tego czatu? Model zapomni kontekst.")) return;
 
     conversationHistory = [];
@@ -582,89 +965,400 @@ function clearCurrentChat() {
     renderChatArea();
 }
 
+function deleteMessage(msgId) {
+    if (isStreaming) return;
+    if (!confirm("Usunąć tę wiadomość z historii czatu?")) return;
+
+    displayMessages = displayMessages.filter(m => m.id !== msgId);
+    rebuildConversationHistory();
+    saveChatData(currentChatId, conversationHistory, displayMessages);
+    renderChatArea();
+}
+
+function copyMessageText(msgId, btn) {
+    const msg = displayMessages.find(m => m.id === msgId);
+    if (!msg) return;
+
+    const temp = document.createElement("div");
+    temp.innerHTML = renderMarkdown(msg.text);
+    const plainText = temp.innerText || temp.textContent || msg.text;
+
+    fallbackCopyTextToClipboard(plainText, btn);
+}
+
+function editUserMessage(msgId) {
+    if (isStreaming) return;
+    const msg = displayMessages.find(m => m.id === msgId);
+    if (!msg) return;
+
+    const newText = prompt("Edytuj swoją wiadomość:", msg.text);
+    if (newText === null) return;
+    const trimmed = newText.trim();
+    if (!trimmed && !msg.image) {
+        alert("Wiadomość nie może być pusta.");
+        return;
+    }
+
+    msg.text = trimmed;
+
+    const msgIndex = displayMessages.findIndex(m => m.id === msgId);
+    if (msgIndex !== -1) {
+        displayMessages = displayMessages.slice(0, msgIndex + 1);
+    }
+
+    rebuildConversationHistory();
+    saveChatData(currentChatId, conversationHistory, displayMessages);
+    renderChatArea();
+
+    streamAIResponse();
+}
+
+function regenerateLastResponse() {
+    if (isStreaming || displayMessages.length === 0) return;
+    const lastMsg = displayMessages[displayMessages.length - 1];
+    if (lastMsg.role !== "model") return;
+
+    displayMessages.pop();
+    rebuildConversationHistory();
+    saveChatData(currentChatId, conversationHistory, displayMessages);
+    renderChatArea();
+
+    streamAIResponse();
+}
+
+
+function handleImageSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        const base64Data = dataUrl.split(",")[1];
+        currentAttachedImage = {
+            mimeType: file.type || "image/jpeg",
+            data: base64Data
+        };
+        showImagePreview(dataUrl);
+    };
+    reader.onerror = function() {
+        alert("Błąd podczas odczytu pliku obrazu.");
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+}
+
+function showImagePreview(dataUrl) {
+    const container = document.getElementById("image-preview-container");
+    container.style.display = "block";
+    container.innerHTML = `
+        <div id="image-preview-area">
+            <div style="position:relative; display:inline-block;">
+                <img src="${dataUrl}" style="height:48px; border-radius:4px; border:1px solid #444; display:block;">
+                <button onclick="removeAttachedImage()" style="position:absolute; top:-6px; right:-6px; background:#e53e3e; color:white; border:0; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; line-height:18px; text-align:center; padding:0;">✕</button>
+            </div>
+            <span style="font-size:11px; color:#aaa;">Obraz dołączony</span>
+        </div>
+    `;
+}
+
+function removeAttachedImage() {
+    currentAttachedImage = null;
+    const container = document.getElementById("image-preview-container");
+    container.style.display = "none";
+    container.innerHTML = "";
+}
+
+
+function exportChatJSON() {
+    const index = getChatIndex();
+    const allData = {
+        chatsIndex: index,
+        chatsData: {}
+    };
+    index.forEach(c => {
+        allData.chatsData[c.id] = loadChatData(c.id);
+    });
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `limini_backup_${Date.now()}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+function exportChatMarkdown() {
+    if (!currentChatId || displayMessages.length === 0) {
+        alert("Brak wiadomości do wyeksportowania.");
+        return;
+    }
+
+    const index = getChatIndex();
+    const chat = index.find(c => c.id === currentChatId);
+    const title = chat ? chat.title : "Czat Limini";
+
+    let md = `# ${title}\n\n`;
+    displayMessages.forEach(msg => {
+        const sender = msg.role === "user" ? "**Użytkownik**" : "**Limini**";
+        md += `### ${sender}\n\n${msg.text}\n\n---\n\n`;
+    });
+
+    const dataStr = "data:text/markdown;charset=utf-8," + encodeURIComponent(md);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `${title.replace(/[^a-z0-9]/gi, '_')}.md`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+function importChatJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (!imported.chatsIndex || !imported.chatsData) {
+                alert("Nieprawidłowy format pliku JSON.");
+                return;
+            }
+
+            const existingIndex = getChatIndex();
+            let action = "merge";
+
+            if (existingIndex.length > 0) {
+                const confirmChoice = confirm("Połączyć zaimportowane czaty z istniejącymi?\n\n[OK] = Połącz czaty\n[Anuluj] = Zastąp wszystkie istniejące czaty");
+                if (!confirmChoice) {
+                    const doubleCheck = confirm("OSTRZEŻENIE: Wybrałeś zastąpienie wszystkich czatów. Czy na pewno usunąć obecne czaty?");
+                    if (!doubleCheck) return;
+                    action = "replace";
+                }
+            }
+
+            if (action === "replace") {
+                existingIndex.forEach(c => localStorage.removeItem(PREFIX + c.id));
+                saveChatIndex(imported.chatsIndex);
+                Object.keys(imported.chatsData).forEach(id => {
+                    localStorage.setItem(PREFIX + id, JSON.stringify(imported.chatsData[id]));
+                });
+            } else {
+                let mergedIndex = [...existingIndex];
+                imported.chatsIndex.forEach(impChat => {
+                    let targetId = impChat.id;
+                    if (mergedIndex.some(c => c.id === targetId)) {
+                        targetId = "chat_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5);
+                    }
+                    mergedIndex.push({ id: targetId, title: impChat.title });
+                    localStorage.setItem(PREFIX + targetId, JSON.stringify(imported.chatsData[impChat.id]));
+                });
+                saveChatIndex(mergedIndex);
+            }
+
+            renderSidebar();
+            const newIndex = getChatIndex();
+            if (newIndex.length > 0) {
+                openChat(newIndex[newIndex.length - 1].id);
+            }
+            alert("Pomyślnie zaimportowano czaty!");
+        } catch(err) {
+            alert("Błąd podczas importu pliku JSON: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+}
+
 
 document.getElementById("prompt").addEventListener("keydown", e => {
     if (e.key === "Enter") send();
 });
 
 async function send() {
+    if (isStreaming) return;
+
     const inputField = document.getElementById("prompt");
     const input = inputField.value.trim();
-    if (!input) return;
+
+    if (!input && !currentAttachedImage) return;
 
     if (!currentChatId) newChat();
 
     const apiKey = localStorage.getItem("gemini_api_key") || document.getElementById("api-key").value.trim();
-    if (!apiKey) { alert("Błąd: Najpierw podaj i zapisz swój klucz API!"); return; }
+    if (!apiKey) {
+        alert("Błąd: Najpierw podaj i zapisz swój klucz API w ustawieniach!");
+        toggleSettings();
+        return;
+    }
 
     inputField.value = "";
 
-    const chatBox = document.getElementById("chat-area");
+    const userMsg = {
+        id: "msg_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5),
+        role: "user",
+        text: input,
+        image: currentAttachedImage ? { ...currentAttachedImage } : null
+    };
 
-    const placeholder = chatBox.querySelector("p[style*='color:#aaa']");
-    if (placeholder) placeholder.remove();
+    removeAttachedImage();
 
-    chatBox.innerHTML += `<p><b>Ty:</b> ${escapeHTML(input)}</p>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    conversationHistory.push({ role: "user", parts: [{ text: input }] });
-    displayMessages.push({ role: "user", text: input });
+    displayMessages.push(userMsg);
 
     const index = getChatIndex();
     const chat = index.find(c => c.id === currentChatId);
     if (chat && (chat.title === "Nowy czat" || chat.title === "")) {
-        chat.title = input.length > 40 ? input.slice(0, 40) + "…" : input;
+        const titleText = input || "Obraz";
+        chat.title = titleText.length > 40 ? titleText.slice(0, 40) + "…" : titleText;
         saveChatIndex(index);
         renderSidebar();
     }
 
-    // Wskaźnik ładowania
-    const loadingId = "loading-" + Date.now();
-    chatBox.innerHTML += `<p id="${loadingId}" style="color:#888;font-style:italic;">Limini myśli...</p>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
+    rebuildConversationHistory();
+    saveChatData(currentChatId, conversationHistory, displayMessages);
+    renderChatArea();
+
+    await streamAIResponse();
+}
+
+async function streamAIResponse() {
+    const apiKey = localStorage.getItem("gemini_api_key") || document.getElementById("api-key").value.trim();
+    if (!apiKey) {
+        alert("Błąd: Brak klucza API!");
+        return;
+    }
+
+    const model = localStorage.getItem("gemini_model") || "gemini-3.6-flash";
+    const tempVal = parseFloat(localStorage.getItem("gemini_temperature") ?? "0.7");
+    const sysInstructionText = localStorage.getItem("gemini_system_instruction") || "";
+
+    const aiMsgId = "msg_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5);
+    const aiMsg = {
+        id: aiMsgId,
+        role: "model",
+        text: ""
+    };
+
+    displayMessages.push(aiMsg);
+    renderChatArea();
+
+    isStreaming = true;
 
     const trimmedHistory = conversationHistory.slice(-MAX_TURNS);
 
+    const requestBody = {
+        contents: trimmedHistory,
+        generationConfig: {
+            temperature: isNaN(tempVal) ? 0.7 : tempVal
+        }
+    };
+
+    if (sysInstructionText.trim()) {
+        requestBody.systemInstruction = {
+            parts: [{ text: sysInstructionText.trim() }]
+        };
+    }
+
+    const contentEl = document.getElementById(`content-${aiMsgId}`);
+    if (contentEl) contentEl.innerHTML = '<span style="color:#888;font-style:italic;">Limini myśli...</span>';
+
     try {
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ contents: trimmedHistory })
+                body: JSON.stringify(requestBody)
             }
         );
 
-        const data = await response.json();
-        document.getElementById(loadingId)?.remove();
+        if (!response.ok) {
+            let errText = await response.text();
+            try {
+                let errJson = JSON.parse(errText);
+                throw new Error(errJson.error?.message || `Błąd HTTP ${response.status}`);
+            } catch(e) {
+                throw new Error(`Błąd API (${response.status}): ${errText}`);
+            }
+        }
 
-        if (data.error) {
-            chatBox.innerHTML += `<p style="color:red;"><b>Błąd API:</b> ${escapeHTML(data.error.message)}</p>`;
-            conversationHistory.pop();
-            displayMessages.pop();
-        } else {
-            const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "(brak odpowiedzi)";
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+        let fullText = "";
 
-            conversationHistory.push({ role: "model", parts: [{ text: replyText }] });
-            displayMessages.push({ role: "model", text: replyText });
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-            chatBox.innerHTML += `<p><b>Limini:</b></p><div>${renderMarkdown(replyText)}</div><hr style="border:0;border-top:1px solid #ddd;margin-top:12px;">`;
+            buffer += decoder.decode(value, { stream: true });
+            let lines = buffer.split("\n");
+            buffer = lines.pop(); // Niedokończona linia w buforze
 
-            saveChatData(currentChatId, conversationHistory, displayMessages);
+            for (let line of lines) {
+                line = line.trim();
+                if (line.startsWith("data:")) {
+                    let jsonStr = line.substring(5).trim();
+                    if (jsonStr === "[DONE]") continue;
+                    try {
+                        let parsed = JSON.parse(jsonStr);
+                        let textChunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                        if (textChunk) {
+                            fullText += textChunk;
+                            aiMsg.text = fullText;
+                            const targetEl = document.getElementById(`content-${aiMsgId}`);
+                            if (targetEl) {
+                                targetEl.innerHTML = renderMarkdown(fullText);
+                            }
+                            const chatBox = document.getElementById("chat-area");
+                            chatBox.scrollTop = chatBox.scrollHeight;
+                        }
+                    } catch (e) {
+                        console.error("Błąd parsowania SSE chunk:", e);
+                    }
+                }
+            }
+        }
+
+        // Przetworzenie pozostałego bufora
+        if (buffer.trim().startsWith("data:")) {
+            let jsonStr = buffer.trim().substring(5).trim();
+            if (jsonStr !== "[DONE]") {
+                try {
+                    let parsed = JSON.parse(jsonStr);
+                    let textChunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (textChunk) {
+                        fullText += textChunk;
+                        aiMsg.text = fullText;
+                    }
+                } catch (e) {}
+            }
+        }
+
+        if (!fullText) {
+            aiMsg.text = "(Brak odpowiedzi)";
         }
 
     } catch (error) {
-        document.getElementById(loadingId)?.remove();
-        chatBox.innerHTML += `<p style="color:red;"><b>Błąd:</b> ${escapeHTML(error.message || "Nie można uzyskać odpowiedzi")}</p>`;
-        conversationHistory.pop();
-        displayMessages.pop();
+        console.error("Błąd podczas streamingu:", error);
+        if (!aiMsg.text) {
+            aiMsg.text = ` **Błąd:** ${error.message}`;
+        } else {
+            aiMsg.text += `\n\n **Połączenie przerwane:** ${error.message}`;
+        }
+    } finally {
+        isStreaming = false;
+        rebuildConversationHistory();
+        saveChatData(currentChatId, conversationHistory, displayMessages);
+        renderChatArea();
     }
-
-    updateHistoryInfo();
-    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+
 (function init() {
+    loadSettings();
     const index = getChatIndex();
     if (index.length > 0) {
         openChat(index[index.length - 1].id);
