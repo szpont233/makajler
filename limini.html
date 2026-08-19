@@ -553,8 +553,8 @@ body {
         <div id="image-preview-container" style="display:none;"></div>
 
         <div id="input-row">
-            <button id="add-img-btn" onclick="document.getElementById('image-file-input').click()" title="Dołącz obraz">+</button>
-            <input type="file" id="image-file-input" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
+            <button id="add-img-btn" onclick="document.getElementById('image-file-input').click()" title="Dołącz plik">+</button>
+            <input type="file" id="image-file-input" accept="*" style="display:none" onchange="handleImageSelect(event)">
             <input id="prompt" placeholder="Zapytaj coś...">
             <button id="send-btn" onclick="send()">Wyślij</button>
         </div>
@@ -671,18 +671,87 @@ function renderMarkdown(text) {
     }
 
     processed = escapeHTML(processed);
-
     processed = processed.replace(/\r\n/g, "\n");
+
+    // Helper do bezpiecznego dzielenia wiersza tabeli na komórki
+    function splitTableRow(rowStr) {
+        let trimmed = rowStr.trim();
+        if (trimmed.startsWith("|")) trimmed = trimmed.slice(1);
+        if (trimmed.endsWith("|")) trimmed = trimmed.slice(0, -1);
+        return trimmed.split("|").map(s => s.trim());
+    }
+
+
+    processed = processed.replace(/(?:^|\n)((?:[^\n]*\|[^\n]*\n?)+)/g, function(match, tableGroup) {
+        let lines = tableGroup.trim().split("\n");
+        if (lines.length < 2) return match;
+
+        let delimLine = lines[1].trim();
+
+        if (!/^[|:\-\s]+$/.test(delimLine) || !/[-:]/.test(delimLine)) return match;
+
+        let delimCells = splitTableRow(delimLine);
+        if (!delimCells.every(c => /^:?-+:?$/.test(c))) return match;
+
+        let alignments = delimCells.map(c => {
+            if (c.startsWith(":") && c.endsWith(":")) return "center";
+            if (c.endsWith(":")) return "right";
+            if (c.startsWith(":")) return "left";
+            return "left";
+        });
+
+        let html = '<table style="border-collapse:collapse;margin:10px 0;width:100%;border:1px solid #444;font-size:13px;">';
+
+        let headers = splitTableRow(lines[0]);
+        html += '<thead style="background:#222;color:#fff;"><tr>';
+        headers.forEach((h, idx) => {
+            let align = alignments[idx] || "left";
+            html += `<th style="border:1px solid #444;padding:6px 10px;text-align:${align};">${h}</th>`;
+        });
+        html += '</tr></thead><tbody>';
+
+        for (let i = 2; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            let cells = splitTableRow(lines[i]);
+            html += '<tr>';
+            for (let idx = 0; idx < headers.length; idx++) {
+                let cellContent = cells[idx] !== undefined ? cells[idx] : "";
+                let align = alignments[idx] || "left";
+                html += `<td style="border:1px solid #444;padding:6px 10px;color:#ddd;text-align:${align};">${cellContent}</td>`;
+            }
+            html += '</tr>';
+        }
+        html += '</tbody></table>';
+
+        let prefix = match.startsWith("\n") ? "\n" : "";
+        return prefix + html;
+    });
+
+    processed = processed.replace(/^###### (.*$)/gim, '<div style="font-size:11px;font-weight:bold;margin-top:5px;margin-bottom:2px;color:#fff;">$1</div>');
+    processed = processed.replace(/^##### (.*$)/gim, '<div style="font-size:12px;font-weight:bold;margin-top:6px;margin-bottom:2px;color:#fff;">$1</div>');
+    processed = processed.replace(/^#### (.*$)/gim, '<div style="font-size:14px;font-weight:bold;margin-top:8px;margin-bottom:3px;color:#fff;">$1</div>');
     processed = processed.replace(/^### (.*$)/gim, '<div style="font-size:16px;font-weight:bold;margin-top:10px;margin-bottom:4px;color:#fff;">$1</div>');
     processed = processed.replace(/^## (.*$)/gim, '<div style="font-size:18px;font-weight:bold;margin-top:12px;margin-bottom:6px;color:#fff;">$1</div>');
     processed = processed.replace(/^# (.*$)/gim, '<div style="font-size:20px;font-weight:bold;margin-top:14px;margin-bottom:8px;color:#fff;">$1</div>');
+
+    processed = processed.replace(/^(&gt;|>)\s?(.*$)/gim, '<blockquote style="border-left:3px solid #555;margin:8px 0;padding-left:10px;color:#ccc;font-style:italic;">$2</blockquote>');
+
+    processed = processed.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width:100%;height:auto;border-radius:4px;margin:8px 0;display:block;">');
+    processed = processed.replace(/^!\s*\[?([^\]\n()]+)\]?$/gim, '<div style="background:#1e1e1e;border:1px dashed #444;padding:8px 12px;border-radius:4px;color:#aaa;font-size:12px;margin:8px 0;display:inline-block;">🖼️ <strong>Obraz:</strong> $1</div>');
+
     processed = processed.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
     processed = processed.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    processed = processed.replace(/~~(.*?)~~/g, '<del style="color:#aa5555;">$1</del>');
+    processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#4da6ff;text-decoration:underline;">$1</a>');
     processed = processed.replace(/`([^`]+)`/g, '<code style="background:#222;padding:2px 5px;border-radius:3px;font-family:monospace;font-size:13px;color:#f8f8f2;">$1</code>');
+
     processed = processed.replace(/^\* (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
     processed = processed.replace(/^- (.*$)/gim, '<div style="margin-left:15px;padding-left:5px;">• $1</div>');
     processed = processed.replace(/^---$/gim, '<hr style="border:0;border-top:1px dashed #444;margin:10px 0;">');
+
     processed = processed.replace(/\n/g, "<br>");
+    processed = processed.replace(/<br>\s*<(div|blockquote|table|hr|img)/gi, '<$1');
+    processed = processed.replace(/<\/(div|blockquote|table)>\s*<br>/gi, '</$1>');
 
     codeBlocks.forEach(item => {
         let escapedCode = escapeHTML(item.code);
@@ -869,14 +938,14 @@ function renderChatArea() {
         let actionsHtml = `<div class="msg-actions">`;
 
         if (isUser) {
-            actionsHtml += `<button class="action-btn" onclick="editUserMessage('${msg.id}')" title="Edytuj wiadomość">✏️ Edytuj</button>`;
-            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii">🗑️ Usuń</button>`;
+            actionsHtml += `<button class="action-btn" onclick="editUserMessage('${msg.id}')" title="Edytuj wiadomość"> Edytuj</button>`;
+            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii"> Usuń</button>`;
         } else {
-            actionsHtml += `<button class="action-btn" onclick="copyMessageText('${msg.id}', this)" title="Kopiuj tekst">📋 Kopiuj</button>`;
-            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii">🗑️ Usuń</button>`;
+            actionsHtml += `<button class="action-btn" onclick="copyMessageText('${msg.id}', this)" title="Kopiuj tekst"> Kopiuj</button>`;
+            actionsHtml += `<button class="action-btn" onclick="deleteMessage('${msg.id}')" title="Usuń z historii"> Usuń</button>`;
             
             if (index === displayMessages.length - 1 && !isStreaming) {
-                actionsHtml += `<button class="action-btn" onclick="regenerateLastResponse()" title="Wygeneruj ponownie">🔄 Ponów</button>`;
+                actionsHtml += `<button class="action-btn" onclick="regenerateLastResponse()" title="Wygeneruj ponownie"> Ponów</button>`;
             }
         }
 
@@ -950,7 +1019,7 @@ function deleteChat(event, id) {
 
 function clearCurrentChat() {
     if (isStreaming || !currentChatId || conversationHistory.length === 0) return;
-    if (!confirm("Wyczyścić wiadomości tego czatu? Model zapomni kontekst.")) return;
+    if (!confirm("Wyczyścić wiadomości tego czatu? Model zapomni kontekst")) return;
 
     conversationHistory = [];
     displayMessages = [];
@@ -1035,13 +1104,13 @@ function handleImageSelect(event) {
         const dataUrl = e.target.result;
         const base64Data = dataUrl.split(",")[1];
         currentAttachedImage = {
-            mimeType: file.type || "image/jpeg",
+            mimeType: file.type || "*",
             data: base64Data
         };
         showImagePreview(dataUrl);
     };
     reader.onerror = function() {
-        alert("Błąd podczas odczytu pliku obrazu.");
+        alert("To się nie powinno stać..");
     };
     reader.readAsDataURL(file);
     event.target.value = "";
@@ -1056,7 +1125,7 @@ function showImagePreview(dataUrl) {
                 <img src="${dataUrl}" style="height:48px; border-radius:4px; border:1px solid #444; display:block;">
                 <button onclick="removeAttachedImage()" style="position:absolute; top:-6px; right:-6px; background:#e53e3e; color:white; border:0; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; line-height:18px; text-align:center; padding:0;">✕</button>
             </div>
-            <span style="font-size:11px; color:#aaa;">Obraz dołączony</span>
+            <span style="font-size:11px; color:#aaa;">Dołączony plik</span>
         </div>
     `;
 }
