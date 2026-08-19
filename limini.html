@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Limini</title>
+    <title>AI po API</title>
     <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="shortcut icon" href="assets/favicon.ico" />
@@ -471,13 +471,14 @@ body {
 <div id="menu-btn" onclick="toggleSidebar()">≡</div>
 
 <div id="sidebar">
+    <span class="app-title" id="top-bar"><span style="color: rgb(49, 181, 248);">AI</span> po <span style="color: rgb(255, 0, 0);">API</span></span>
     <div id="sidebar-header">Czaty</div>
     <div id="search-box">
         <input id="search-input" placeholder="Szukaj czatu..." oninput="renderSidebar()">
     </div>
     <button id="new-chat-btn" onclick="newChat()">+ Nowy czat</button>
     <div id="chat-list"></div>
-    <div id="sidebar-footer"><hr style="border:0;border-top:1px solid #222;margin-bottom:10px;"><a style="color: white;" href="olimini.html">Co to Limini</a></div>
+    <div id="sidebar-footer">Lokalizacja: <input type="text" placeholder="A chuj wie?"><hr style="border:0;border-top:1px solid #222;margin-bottom:10px;"><a style="color: white;" href="about.html">About</Swara></div>
 </div>
 
 <div id="main">
@@ -485,18 +486,16 @@ body {
         <a href="https://imperiumlechitow.pl">
             <div class="logo-box"><img src="https://imperiumlechitow.pl/logo.png" alt="logo"></div>
         </a>
-        <p class="app-title">Limini</p>
-        <p class="app-subtitle">Stworzona do działania nawet na kartoflu</p>
     </div>
 
     <div id="settings-toggle-bar" onclick="toggleSettings()">
-        <span style="font-weight: bold; font-size: 12px; color: #ccc;">⚙️ Ustawienia & API</span>
-        <span id="settings-toggle-icon" style="font-size: 11px; color: #888;">▼ Pokaż</span>
+        <span style="font-weight: bold; font-size: 12px; color: #ccc;"> Ustawienia i API</span>
+        <span id="settings-toggle-icon" style="font-size: 11px; color: #888;">\/ Pokaż</span>
     </div>
 
     <div id="settings-panel">
         <div class="settings-group">
-            <label>Klucz API Gemini:</label>
+            <label>Klucz API:</label>
             <div style="display:flex; gap:6px;">
                 <input id="api-key" type="password" placeholder="Wklej swój klucz API...">
                 <button class="primary-btn" onclick="saveSettings()">Zapisz</button>
