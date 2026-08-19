@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /container/
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /limini.html
+
+Sitemap: https://imperiumlechitow.pl/sitemap.xml
