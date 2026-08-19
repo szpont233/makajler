@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI po API</title>
+    <title>Alphanium AI</title>
     <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="shortcut icon" href="assets/favicon.ico" />
@@ -376,6 +376,61 @@ body {
     background: #333;
 }
 
+#attach-wrapper {
+    position: relative;
+    display: flex;
+}
+
+#attach-menu {
+    display: none;
+    position: absolute;
+    bottom: 46px;
+    left: 0;
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 50;
+    min-width: 150px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.attach-menu-item {
+    display: block;
+    width: 100%;
+    background: #1b1b1b;
+    color: #ddd;
+    border: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.attach-menu-item:hover {
+    background: #2b2b2b;
+}
+
+#web-search-toggle {
+    min-width: 38px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#web-search-toggle:hover {
+    background: #333;
+}
+
+#web-search-toggle.active {
+    background: #2b6cb0;
+    border-color: #2b6cb0;
+    color: #fff;
+}
+
 #prompt {
     flex: 1;
     background: #1b1b1b;
@@ -471,14 +526,16 @@ body {
 <div id="menu-btn" onclick="toggleSidebar()">≡</div>
 
 <div id="sidebar">
-    <span class="app-title" id="top-bar"><span style="color: rgb(49, 181, 248);">AI</span> po <span style="color: rgb(255, 0, 0);">API</span></span>
+    <span class="app-title" id="top-bar">Alphanium AI</span>
     <div id="sidebar-header">Czaty</div>
     <div id="search-box">
         <input id="search-input" placeholder="Szukaj czatu..." oninput="renderSidebar()">
     </div>
     <button id="new-chat-btn" onclick="newChat()">+ Nowy czat</button>
     <div id="chat-list"></div>
-    <div id="sidebar-footer">Lokalizacja: <input type="text" placeholder="A chuj wie?"><hr style="border:0;border-top:1px solid #222;margin-bottom:10px;"><a style="color: white;" href="about.html">About</Swara></div>
+    <div id="sidebar-footer">Lokalizacja: <input type="text" placeholder="Wpisz..."><hr style="border:0;border-top:1px solid #222;margin-bottom:10px;">
+        <a style="color: white;" href="about.html">O Alphanium</a>
+    </div>
 </div>
 
 <div id="main">
@@ -490,7 +547,7 @@ body {
 
     <div id="settings-toggle-bar" onclick="toggleSettings()">
         <span style="font-weight: bold; font-size: 12px; color: #ccc;"> Ustawienia i API</span>
-        <span id="settings-toggle-icon" style="font-size: 11px; color: #888;">\/ Pokaż</span>
+        <span id="settings-toggle-icon" style="font-size: 11px; color: #888;">▼ Pokaż</span>
     </div>
 
     <div id="settings-panel">
@@ -553,8 +610,15 @@ body {
         <div id="image-preview-container" style="display:none;"></div>
 
         <div id="input-row">
-            <button id="add-img-btn" onclick="document.getElementById('image-file-input').click()" title="Dołącz plik">+</button>
-            <input type="file" id="image-file-input" accept="*" style="display:none" onchange="handleImageSelect(event)">
+            <div id="attach-wrapper">
+                <button id="add-img-btn" onclick="toggleAttachMenu()" title="Dołącz plik">+</button>
+                <div id="attach-menu">
+                    <button type="button" class="attach-menu-item" onclick="selectAttachType('image')">🖼️ Obraz</button>
+                    <button type="button" class="attach-menu-item" onclick="selectAttachType('file')">📎 Plik</button>
+                </div>
+            </div>
+            <input type="file" id="image-file-input" accept="image/*" style="display:none" onchange="handleImageSelect(event)">
+            <button id="web-search-toggle" onclick="toggleWebSearch()" title="Wyszukiwanie w internecie">🌐</button>
             <input id="prompt" placeholder="Zapytaj coś...">
             <button id="send-btn" onclick="send()">Wyślij</button>
         </div>
@@ -569,8 +633,10 @@ const PREFIX    = "limini_chat_";
 let currentChatId = null;
 let conversationHistory = []; // format Gemini API: [{role, parts:[{text, inlineData}]}]
 let displayMessages = [];     // format UI: [{id, role:"user"|"model", text, image?}]
-let currentAttachedImage = null; // { mimeType, data }
+let currentAttachedImage = null; // { mimeType, data, name, isImage }
 let isStreaming = false;
+let webSearchEnabled = false;
+let pendingAttachType = "image"; // "image" | "file"
 
 const PRESETS = {
     programmer: "Jesteś doświadczonym programistą. Twój kod jest czysty, bezpieczny i wydajny. Odpowiadaj zwięźle i precyzyjnie.",
@@ -597,6 +663,20 @@ function loadSettings() {
     const savedSys = localStorage.getItem("gemini_system_instruction") || "";
     const sysInstInput = document.getElementById("system-instruction");
     if (sysInstInput) sysInstInput.value = savedSys;
+
+    webSearchEnabled = localStorage.getItem("gemini_web_search") === "1";
+    updateWebSearchButton();
+}
+
+function toggleWebSearch() {
+    webSearchEnabled = !webSearchEnabled;
+    localStorage.setItem("gemini_web_search", webSearchEnabled ? "1" : "0");
+    updateWebSearchButton();
+}
+
+function updateWebSearchButton() {
+    const btn = document.getElementById("web-search-toggle");
+    if (btn) btn.className = webSearchEnabled ? "active" : "";
 }
 
 function saveSettings() {
@@ -930,7 +1010,12 @@ function renderChatArea() {
 
         let imgHtml = "";
         if (msg.image && msg.image.data) {
-            imgHtml = `<img src="data:${msg.image.mimeType};base64,${msg.image.data}" style="max-width:100%; max-height:250px; border-radius:4px; margin-bottom:8px; display:block;">`;
+            const isImgAttachment = msg.image.isImage !== false;
+            if (isImgAttachment) {
+                imgHtml = `<img src="data:${msg.image.mimeType};base64,${msg.image.data}" style="max-width:100%; max-height:250px; border-radius:4px; margin-bottom:8px; display:block;">`;
+            } else {
+                imgHtml = `<div style="display:flex; align-items:center; gap:6px; background:#1e1e1e; border:1px solid #333; padding:6px 10px; border-radius:4px; margin-bottom:8px; font-size:12px; color:#ccc;">📄 <span>${escapeHTML(msg.image.name || "Załączony plik")}</span></div>`;
+            }
         }
 
         let contentHtml = isUser ? escapeHTML(msg.text) : renderMarkdown(msg.text);
@@ -952,7 +1037,7 @@ function renderChatArea() {
         actionsHtml += `</div>`;
 
         msgDiv.innerHTML = `
-            <div style="font-weight:bold; margin-bottom:4px; font-size:12px; opacity:0.7;">${isUser ? "Ty:" : "Limini:"}</div>
+            <div style="font-weight:bold; margin-bottom:4px; font-size:12px; opacity:0.7;">${isUser ? "Ty:" : "Alpha:"}</div>
             ${imgHtml}
             <div id="content-${msg.id}" class="msg-content">${contentHtml}</div>
             ${actionsHtml}
@@ -1095,6 +1180,27 @@ function regenerateLastResponse() {
 }
 
 
+function toggleAttachMenu() {
+    const menu = document.getElementById("attach-menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function selectAttachType(type) {
+    pendingAttachType = type;
+    document.getElementById("attach-menu").style.display = "none";
+    const input = document.getElementById("image-file-input");
+    input.accept = type === "image" ? "image/*" : "*";
+    input.click();
+}
+
+document.addEventListener("click", function(e) {
+    const wrapper = document.getElementById("attach-wrapper");
+    const menu = document.getElementById("attach-menu");
+    if (wrapper && menu && menu.style.display === "block" && !wrapper.contains(e.target)) {
+        menu.style.display = "none";
+    }
+});
+
 function handleImageSelect(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1103,11 +1209,14 @@ function handleImageSelect(event) {
     reader.onload = function(e) {
         const dataUrl = e.target.result;
         const base64Data = dataUrl.split(",")[1];
+        const isImage = pendingAttachType === "image" && (file.type || "").startsWith("image/");
         currentAttachedImage = {
-            mimeType: file.type || "*",
-            data: base64Data
+            mimeType: file.type || "application/octet-stream",
+            data: base64Data,
+            name: file.name || "",
+            isImage: isImage
         };
-        showImagePreview(dataUrl);
+        showImagePreview(isImage ? dataUrl : null);
     };
     reader.onerror = function() {
         alert("To się nie powinno stać..");
@@ -1119,13 +1228,20 @@ function handleImageSelect(event) {
 function showImagePreview(dataUrl) {
     const container = document.getElementById("image-preview-container");
     container.style.display = "block";
+
+    const info = currentAttachedImage;
+    const thumbHtml = dataUrl
+        ? `<img src="${dataUrl}" style="height:48px; border-radius:4px; border:1px solid #444; display:block;">`
+        : `<div style="height:48px; min-width:48px; display:flex; align-items:center; justify-content:center; background:#222; border:1px solid #444; border-radius:4px; font-size:20px;">📄</div>`;
+    const label = info && info.isImage ? "Dołączony obraz" : ("Dołączony plik" + (info && info.name ? ": " + escapeHTML(info.name) : ""));
+
     container.innerHTML = `
         <div id="image-preview-area">
             <div style="position:relative; display:inline-block;">
-                <img src="${dataUrl}" style="height:48px; border-radius:4px; border:1px solid #444; display:block;">
+                ${thumbHtml}
                 <button onclick="removeAttachedImage()" style="position:absolute; top:-6px; right:-6px; background:#e53e3e; color:white; border:0; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; line-height:18px; text-align:center; padding:0;">✕</button>
             </div>
-            <span style="font-size:11px; color:#aaa;">Dołączony plik</span>
+            <span style="font-size:11px; color:#aaa;">${label}</span>
         </div>
     `;
 }
@@ -1165,11 +1281,11 @@ function exportChatMarkdown() {
 
     const index = getChatIndex();
     const chat = index.find(c => c.id === currentChatId);
-    const title = chat ? chat.title : "Czat Limini";
+    const title = chat ? chat.title : "Czat Alpha";
 
     let md = `# ${title}\n\n`;
     displayMessages.forEach(msg => {
-        const sender = msg.role === "user" ? "**Użytkownik**" : "**Limini**";
+        const sender = msg.role === "user" ? "**Użytkownik**" : "**Alpha**";
         md += `### ${sender}\n\n${msg.text}\n\n---\n\n`;
     });
 
@@ -1329,8 +1445,22 @@ async function streamAIResponse() {
         };
     }
 
+    if (webSearchEnabled) {
+        requestBody.tools = requestBody.tools || [];
+        requestBody.tools.push({ google_search: {} });
+    }
+
     const contentEl = document.getElementById(`content-${aiMsgId}`);
-    if (contentEl) contentEl.innerHTML = '<span style="color:#888;font-style:italic;">Limini myśli...</span>';
+    const initialThinkingText = webSearchEnabled ? "Przeszukuję sieć..." : "Alpha myśli...";
+    if (contentEl) contentEl.innerHTML = `<span style="color:#888;font-style:italic;">${initialThinkingText}</span>`;
+
+    let firstChunkReceived = false;
+    const slowResponseTimeout = setTimeout(() => {
+        if (!firstChunkReceived) {
+            const el = document.getElementById(`content-${aiMsgId}`);
+            if (el) el.innerHTML = '<span style="color:#888;font-style:italic;">To trochę potrwa, jeszcze rozmyślam..</span>';
+        }
+    }, 15000);
 
     try {
         const response = await fetch(
@@ -1374,6 +1504,7 @@ async function streamAIResponse() {
                         let parsed = JSON.parse(jsonStr);
                         let textChunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
                         if (textChunk) {
+                            firstChunkReceived = true;
                             fullText += textChunk;
                             aiMsg.text = fullText;
                             const targetEl = document.getElementById(`content-${aiMsgId}`);
@@ -1398,6 +1529,7 @@ async function streamAIResponse() {
                     let parsed = JSON.parse(jsonStr);
                     let textChunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
                     if (textChunk) {
+                        firstChunkReceived = true;
                         fullText += textChunk;
                         aiMsg.text = fullText;
                     }
@@ -1417,6 +1549,7 @@ async function streamAIResponse() {
             aiMsg.text += `\n\n **Połączenie przerwane:** ${error.message}`;
         }
     } finally {
+        clearTimeout(slowResponseTimeout);
         isStreaming = false;
         rebuildConversationHistory();
         saveChatData(currentChatId, conversationHistory, displayMessages);
