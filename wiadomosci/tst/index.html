@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Imperium Lechitów</title>
+<link rel="canonical" href="https://imperiumlechtow.pl/">
+<meta property="og:url" content="https://imperiumlechtow.pl/">
+<style>
+     * {
+        font-family: 'LechitaSans';
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+    @font-face {
+        font-family: 'LechitaSans';
+        src: url('../assets/font/tahoma.ttf') format('ttf');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+    #header h1 {
+        font-family: 'LechitaSans';
+        font-weight: bold;
+    }
+
+    #wybor-miasta {
+        background-color: white;
+        color: black;
+        border: 1px solid #7F9DB9;
+    }
+    #cwel{
+    color: gold;
+    }
+    #cwel:hover{
+    color: white;
+    background-color: #003366;
+    }
+
+    #profreg{
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+    }
+    #profil{
+        padding-right: 15px;
+    }
+    #register{
+        padding-left: 10px;
+    }
+    .emotikon{height:15px; width:15px; vertical-align:middle; margin-right:4px;}
+    #swieta {
+        color: black;
+        padding: 10px;
+        border-left: 4px dashed #c70707;
+        background: #f0f4f8;
+        margin-bottom: 10px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        transition: transform 0.2s, background 0.2s;
+    }
+
+    #swieta:hover {
+    background-color: #dbdbdb;
+    }
+
+    #swieta:not(:last-child) {
+    border-bottom: 1px dotted #ccc;
+    margin-bottom: 12px;
+    }
+
+    /* style dla karuzeli */
+    #latest-guestbook-entry {
+        min-height: 80px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carousel-entry {
+        opacity: 0;
+        transform: translateY(5px);
+        transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        position: absolute;
+        width: 100%;
+    }
+
+    .carousel-entry.active {
+        opacity: 1;
+        transform: translateY(0);
+        position: relative;
+    }
+
+    .carousel-entry p {
+        margin: 3px 0;
+        font-size: 12px;
+    }
+
+    .carousel-entry strong {
+        color: #2b4a80;
+    }
+
+    .carousel-nav {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .carousel-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #ccc;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .carousel-dot.active {
+        background-color: #2b4a80;
+    }
+
+    .carousel-dot:hover {
+        background-color: #d4af37;
+    }
+
+    .entry-time {
+        font-size: 10px;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    .nagl {
+        font-size: 18px;
+        font-weight: bold;
+        color: #2b4a80;
+    }
+    .sid{
+        font-size: 14px;
+        font-weight: bold;
+        color: #12213b;
+    }
+    .artykul{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+    #main{
+        display:flex;
+        gap:20px;
+    }
+
+    #sidebar{
+        order:2;
+        width:250px;
+    }
+
+    #content{
+        order:1;
+        flex:1;
+    }
+    #content { border: 1px solid #BA000A; padding: 10px; background: #fff; }
+    @media (max-width: 600px) {
+    .nowe, .specjal {
+        padding: 8px;
+        font-size: 13px;
+    }
+    #content {
+        padding: 10px;
+        order: 1;
+    }
+    #main{
+        flex-direction:column;
+    }
+
+    #sidebar{
+        order:2;
+    }
+    }  
+</style>
+<link rel="stylesheet" href="../../assets/css/xp.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="icon" type="image/png" href="../../assets/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png" />
+<meta name="theme-color" content="#fafafa" />
+<link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#c0392b" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<div id="header">
+    <a href="#" style="margin: auto; padding: 5px;"><div style="border: 1px solid black; padding: 5px; background-color: #c0c0c0;" ><img src="../../logo.png" alt="logo Lechii"></div></a>
+</div>
+
+<div id="container">
+    <div id="menu">
+        <a href="https://imperiumlechitow.pl/">Strona główna</a> |
+        <a href="../../container/projekty/index.html">Gry/Prodżekts</a> |
+        <a href="../../container/galeria/index.html">Galeria</a> |
+        <a href="../../container/kontakt/index.html">Kontakt</a> |
+        <a href="../../container/swiatynia/index.html">Świątynia</a> |
+        <a id="cwel" href="../../container/guestbook/index.html">Księga wpisów</a>
+    </div>
+
+    <div id="logan">
+        <p id="czyzal">Status...</p>
+        <a id="profil" href="../../container/profile/index.html">Mój profil</a>
+    </div>
+    <div id="profreg">
+        <a id="register" href="../../register.html">
+            <img src="../../assets/icons/rejestruj.png" height="13" width="12" alt="*" loading="lazy">
+            Dołącz do Imperium
+        </a>
+        <a id="loginlink" href="../../login.html">
+            Zaloguj się
+            <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png" loading="lazy">
+        </a>
+    </div>
+        <div id="main">
+            <div id="sidebar">
+            <aside class="infobox">
+                <span class="sid">Informacje ogólne</span>
+                <hr>
+                <select id="wybor-miasta" style="width: 100%; font-size: 11px; margin-bottom: 10px; font-family:'LechitaSans';">
+                    <option value="53.07,20.35,Stara Otocznia">📍 Stara Otocznia</option>
+                    <option value="53.11,20.38,Mława">📍 Mława</option>
+                    <option value="53.24,20.18,Działdowo">📍 Działdowo</option>
+                    <option value="53.17,20.29,Iłowo-Osada">📍 Iłowo-Osada</option>
+                    <option value="53.19,20.25,Narzym">📍 Narzym</option>
+                    <option value="53.20,20.66,Brzozowo Utraty">📍 Brzozowo Utraty</option>
+                </select>
+                
+                <div id="mlawa-info">Lapanie sygnalu z marsa...</div>
+            </aside>
+            <aside class="infobox" id="partia">
+                <span class="sid">Forum Lechii</span>
+                <hr>
+                <div id="latest-guestbook-entry"></div>
+                <div class="carousel-nav" id="carousel-nav"></div>
+                <hr>
+                <a href="../../container/guestbook/index.html" style="font-weight: bold;">Zobacz wszystkie / Napisz</a>
+            </aside>
+            <br>
+            <aside class="infobox" id="bozena">
+                <span class="sid">Współpraca z Bożeną Bogusławską</span><br>
+                <hr>
+                <img width="150px" height="150px" src="assets/bozena.jpeg" alt="Bożena Boguslawska" loading="lazy">
+                <p>Wbijaj na tikotka Bożeny Boguslawskiej!!1</p>
+                <a href="https://www.tiktok.com/@bozena.boguslawska6">Kliknij tutaj</a>
+            </aside>
+
+            <aside class="infobox" id="nowosci-log">
+                <span class="sid">Log Nowości</span>
+                <hr>
+                <div style="max-height: 300px; overflow-y: auto; font-size: 11px;">
+                    <p><strong>8-9 luty 2026:</strong> Już wszystko śmiga! <s>Od jakiegoś czasu nie działają wpisy, błąd jest od strony serwera. Staramy się to naprawić</s></p>
+                    <p><strong>29 stycznia 2026:</strong> Od teraz można pisać bez logowania się! Dla niezarejestrowanych jest cooldown na pisanie (1 minuta)</p>
+                    <p><strong>18 stycznia 2026:</strong> Zostala stworzona nowa tapeta. Specjalnie wykuta przez skandynawskich krasnali i islamskich programistów na tablicy z kamieni, <a href="container/galeria/index.html"> zobacz tutaj</a> w galerii!!</p>
+                    <p><strong>10 stycznia 2026:</strong> Upgrade systemu kont. Od teraz jest jakiś sensowny profil. Na razie jest możliwość aby zmiany bio. Wejdźcie na "Mój profil" jak jesteście zalogowani. Inni użytkownicy mogą wejść na twój profil przez kliknięcie na nick w <a href="container/guestbook/index.html">Księdze wpisów</a>. Dobranoc.</p>
+                    <p><strong>01 stycznia 2026:</strong> Witam w nowym roku.</p>
+                    <p><strong>31 grudnia 2025:</strong> Szczęśliwego nowego roku! <img src="../../assets/nowyrok2-ezgif.com-optimize.gif" height="50px" width="40px" loading="lazy"></p>
+                    <p><strong>26 grudnia 2025:</strong> Zamiast spędzać święta z rodziną to siedzę w piwnicy i piszę z czatem schizoweb <img src="assets/icons/pointup.png" loading="lazy"><br> Od teraz wpisy są dla wszystkich ale Szekspire muszą się zarejestrować żeby dalej pisać.. Pozdrawiamy.</p>
+                    <p><strong>24 grudnia 2025:</strong> Zdrowych wesołych, wspaniałych świąt oraz szczęśliwego nowego roku wszystkim życzę!</p>
+                    <p><strong>23 grudnia 2025:</strong> Robię własnego icon packa. Niedługo będzie jak w Gadu Gadu <img class="emotikon" src="assets/icons/usmiech.png" loading="lazy"></p>
+                    <p><strong>21 grudnia 2025:</strong> Nudzi mi się w chuj dajcie jakieś propozycje. Dodałem nowy system kont. Już można się rejestrować/logować. Wciąż w fazie beta!! Nie spodziewajcie się kokosów</p>
+                    <p><strong>19 grudnia 2025:</strong> Zrobiłem działającą stronę do wpisów. Najnowsze wpisy będą wyświetlane na tej stronie głównej (3 kafelek po prawej stronie). Zobacz <a href="container/guestbook/index.html">Księgę wpisów</a></p>
+                    <p><strong>17 grudnia 2025:</strong> Z dniem 17 grudnia 2025 nasza strona imperiumlechtow.pl oficjalnie zawarła współpracę z Bożeną Bogusławską. Świadkami zawarcia współpracy jest Jeffrey Epstein, Charlie Kirk i George Floyd. Zachęcamy do współpracy z nami :-)</p>
+                    <p><strong>12 grudnia 2025:</strong> Mała pierdoła (kafelki) po prawej stronie. Dodałem byle co bo mi się tak podoba</p>
+                    <p><strong>8 grudnia 2025:</strong> Szpont młodzieżowym słowem roku!!! Chwała i pozdrowienia dla Wielkiego Igora Szponciciela! <br> <img src="assets/szpont_selfie.jpg" loading="lazy" width="100px"></p>
+                    <p><strong>29 listopada 2025:</strong> Zrobiłem nową grę "Twierdza". Wejdź w "Projekty" i obczaj!</p>
+                    <p><strong>28 listopada 2025:</strong> Po długiej przerwie pomyślałem żeby przywrócić tę stronę do życia. Za niedługo wyjdzie coś ciekawego. Coś à la "Stronghold" :)</p>
+                    <p><strong>03 listopada 2025:</strong> Same szpony. no same szponty. zobacz update 1.5 beta Szpontklikera</p>
+                    <p><strong>28 października 2025:</strong> Ulepszono UI strony i dodałem parę drobności<br> Obczaj też nową wersję Szpontklikera BETA w wersji 1.4!!!</p>
+                    <p><strong>22 października 2025:</strong> Do tej pory to jest największy update. Wymieniam w punktach: <br>1.1 Jest już dostępna nowa wersja <a href="projekty/makajler/index.html">Szpontoklikera!</a> <br>1.2 Dodano ulepszenia, sklep i inne funkcje do Szpontoklikera. <br>2. Stworzono również nowe logo dla naszego Imperium Lechickiego <br>3. Dodano działający formularz który automatycznie wysyła gołębia z listem do nas. Jest w zakładce <a href="container/kontakt/index.html">Kontakt</a>. <br>4. Dodano parę nowych zdjęć do galerii. Jak chcecie to wysyłajcie na podanego maila. <br>A to jest dopiero początek. Chwała Imperium</p>
+                    <p><strong>18 października 2025:</strong> Dodano nową stronę główną i posortowano wszystko na różne kategorie. Pozdrawiam wszystkich Lechitów!</p>
+                    <p><strong>16 października 2025:</strong> Obczaj nowego Szpontoklikera <a href="../../projekty/makajler/index.html">tutaj</a></p>
+                    <p><strong>15 października 2025:</strong> Narodziny Lechistanu w internecie.</p>
+                </div>
+            </aside>
+
+            <script type="module" defer> //status wpisow
+                import { db } from './../../assets/firebase.js';
+                import { collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+                let currentIndex = 0;
+                let entries = [];
+                let autoRotateInterval;
+
+                async function loadEntries() {
+                    const container = document.getElementById('latest-guestbook-entry');
+                    const navContainer = document.getElementById('carousel-nav');
+                    
+                    try {
+                        const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(5));
+                        const querySnapshot = await getDocs(q);
+                        
+                        if (querySnapshot.empty) {
+                            container.innerHTML = '<p style="text-align:center; color:#999;">Brak wpisów.</p>';
+                            return;
+                        }
+
+                        entries = querySnapshot.docs.map(doc => doc.data());
+
+                        entries.forEach((data, index) => {
+                            const date = data.createdAt?.toDate().toLocaleDateString('pl-PL') || "Niedawno";
+                            const authorName = data.nick || data.name || "Anonimowy";
+                            const content = data.content.substring(0, 50) + (data.content.length > 50 ? '...' : '');
+                            
+                            const entryEl = document.createElement('div');
+                            entryEl.className = 'carousel-entry' + (index === 0 ? ' active' : '');
+                            entryEl.innerHTML = `
+                                <p><strong>${authorName}</strong></p>
+                                <p style="font-style: italic;">"${content}"</p>
+                                <p class="entry-time">${date}</p>
+                            `;
+                            container.appendChild(entryEl);
+                        });
+
+                        if (entries.length > 1) {
+                            entries.forEach((_, index) => {
+                                const dot = document.createElement('div');
+                                dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                                dot.onclick = () => goToSlide(index);
+                                navContainer.appendChild(dot);
+                            });
+
+                            autoRotateInterval = setInterval(() => {
+                                currentIndex = (currentIndex + 1) % entries.length;
+                                updateCarousel();
+                            }, 5000);
+                        }
+                    } catch (e) {
+                        container.innerHTML = '<p style="color:#d00;">Błąd</p>';
+                        console.error(e);
+                    }
+                }
+
+                function updateCarousel() {
+                    const entryEls = document.querySelectorAll('.carousel-entry');
+                    const dots = document.querySelectorAll('.carousel-dot');
+                    
+                    entryEls.forEach((el, index) => {
+                        el.classList.toggle('active', index === currentIndex);
+                    });
+                    dots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentIndex);
+                    });
+                }
+
+                function goToSlide(index) {
+                    currentIndex = index;
+                    updateCarousel();
+                    clearInterval(autoRotateInterval);
+                    autoRotateInterval = setInterval(() => {
+                        currentIndex = (currentIndex + 1) % entries.length;
+                        updateCarousel();
+                    }, 4000);
+                }
+
+                loadEntries();
+            </script>
+            </div>
+            <div id="content">
+                <b style="color:#018634; text-decoration: none;">Raport historyczny</b>
+                <h2 style="color: #BA000A; font-size: 20px; margin: 0 0 10px 0; ">Szok! Zdeklasyfikowano niemiecckie dokumenty Hitlera! Lech "Bolek" Wałęsa przeciwko Lechistanie!</h2>
+                <p style="color: #a7a7a7; font-size: 12px; font-style: italic;">Chujoda, 15.03.2026.   Rabbi Klaus Wankerberg</p>
+                <hr style="border: 0; border-top: 1px solid #aaa; margin: 15px 0;">
+                <figure style="float: right; width: 220px; margin: 0 0 15px 15px; text-align: center;">
+                <img src="https://polskiemiesiace.ipn.gov.pl/dokumenty/zalaczniki/263/263-495668.jpg" alt="stuł" style="height: 150px; width: 210px; border: #999 1px solid; padding: 2px; display: block; margin: 0 auto;" loading="lazy">
+                <figcaption style="color: #a7a7a7; font-size: 12px; font-style: italic; margin-top: 6px; line-height: 1.3;">
+                    Polska, 1989. Źródło: Archiwum Narodowe. W tle widać Lecha Wałęsę, który podobno miał być informowany o planach dotyczących istnieniu Polski przed Mieszkiem I przez komunistycznych dyplomatów podczas tajnych spotkań w latach 80-tych. 
+                </figcaption>
+                </figure>
+                <p>     Według przekazów, w podziemiach Sudetów znajdują się archiwa z czasów sprzed chrystianizacji,
+        opisujące <strong>strukturę Imperium Lechitów</strong>. Ich istnienie było potwierdzane w latach 1941-1943. przez niemieckich badaczy,
+    jednak dokumentacja zaginęła po wojnie.<br><br>
+
+      Według relacji świadków, <strong>wejście do podziemnych komór</strong> miało znajdować się w jednym z masywów w okolicach
+    Ślęży, góry uznawanej od wieków za miejsce kultu solarnego. Wspominano o wyrytych w kamieniu symbolach przypominających
+    starosłowiańskie runy, które po zestawieniu tworzyły zapis genealogii i rytuałów związanych z kultem Słońca i przodków.
+    Część tych znaków udało się podobno skopiować jeszcze przed wojną, lecz kopie zostały przejęte przez służby okupacyjne
+    i ślad po nich zaginął.<br><br>
+
+      Po 1945 roku <strong> był objęty licznymi pracami górniczymi i wojskowymi</strong>, co tylko potwierdza przypuszczenia, że
+    istniało tam coś więcej niż zwykłe jaskinie. Niektórzy twierdzą, że część z tuneli została celowo zasypana betonem
+    w latach 50., a miejsce objęto tajemniczymi restrykcjami.<br><br>
+
+      W lokalnych legendach mówi się, że <strong>„Kamienne Archiwa”</strong> przechowują nie tylko zapisy dziejów, ale także
+    metalowe tablice z mapą dawnych osad Lechitów oraz konstrukcje wykonane z nieznanego stopu, odpornego na korozję.
+    Do dziś, nikt oficjalnie nie potwierdził istnienia tych artefaktów - lecz co jakiś czas pojawiają się relacje
+    o dziwnych wibracjach magnetycznych i anomaliach kompasu w rejonie Ślęży.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    Strona stworzona przez obywateli Imperium Lechitów. <br><br>
+</div>
+
+<script src="../../assets/infobox.js" defer></script>
+<script src="../../assets/imieniny.js" defer></script>
+<script type="module">
+    import { auth } from "./../../assets/firebase.js";
+    import { onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { updateProfile } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+    const status = document.getElementById("czyzal");
+    const link = document.getElementById("loginlink");
+
+    onAuthStateChanged(auth, (user) => {
+    if (user) {
+        status.textContent = "Zalogowany jako: " + user.displayName;
+        link.innerHTML = 'Wyloguj <img src="../../assets/icons/logout.png" alt="Wyloguj" style="height:12px; width:12px; vertical-align:middle; margin-right:4px;">';
+        link.href = "index.html";
+        link.onclick = (e) => {
+        e.preventDefault();
+        signOut(auth);
+        };
+    } else {
+        status.textContent = "Nie jesteś zalogowany";
+        link.innerHTML = 'Zaloguj się <img style="height:12px; width:12px; vertical-align:middle; margin-right:4px;" src="../../assets/icons/login.png">';
+        link.href = "login.html";
+    }
+    });
+</script>
+</body>
+</html>
